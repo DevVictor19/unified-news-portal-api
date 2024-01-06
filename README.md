@@ -24,3 +24,37 @@ Tendo em vista esses problemas, tive a ideia de criar um <b>Portal de Notícias 
 
 - Fornecer um canal de comunicação da instituição, unificado, que permita a interação entre cursos e turmas diferentes.
 - Fornecer uma alternativa que seja mais conveniente que o uso de grupos de WhatsApp.
+
+## Requisitos Funcionais
+
+### Autenticação
+
+- O sistema deve permitir que os usuários criem uma conta usando um email e senha.
+- O sistema deve validar o email para que o cadastro seja efetuado com sucesso.
+- O sistema deve permitir que os usuários façam o login usando email e senha verificados.
+- O sistema deve permitir a recuperação de senha por email, uma vez que o cadastro seja efetuado.
+
+### Publicações
+
+- O sistema deve exigir cargos de admin, coordenador, líder, vice-líder ou professor para fazer uma postagem em uma categoria.
+- O sistema deve permitir a criação de posts com texto e foto ou texto e vídeo.
+- O sistema deve permitir os usuários que possuam permissão executar as operações basicas de criação, leitura, remoção e edição de posts.
+- O sistema deve fornecer categorias de filtragem para facilitar a visualização de postagens por parte do aluno.
+- O sistema deve categorizar as postagens, definindo o tipo de postagem, a área, o curso, a turma e a matéria.
+- O sistema deve permitir que o usuário faça uma inscrição para aquela determinada categoria.
+
+### Comunicação
+
+- O sistema deve dar a opção do usuário habilitar as formas de comunicação: e-mail e/ou WhatsApp.
+- O sistema deve notificar o usuário por e-mail sobre um novo post na categoria se o mesmo inscreveu-se e habilitou comunicação por e-mail.
+- O sistema deve notificar o usuário por mensagem no WhatsApp sobre um novo post na categoria se o mesmo inscreveu-se e habilitou comunicação por WhatsApp.
+
+### Administração
+
+- O sistema deve ter uma área reservada para usuários com cargos de Admin ou Coordenador.
+- O sistema deve permitir que o admin veja os usuários cadastrados.
+- O sistema deve permitir que o admin crie ou remova usuários.
+- O sistema deve permitir que o admin modifique os cargos dos usuários cadastrados.
+- O sistema deve permitir que admins façam a adição, modificação e remoção de categorias.
+- O sistema deve permitir que admins façam a adição, modificação e remoção de postagens.
+- O sistema deve permitir que coordenadores façam a adição e remoção de categorias apenas no seu curso.
