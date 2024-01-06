@@ -58,3 +58,11 @@ Tendo em vista esses problemas, tive a ideia de criar um <b>Portal de Notícias 
 - O sistema deve permitir que admins façam a adição, modificação e remoção de categorias.
 - O sistema deve permitir que admins façam a adição, modificação e remoção de postagens.
 - O sistema deve permitir que coordenadores façam a adição e remoção de categorias apenas no seu curso.
+
+## Requisitos Não Funcionais
+
+- Os dados do usuário como senha e número de telefone devem ser armazenados de forma criptografada, para conservar a privacidade dos usuários.
+- A autenticação deve usar Cookies para proteger a aplicação de ataques XSS.
+- O banco deve ser NoSQL para suportar eventuais mudanças da estruturação dos dados, além de melhorar na perfomance das filtragens.
+- A interface deve ser intuitiva e fácil de usar.
+- A interface deve ser responsiva e se adequar para desktops, tablets e celulares.
