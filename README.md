@@ -65,3 +65,7 @@ Tendo em vista esses problemas, tive a ideia de criar um <b>Portal de Notícias 
 - O banco deve ser NoSQL para suportar eventuais mudanças da estruturação dos dados, além de melhorar na perfomance das filtragens.
 - A interface deve ser intuitiva e fácil de usar.
 - A interface deve ser responsiva e se adequar para desktops, tablets e celulares.
+
+## Diagrama Entidade-Relacionamento (DER)
+
+<img src="./docs/images/portal-de-noticias-unificado.png" alt="diagrama entidade relacionamento" />
