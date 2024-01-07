@@ -68,4 +68,4 @@ Tendo em vista esses problemas, tive a ideia de criar um <b>Portal de Notícias 
 
 ## Diagrama Entidade-Relacionamento (DER)
 
-<img src="./docs/images/portal-de-noticias-unificado.png" alt="diagrama entidade relacionamento" />
+<img src="./docs/images/DER.png" alt="diagrama entidade relacionamento" />
