@@ -2,7 +2,7 @@
 
 ## Descrição
 
-Aplicação NestJS MVC que tem como função centralizar o canal de comunicação de uma instuição de ensino superior.
+Aplicação que tem como função centralizar o canal de comunicação de uma instuição de ensino superior.
 
 ## Motivação
 
