@@ -65,6 +65,8 @@ Tendo em vista esses problemas, tive a ideia de criar um <b>Portal de Notícias 
 - O banco deve ser NoSQL para suportar eventuais mudanças da estruturação dos dados, além de melhorar na perfomance das filtragens.
 - A interface deve ser intuitiva e fácil de usar.
 - A interface deve ser responsiva e se adequar para desktops, tablets e celulares.
+- A aplicação deve ter testes automatizados para garantir maior segurança no funcionamento de suas atividades e facilitar a manutenção futura.
+- A aplicação deve usar o modelo de arquitetura limpa para facilitar eventuais modificações do seu escopo e funcionalidades.
 
 ## Diagrama Entidade-Relacionamento (DER)
 
