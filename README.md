@@ -75,3 +75,7 @@ Tendo em vista esses problemas, tive a ideia de criar um <b>Portal de Notícias 
 ## Modelagem do banco (MongoDB)
 
 <img src="./docs/images/relational-model.png" />
+
+## Diagrama de Casos de Uso
+
+<img src="./docs/images/usecases-diagram.png" alt="diagrama de cassos de uso" />
