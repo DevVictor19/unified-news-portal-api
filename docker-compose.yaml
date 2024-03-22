@@ -1,0 +1,33 @@
+services:
+  database:
+    image: mongo
+    container_name: mongo-pnu
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+    networks:
+      - pnu-network
+    volumes:
+      - mongo-pnu-volume:/data/db
+
+  backend:
+    container_name: nest-api-pnu
+    restart: always
+    build:
+      context: .
+      target: production
+    env_file:
+      - .env
+    ports:
+      - '${SERVER_PORT}:${SERVER_PORT}'
+    networks:
+      - pnu-network
+
+networks:
+  pnu-network:
+
+volumes:
+  mongo-pnu-volume:
