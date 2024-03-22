@@ -14,6 +14,8 @@ services:
       - mongo-pnu-volume:/data/db
 
   backend:
+    depends_on:
+      - database
     container_name: nest-api-pnu
     restart: always
     build:
