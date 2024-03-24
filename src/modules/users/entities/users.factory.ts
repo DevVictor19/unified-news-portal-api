@@ -1,5 +1,6 @@
 import { User } from './users.entity';
 
+import { Subscriptions } from '@/common/@types/users/subscriptions.type';
 import { COMUNICATIONS } from '@/common/enums/comunications.enum';
 import { ROLES } from '@/common/enums/roles.enum';
 
@@ -12,7 +13,7 @@ export type CreateUserProps = {
   phone?: string;
   password: string;
   email_is_verified?: boolean;
-  subscriptions?: string[];
+  subscriptions?: Subscriptions;
   comunications?: COMUNICATIONS[];
 };
 
