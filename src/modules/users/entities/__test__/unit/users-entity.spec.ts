@@ -29,8 +29,12 @@ describe('Users entity unit tests', () => {
     expect(user.email_is_verified).toBe(false);
   });
 
-  it('Should initialize with subscriptions as an empty array', () => {
-    expect(user.subscriptions.length).toBe(0);
+  it('Should initialize subscriptions with empty arrays', () => {
+    expect(user.subscriptions.categories.length).toBe(0);
+    expect(user.subscriptions.classes.length).toBe(0);
+    expect(user.subscriptions.courses.length).toBe(0);
+    expect(user.subscriptions.subjects.length).toBe(0);
+    expect(user.subscriptions.post_type.length).toBe(0);
   });
 
   it('Should initialize with comunications as an emtpy array', () => {
