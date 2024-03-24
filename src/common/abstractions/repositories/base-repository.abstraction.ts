@@ -1,7 +1,9 @@
-export interface IBaseRepository<Entity extends object> {
-  insert(entity: Entity): Promise<void>;
-  findById(id: string): Promise<Entity | null>;
-  findAll(): Promise<Entity[]>;
-  update(id: string, entity: Entity): Promise<void>;
+import { Entity } from '../entities/entity.abstraction';
+
+export interface IBaseRepository<T extends Entity> {
+  insert(entity: T): Promise<void>;
+  findById(id: string): Promise<T | null>;
+  findAll(): Promise<T[]>;
+  update(id: string, entity: T): Promise<void>;
   delete(id: string): Promise<void>;
 }
