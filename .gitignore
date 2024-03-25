@@ -37,3 +37,4 @@ lerna-debug.log*
 .env.development
 .env.production
 .env
+/init-mongo.js
