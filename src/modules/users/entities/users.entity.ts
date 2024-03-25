@@ -54,4 +54,4 @@ export class User extends Entity {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-export const UserModel = mongoose.model('Users', UserSchema);
+export const UserModel = mongoose.model('users', UserSchema);
