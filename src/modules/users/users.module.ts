@@ -8,7 +8,7 @@ import { IHashProvider } from './providers/hash-provider.interface';
 import { BcryptHashProvider } from './providers/implementations/bcrypt-hash.provider';
 import { UsersMongoRepository } from './repositories/implementations/users-mongo.repository';
 import { IUsersRepository } from './repositories/users-repository.interface';
-import { SignupUserUseCase } from './usecases/signup-user.usecase';
+import { SignupUserUseCase } from './usecases';
 import { UsersController } from './users.controller';
 
 @Module({
