@@ -5,8 +5,14 @@ import { SignupUserUseCase } from '../../signup-user.usecase';
 
 import { User } from '@/modules/users/entities/users.entity';
 import { UsersFactory } from '@/modules/users/entities/users.factory';
-import { IHashProvider } from '@/modules/users/providers/hash-provider.interface';
-import { BcryptHashProvider } from '@/modules/users/providers/implementations/bcrypt-hash.provider';
+import { HashProviderMock } from '@/modules/users/providers/hash/__MOCKS__/hash-provider.mock';
+import { IHashProvider } from '@/modules/users/providers/hash/hash-provider.interface';
+import { JwtProviderMock } from '@/modules/users/providers/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/users/providers/jwt/jwt-provider.interface';
+import { MailProviderMock } from '@/modules/users/providers/mail/__MOCKS__/mail-provider.mock';
+import { IMailProvider } from '@/modules/users/providers/mail/mail-provider.interface';
+import { TemplateEngineProviderMock } from '@/modules/users/providers/template-engine/__MOCKS__/template-engine-provider.mock';
+import { ITemplateEngineProvider } from '@/modules/users/providers/template-engine/template-engine-provider.interface';
 import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
 import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
 
@@ -15,6 +21,10 @@ describe('SignupUserUseCase unit tests', () => {
   let repository: IUsersRepository;
   let factory: UsersFactory;
   let hashProvider: IHashProvider;
+  let templateProvider: ITemplateEngineProvider;
+  let jwtProvider: IJwtProvider;
+  let mailProvider: IMailProvider;
+  let serverUrl: string;
   let payload: any;
 
   beforeEach(() => {
@@ -25,8 +35,20 @@ describe('SignupUserUseCase unit tests', () => {
     };
     repository = new UsersInMemoryRepository();
     factory = new UsersFactory();
-    hashProvider = new BcryptHashProvider();
-    sut = new SignupUserUseCase(repository, factory, hashProvider);
+    hashProvider = new HashProviderMock();
+    templateProvider = new TemplateEngineProviderMock();
+    jwtProvider = new JwtProviderMock();
+    mailProvider = new MailProviderMock();
+    serverUrl = 'server url';
+    sut = new SignupUserUseCase(
+      repository,
+      factory,
+      hashProvider,
+      templateProvider,
+      jwtProvider,
+      mailProvider,
+      serverUrl,
+    );
   });
 
   it('Should create and save a user with hashed password', async () => {
