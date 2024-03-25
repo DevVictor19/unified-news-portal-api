@@ -1,6 +1,6 @@
 export interface ITemplateEngineProvider {
   compile(
-    templatePath: string,
+    fileName: string,
     variables?: { [key: string]: string | object },
   ): string;
 }
