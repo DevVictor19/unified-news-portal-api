@@ -1,10 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { UsersFactory } from '../entities/users.factory';
-import { IHashProvider } from '../providers/hash-provider.interface';
-import { IJwtProvider } from '../providers/jwt-provider.interface';
-import { IMailProvider } from '../providers/mail-provider.interface';
-import { ITemplateEngineProvider } from '../providers/template-engine-provider.interface';
+import { IHashProvider } from '../providers/hash/hash-provider.interface';
+import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
+import { IMailProvider } from '../providers/mail/mail-provider.interface';
+import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
