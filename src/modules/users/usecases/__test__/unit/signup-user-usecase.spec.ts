@@ -31,7 +31,6 @@ describe('SignupUserUseCase unit tests', () => {
 
   it('Should create and save a user with hashed password', async () => {
     const repositoryFindByEmailSpy = jest.spyOn(repository, 'findByEmail');
-    repositoryFindByEmailSpy.mockResolvedValue(null);
     const hashProviderSpy = jest.spyOn(hashProvider, 'generateHash');
     const factorySpy = jest.spyOn(factory, 'create');
     const repositoryInsertSpy = jest.spyOn(repository, 'insert');
@@ -41,6 +40,7 @@ describe('SignupUserUseCase unit tests', () => {
     const hashedPassword = await hashProviderSpy.mock.results[0].value;
     const user = await factorySpy.mock.results[0].value;
 
+    expect(repositoryFindByEmailSpy).toHaveBeenCalledWith(payload.email);
     expect(hashProviderSpy).toHaveBeenCalledWith(payload.password);
     expect(factorySpy).toHaveBeenCalledWith({
       email: payload.email,
