@@ -13,7 +13,7 @@ import { NodeMailerMailProvider } from './providers/implementations/nodemailer-m
 import { IJwtProvider } from './providers/jwt-provider.interface';
 import { IMailProvider } from './providers/mail-provider.interface';
 import { ITemplateEngineProvider } from './providers/template-engine-provider.interface';
-import { UsersMongoRepository } from './repositories/implementations/users-mongo.repository';
+import { UsersMongoRepository } from './repositories/mongo/users-mongo.repository';
 import { IUsersRepository } from './repositories/users-repository.interface';
 import { SignupUserUseCase } from './usecases';
 import { UsersController } from './users.controller';

@@ -7,7 +7,7 @@ import { User } from '@/modules/users/entities/users.entity';
 import { UsersFactory } from '@/modules/users/entities/users.factory';
 import { IHashProvider } from '@/modules/users/providers/hash-provider.interface';
 import { BcryptHashProvider } from '@/modules/users/providers/implementations/bcrypt-hash.provider';
-import { UsersInMemoryRepository } from '@/modules/users/repositories/implementations/users-in-memory.repository';
+import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
 import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
 
 describe('SignupUserUseCase unit tests', () => {
