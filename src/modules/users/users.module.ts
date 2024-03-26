@@ -16,6 +16,7 @@ import { ITemplateEngineProvider } from './providers/template-engine/template-en
 import { UsersMongoRepository } from './repositories/mongo/users-mongo.repository';
 import { IUsersRepository } from './repositories/users-repository.interface';
 import { SignupUserUseCase } from './usecases';
+import { VerifyEmailUseCase } from './usecases/verify-email.usecase';
 import { UsersController } from './users.controller';
 
 @Module({
@@ -95,6 +96,16 @@ import { UsersController } from './users.controller';
         'MailProvider',
         ConfigService,
       ],
+    },
+    {
+      provide: VerifyEmailUseCase,
+      useFactory: (
+        jwtProvider: IJwtProvider,
+        usersRepository: IUsersRepository,
+      ) => {
+        return new VerifyEmailUseCase(jwtProvider, usersRepository);
+      },
+      inject: ['JwtProvider', 'UsersRepository'],
     },
   ],
 })
