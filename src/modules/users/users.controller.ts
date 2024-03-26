@@ -11,7 +11,7 @@ export class UsersController {
     private verifyEmailUseCase: VerifyEmailUseCase,
   ) {}
 
-  @Post('/')
+  @Post('/signup')
   signup(@Body() signupUserDto: SignupUserDto) {
     return this.signupUserUseCase.execute(signupUserDto);
   }
