@@ -72,6 +72,34 @@ describe('SignupUserUseCase unit tests', () => {
     expect(repositoryInsertSpy).toHaveBeenCalledWith(user);
   });
 
+  it('Should send a verification email with a url for verify', async () => {
+    const signJwtSpy = jest.spyOn(jwtProvider, 'sign');
+    const compileTemplateSpy = jest.spyOn(templateProvider, 'compile');
+    const sendEmailSpy = jest.spyOn(mailProvider, 'sendMail');
+
+    await sut.execute(payload);
+
+    const token = await signJwtSpy.mock.results[0].value;
+    const link = `${serverUrl}/users/verify?token=${token}`;
+    const html = await compileTemplateSpy.mock.results[0].value;
+
+    expect(signJwtSpy).toHaveBeenCalledWith({
+      expiresIn: '2h',
+      payload: { email: payload.email },
+    });
+    expect(compileTemplateSpy).toHaveBeenCalledWith('email-verification.hbs', {
+      link,
+    });
+    expect(sendEmailSpy).toHaveBeenCalledWith({
+      body: html,
+      subject: 'Verificação de Email',
+      to: {
+        email: payload.email,
+        name: payload.name,
+      },
+    });
+  });
+
   it('Should throw a BadRequestException if email is already in use', async () => {
     const repositoryFindByEmailSpy = jest.spyOn(repository, 'findByEmail');
     repositoryFindByEmailSpy.mockResolvedValue({} as User);
