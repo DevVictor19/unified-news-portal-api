@@ -19,7 +19,7 @@ type Output = void;
 
 export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
   constructor(
-    private usersReporitory: IUsersRepository,
+    private usersRepository: IUsersRepository,
     private usersFactory: UsersFactory,
     private hashProvider: IHashProvider,
     private templateProvider: ITemplateEngineProvider,
@@ -29,7 +29,7 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
   ) {}
 
   async execute(input: Input): Promise<Output> {
-    const existingUser = await this.usersReporitory.findByEmail(input.email);
+    const existingUser = await this.usersRepository.findByEmail(input.email);
 
     if (existingUser) {
       throw new BadRequestException('Email already in use');
@@ -63,6 +63,6 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
       password: hashedPassword,
     });
 
-    await this.usersReporitory.insert(user);
+    await this.usersRepository.insert(user);
   }
 }

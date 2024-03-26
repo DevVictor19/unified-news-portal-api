@@ -66,7 +66,7 @@ import { UsersController } from './users.controller';
     {
       provide: SignupUserUseCase,
       useFactory: (
-        usersReporitory: IUsersRepository,
+        usersRepository: IUsersRepository,
         usersFactory: UsersFactory,
         hashProvider: IHashProvider,
         templateProvider: ITemplateEngineProvider,
@@ -77,7 +77,7 @@ import { UsersController } from './users.controller';
         const serverUrl = configService.getOrThrow<string>('server.url');
 
         return new SignupUserUseCase(
-          usersReporitory,
+          usersRepository,
           usersFactory,
           hashProvider,
           templateProvider,
