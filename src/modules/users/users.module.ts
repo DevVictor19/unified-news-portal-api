@@ -15,9 +15,11 @@ import { HandleBarsTemplateEngineProvider } from './providers/template-engine/ha
 import { ITemplateEngineProvider } from './providers/template-engine/template-engine-provider.interface';
 import { UsersMongoRepository } from './repositories/mongo/users-mongo.repository';
 import { IUsersRepository } from './repositories/users-repository.interface';
-import { SignupUserUseCase } from './usecases';
-import { LoginUserUseCase } from './usecases/login-user.usecase';
-import { VerifyEmailUseCase } from './usecases/verify-email.usecase';
+import {
+  LoginUserUseCase,
+  SignupUserUseCase,
+  VerifyEmailUseCase,
+} from './usecases';
 import { UsersController } from './users.controller';
 
 @Module({
