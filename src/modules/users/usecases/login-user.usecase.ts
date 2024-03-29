@@ -4,6 +4,7 @@ import { IHashProvider } from '../providers/hash/hash-provider.interface';
 import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
+import { AuthJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 
@@ -45,12 +46,14 @@ export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    const payload: AuthJwtPayload = {
+      userId: existingUser._id!,
+      role: existingUser.role,
+      token_type: TOKEN_TYPE.AUTH,
+    };
+
     const token = this.jwtProvider.sign({
-      payload: {
-        userId: existingUser._id,
-        role: existingUser.role,
-        token_type: TOKEN_TYPE.AUTH,
-      },
+      payload,
       expiresIn: '4h',
     });
 

@@ -3,6 +3,7 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
+import { EmailVerificationJwtParsed } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 
@@ -19,7 +20,9 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
   ) {}
 
   async execute(input: Input): Promise<Output> {
-    const token = this.jwtProvider.verify(input.token);
+    const token = this.jwtProvider.verify<EmailVerificationJwtParsed>(
+      input.token,
+    );
 
     if (!token || typeof token === 'string') {
       throw new UnauthorizedException(

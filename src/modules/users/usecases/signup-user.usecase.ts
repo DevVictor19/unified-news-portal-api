@@ -7,6 +7,7 @@ import { IMailProvider } from '../providers/mail/mail-provider.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
+import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 
@@ -36,8 +37,13 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
       throw new BadRequestException('Email already in use');
     }
 
+    const payload: EmailVerificationJwtPayload = {
+      email: input.email,
+      token_type: TOKEN_TYPE.EMAIL_VERIFY,
+    };
+
     const token = this.jwtProvider.sign({
-      payload: { email: input.email, token_type: TOKEN_TYPE.EMAIL_VERIFY },
+      payload,
       expiresIn: '2h',
     });
 
