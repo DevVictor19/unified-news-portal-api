@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
@@ -40,7 +40,7 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
     }
 
     if (existingUser.email_is_verified) {
-      return;
+      throw new BadRequestException('Email already verified');
     }
 
     existingUser.email_is_verified = true;

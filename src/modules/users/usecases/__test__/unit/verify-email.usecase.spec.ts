@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 import { VerifyEmailUseCase } from '../../verify-email.usecase';
 
@@ -53,15 +53,16 @@ describe('VerifyEmailUseCase unit tests', () => {
     expect(findByEmailSpy).toHaveBeenCalled();
   });
 
-  it('Should not call update method when user email is already verified', async () => {
+  it('Should throw a BadRequestException if email is already verified', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
     findByEmailSpy.mockResolvedValue({ email_is_verified: true } as User);
     const updateUserSpy = jest.spyOn(usersRepository, 'update');
 
-    await sut.execute({ token: 'token' });
-
+    await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
     expect(verifyJwtSpy).toHaveBeenCalled();
     expect(findByEmailSpy).toHaveBeenCalled();
     expect(updateUserSpy).not.toHaveBeenCalled();
