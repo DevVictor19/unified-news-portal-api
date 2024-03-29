@@ -3,10 +3,12 @@ import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { SendEmailVerificationDto } from './dtos/send-email-verification.dto';
 import { SignupUserDto } from './dtos/signup-user.dto';
-import { SignupUserUseCase } from './usecases';
-import { LoginUserUseCase } from './usecases/login-user.usecase';
-import { SendEmailVerificationUseCase } from './usecases/send-email-verification.usecase';
-import { VerifyEmailUseCase } from './usecases/verify-email.usecase';
+import {
+  SignupUserUseCase,
+  LoginUserUseCase,
+  SendEmailVerificationUseCase,
+  VerifyEmailUseCase,
+} from './usecases';
 
 @Controller('/users')
 export class UsersController {

@@ -19,8 +19,8 @@ import {
   LoginUserUseCase,
   SignupUserUseCase,
   VerifyEmailUseCase,
+  SendEmailVerificationUseCase,
 } from './usecases';
-import { SendEmailVerificationUseCase } from './usecases/send-email-verification.usecase';
 import { UsersController } from './users.controller';
 
 @Module({
