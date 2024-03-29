@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IMailProvider } from '../providers/mail/mail-provider.interface';
@@ -30,6 +30,12 @@ export class SendPasswordRecoveryEmailUseCase
 
     if (!existingUser) {
       throw new NotFoundException('User not found');
+    }
+
+    const isEmailVerified = existingUser.email_is_verified;
+
+    if (!isEmailVerified) {
+      throw new UnauthorizedException('Email not verified');
     }
 
     const payload: PasswordRecoveryJwtPayload = {

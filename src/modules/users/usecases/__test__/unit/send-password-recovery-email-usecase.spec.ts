@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { SendPasswordRecoveryEmailUseCase } from '../../send-password-recovery-email.usecase';
 
@@ -46,8 +46,21 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
     expect(findByEmailSpy).toHaveBeenCalled();
   });
 
+  it('Should throw a UnauthorizedException when user email is not verified', async () => {
+    const user = { _id: 'userId', email_is_verified: false } as User;
+
+    const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
+    findByEmailSpy.mockResolvedValue(user);
+
+    await expect(() =>
+      sut.execute({ email: faker.internet.email() }),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+
+    expect(findByEmailSpy).toHaveBeenCalled();
+  });
+
   it('Should create a jwt of type PasswordRecoveryJwtPayload', async () => {
-    const user = { _id: 'userId' } as User;
+    const user = { _id: 'userId', email_is_verified: true } as User;
 
     const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
@@ -64,7 +77,12 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   });
 
   it('Should send an email with the provided html template', async () => {
-    const user = { _id: 'userId', name: faker.internet.userName() } as User;
+    const user = {
+      _id: 'userId',
+      name: faker.internet.userName(),
+      email_is_verified: true,
+    } as User;
+
     const input = { email: faker.internet.email() };
 
     const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
