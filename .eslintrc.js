@@ -21,7 +21,6 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    indent: ['error', 2],
     semi: ['error', 'always'],
     'linebreak-style': ['error', 'unix'],
     'no-console': 'error',
