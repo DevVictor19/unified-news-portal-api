@@ -3,6 +3,7 @@ import { BadRequestException } from '@nestjs/common';
 
 import { SignupUserUseCase } from '../../signup-user.usecase';
 
+import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { User } from '@/modules/users/entities/users.entity';
 import { UsersFactory } from '@/modules/users/entities/users.factory';
 import { HashProviderMock } from '@/modules/users/providers/hash/__MOCKS__/hash-provider.mock';
@@ -85,7 +86,7 @@ describe('SignupUserUseCase unit tests', () => {
 
     expect(signJwtSpy).toHaveBeenCalledWith({
       expiresIn: '2h',
-      payload: { email: payload.email },
+      payload: { email: payload.email, token_type: TOKEN_TYPE.EMAIL_VERIFY },
     });
     expect(compileTemplateSpy).toHaveBeenCalledWith('email-verification.hbs', {
       link,

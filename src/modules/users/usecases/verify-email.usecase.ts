@@ -4,6 +4,7 @@ import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 
 type Input = {
   token: string;
@@ -24,6 +25,10 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
       throw new UnauthorizedException(
         'Invalid token, please request another one',
       );
+    }
+
+    if (token.token_type !== TOKEN_TYPE.EMAIL_VERIFY) {
+      throw new UnauthorizedException('Invalid token type');
     }
 
     const existingUser = await this.usersRepository.findByEmail(token.email);

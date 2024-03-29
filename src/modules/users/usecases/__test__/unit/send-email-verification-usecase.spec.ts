@@ -3,6 +3,7 @@ import { BadRequestException } from '@nestjs/common';
 
 import { SendEmailVerificationUseCase } from '../../send-email-verification.usecase';
 
+import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { User } from '@/modules/users/entities/users.entity';
 import { JwtProviderMock } from '@/modules/users/providers/jwt/__MOCKS__/jwt-provider.mock';
 import { IJwtProvider } from '@/modules/users/providers/jwt/jwt-provider.interface';
@@ -61,7 +62,7 @@ describe('SendEmailVerificationUseCase unit tests', () => {
     await sut.execute({ email });
 
     expect(signTokenSpy).toHaveBeenCalledWith({
-      payload: { email },
+      payload: { email, token_type: TOKEN_TYPE.EMAIL_VERIFY },
       expiresIn: '2h',
     });
   });

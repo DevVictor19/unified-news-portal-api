@@ -8,6 +8,7 @@ import { ITemplateEngineProvider } from '../providers/template-engine/template-e
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 
 type Input = {
   name: string;
@@ -36,7 +37,7 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
     }
 
     const token = this.jwtProvider.sign({
-      payload: { email: input.email },
+      payload: { email: input.email, token_type: TOKEN_TYPE.EMAIL_VERIFY },
       expiresIn: '2h',
     });
 

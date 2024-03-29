@@ -5,6 +5,7 @@ import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 
 type Input = {
   email: string;
@@ -45,7 +46,11 @@ export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
     }
 
     const token = this.jwtProvider.sign({
-      payload: { userId: existingUser._id, role: existingUser.role },
+      payload: {
+        userId: existingUser._id,
+        role: existingUser.role,
+        token_type: TOKEN_TYPE.AUTH,
+      },
       expiresIn: '4h',
     });
 

@@ -2,6 +2,7 @@ import { UnauthorizedException } from '@nestjs/common';
 
 import { VerifyEmailUseCase } from '../../verify-email.usecase';
 
+import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { User } from '@/modules/users/entities/users.entity';
 import { JwtProviderMock } from '@/modules/users/providers/jwt/__MOCKS__/jwt-provider.mock';
 import { IJwtProvider } from '@/modules/users/providers/jwt/jwt-provider.interface';
@@ -26,22 +27,35 @@ describe('VerifyEmailUseCase unit tests', () => {
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
       UnauthorizedException,
     );
+    expect(verifyJwtSpy).toHaveBeenCalled();
+  });
+
+  it('Should throw UnauthorizedException when token_type is invalid', async () => {
+    const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
+    verifyJwtSpy.mockReturnValue({ token_type: 'wrong token type' });
+
+    await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+    expect(verifyJwtSpy).toHaveBeenCalled();
   });
 
   it('Should throw UnauthorizedException when user not exists', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
-    verifyJwtSpy.mockReturnValue({});
+    verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
     findByEmailSpy.mockResolvedValue(null);
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
       UnauthorizedException,
     );
+    expect(verifyJwtSpy).toHaveBeenCalled();
+    expect(findByEmailSpy).toHaveBeenCalled();
   });
 
   it('Should not call update method when user email is already verified', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
-    verifyJwtSpy.mockReturnValue({});
+    verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
     findByEmailSpy.mockResolvedValue({ email_is_verified: true } as User);
     const updateUserSpy = jest.spyOn(usersRepository, 'update');
@@ -53,7 +67,10 @@ describe('VerifyEmailUseCase unit tests', () => {
 
   it('Should update user as email verified', async () => {
     const token = 'token';
-    const tokenPayload = { email: 'email' };
+    const tokenPayload = {
+      email: 'email',
+      token_type: TOKEN_TYPE.EMAIL_VERIFY,
+    };
     const user = { _id: 'id', email_is_verified: false } as User;
 
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
