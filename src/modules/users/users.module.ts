@@ -20,6 +20,7 @@ import {
   SignupUserUseCase,
   VerifyEmailUseCase,
   SendEmailVerificationUseCase,
+  SendPasswordRecoveryEmailUseCase,
 } from './usecases';
 import { UsersController } from './users.controller';
 
@@ -147,6 +148,28 @@ import { UsersController } from './users.controller';
         return new VerifyEmailUseCase(jwtProvider, usersRepository);
       },
       inject: ['JwtProvider', 'UsersRepository'],
+    },
+    {
+      provide: SendPasswordRecoveryEmailUseCase,
+      useFactory: (
+        usersRepository: IUsersRepository,
+        jwtProvider: IJwtProvider,
+        templateProvider: ITemplateEngineProvider,
+        mailProvider: IMailProvider,
+      ) => {
+        return new SendPasswordRecoveryEmailUseCase(
+          usersRepository,
+          jwtProvider,
+          templateProvider,
+          mailProvider,
+        );
+      },
+      inject: [
+        'UsersRepository',
+        'JwtProvider',
+        'TemplateEngineProvider',
+        'MailProvider',
+      ],
     },
   ],
 })

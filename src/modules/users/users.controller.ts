@@ -1,11 +1,17 @@
 import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
 
-import { SignupUserDto, LoginUserDto, SendEmailVerificationDto } from './dtos';
+import {
+  SignupUserDto,
+  LoginUserDto,
+  SendEmailVerificationDto,
+  SendPasswordRecoveryEmailDto,
+} from './dtos';
 import {
   SignupUserUseCase,
   LoginUserUseCase,
   SendEmailVerificationUseCase,
   VerifyEmailUseCase,
+  SendPasswordRecoveryEmailUseCase,
 } from './usecases';
 
 @Controller('/users')
@@ -14,6 +20,7 @@ export class UsersController {
     private signupUserUseCase: SignupUserUseCase,
     private loginUserUseCase: LoginUserUseCase,
     private sendEmailVerificationUseCase: SendEmailVerificationUseCase,
+    private sendPasswordRecoveryEmailUseCase: SendPasswordRecoveryEmailUseCase,
     private verifyEmailUseCase: VerifyEmailUseCase,
   ) {}
 
@@ -32,6 +39,12 @@ export class UsersController {
   @HttpCode(200)
   sendEmailVerification(@Body() dto: SendEmailVerificationDto) {
     return this.sendEmailVerificationUseCase.execute(dto);
+  }
+
+  @Post('/send-password-recovery')
+  @HttpCode(200)
+  sendPasswordRecoveryEmail(@Body() dto: SendPasswordRecoveryEmailDto) {
+    return this.sendPasswordRecoveryEmailUseCase.execute(dto);
   }
 
   @Get('/verify')
