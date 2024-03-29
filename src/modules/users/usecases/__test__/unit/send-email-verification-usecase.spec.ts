@@ -50,6 +50,7 @@ describe('SendEmailVerificationUseCase unit tests', () => {
     await expect(() =>
       sut.execute({ email: faker.internet.email() }),
     ).rejects.toBeInstanceOf(BadRequestException);
+    expect(findByEmailSpy).toHaveBeenCalled();
   });
 
   it('Should create a jwt token with user email as payload', async () => {
@@ -61,6 +62,7 @@ describe('SendEmailVerificationUseCase unit tests', () => {
 
     await sut.execute({ email });
 
+    expect(findByEmailSpy).toHaveBeenCalled();
     expect(signTokenSpy).toHaveBeenCalledWith({
       payload: { email, token_type: TOKEN_TYPE.EMAIL_VERIFY },
       expiresIn: '2h',
@@ -87,6 +89,8 @@ describe('SendEmailVerificationUseCase unit tests', () => {
     const link = `${serverUrl}/users/verify?token=${token}`;
     const html = await compileTemplateSpy.mock.results[0].value;
 
+    expect(findByEmailSpy).toHaveBeenCalled();
+    expect(signJwtSpy).toHaveBeenCalled();
     expect(compileTemplateSpy).toHaveBeenCalledWith('email-verification.hbs', {
       link,
     });
