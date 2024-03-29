@@ -45,7 +45,7 @@ export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
     }
 
     const token = this.jwtProvider.sign({
-      payload: { userId: existingUser._id },
+      payload: { userId: existingUser._id, role: existingUser.role },
       expiresIn: '4h',
     });
 

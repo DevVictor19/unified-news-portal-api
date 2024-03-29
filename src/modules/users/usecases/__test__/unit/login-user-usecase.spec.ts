@@ -3,6 +3,7 @@ import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 
 import { LoginUserUseCase } from '../../login-user.usecase';
 
+import { ROLES } from '@/common/enums/roles.enum';
 import { User } from '@/modules/users/entities/users.entity';
 import { HashProviderMock } from '@/modules/users/providers/hash/__MOCKS__/hash-provider.mock';
 import { IHashProvider } from '@/modules/users/providers/hash/hash-provider.interface';
@@ -58,10 +59,11 @@ describe('LoginUserUseCase unit tests', () => {
     );
   });
 
-  it('Should create a jwt token with the user id', async () => {
+  it('Should create a login jwt token', async () => {
     const user = {
       _id: 'id',
       email_is_verified: true,
+      role: ROLES.STUDENT,
     } as User;
 
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
@@ -74,7 +76,7 @@ describe('LoginUserUseCase unit tests', () => {
 
     expect(signJwtSpy).toHaveBeenCalledWith({
       expiresIn: '4h',
-      payload: { userId: user._id },
+      payload: { userId: user._id, role: ROLES.STUDENT },
     });
   });
 });
