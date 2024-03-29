@@ -28,7 +28,7 @@ export class UsersController {
     return this.loginUserUseCase.execute(loginUserDto);
   }
 
-  @Post('/send-verification')
+  @Post('/send-email-verification')
   @HttpCode(200)
   sendEmailVerification(@Body() dto: SendEmailVerificationDto) {
     return this.sendEmailVerificationUseCase.execute(dto);
