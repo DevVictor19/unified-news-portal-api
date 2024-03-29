@@ -19,5 +19,5 @@ export type JwtPayload = {
 
 export interface IJwtProvider {
   sign({ payload, expiresIn }: TokenSignOptions): string;
-  verify(token: string): JwtPayload | string | null;
+  verify<T extends JwtPayload>(token: string): T | string | null;
 }

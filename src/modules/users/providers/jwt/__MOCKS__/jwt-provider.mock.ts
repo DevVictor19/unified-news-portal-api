@@ -10,7 +10,7 @@ export class JwtProviderMock implements IJwtProvider {
     return 'token';
   }
 
-  verify(token: string): string | JwtPayload | null {
+  verify<T extends JwtPayload>(token: string): string | T | null {
     return {
       key: 'test key',
       iss: 'issuer',
@@ -20,6 +20,6 @@ export class JwtProviderMock implements IJwtProvider {
       nbf: 1672455600, // Exemplo de timestamp UNIX para 31/12/2022 00:00:00 GMT
       iat: 1672396800, // Exemplo de timestamp UNIX para 30/12/2022 08:00:00 GMT
       jti: 'jwt_token_id',
-    };
+    } as any;
   }
 }

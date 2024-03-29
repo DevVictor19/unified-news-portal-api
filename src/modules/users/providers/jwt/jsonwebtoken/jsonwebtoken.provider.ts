@@ -13,9 +13,9 @@ export class JsonWebTokenProvider implements IJwtProvider {
     return sign(payload, this.secretKey, { expiresIn });
   }
 
-  verify(token: string): JwtPayload | string | null {
+  verify<T extends JwtPayload>(token: string): T | string | null {
     try {
-      return verify(token, this.secretKey);
+      return verify(token, this.secretKey) as T;
     } catch {
       return null;
     }
