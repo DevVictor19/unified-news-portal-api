@@ -62,6 +62,8 @@ describe('VerifyEmailUseCase unit tests', () => {
 
     await sut.execute({ token: 'token' });
 
+    expect(verifyJwtSpy).toHaveBeenCalled();
+    expect(findByEmailSpy).toHaveBeenCalled();
     expect(updateUserSpy).not.toHaveBeenCalled();
   });
 
