@@ -60,7 +60,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
 
     await sut.execute({ email: faker.internet.email() });
     expect(findByEmailSpy).toHaveBeenCalled();
-    expect(signJwtSpy).toHaveBeenCalledWith({ payload, expiresIn: '2h' });
+    expect(signJwtSpy).toHaveBeenCalledWith({ payload, expiresIn: 1200 });
   });
 
   it('Should send an email with the provided html template', async () => {
@@ -86,7 +86,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
     const recoveryPasswordUrl = `http://example?token=${token}`;
 
     expect(findByEmailSpy).toHaveBeenCalled();
-    expect(signJwtSpy).toHaveBeenCalledWith({ payload, expiresIn: '2h' });
+    expect(signJwtSpy).toHaveBeenCalledWith({ payload, expiresIn: 1200 });
     expect(compileTemplateSpy).toHaveBeenCalledWith('password-recovery.hbs', {
       link: recoveryPasswordUrl,
     });

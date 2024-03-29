@@ -37,7 +37,7 @@ export class SendPasswordRecoveryEmailUseCase
       userId: existingUser._id!,
     };
 
-    const token = this.jwtProvider.sign({ payload, expiresIn: '2h' });
+    const token = this.jwtProvider.sign({ payload, expiresIn: 1200 }); // 20min
 
     const recoveryPasswordUrl = `http://example?token=${token}`;
 
