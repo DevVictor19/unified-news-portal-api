@@ -1,8 +1,6 @@
 import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
 
-import { LoginUserDto } from './dtos/login-user.dto';
-import { SendEmailVerificationDto } from './dtos/send-email-verification.dto';
-import { SignupUserDto } from './dtos/signup-user.dto';
+import { SignupUserDto, LoginUserDto, SendEmailVerificationDto } from './dtos';
 import {
   SignupUserUseCase,
   LoginUserUseCase,
