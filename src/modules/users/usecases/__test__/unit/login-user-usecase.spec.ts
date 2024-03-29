@@ -38,6 +38,7 @@ describe('LoginUserUseCase unit tests', () => {
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
       UnauthorizedException,
     );
+    expect(findByEmailSpy).toHaveBeenCalled();
   });
 
   test('Throw ForbiddenException if user email is not verified', async () => {
@@ -47,6 +48,7 @@ describe('LoginUserUseCase unit tests', () => {
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
+    expect(findByEmailSpy).toHaveBeenCalled();
   });
 
   test('Throw UnauthorizedException if user password is wrong', async () => {
@@ -58,6 +60,8 @@ describe('LoginUserUseCase unit tests', () => {
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
       UnauthorizedException,
     );
+    expect(findByEmailSpy).toHaveBeenCalled();
+    expect(compareHashSpy).toHaveBeenCalled();
   });
 
   it('Should create a login jwt token', async () => {
@@ -75,6 +79,8 @@ describe('LoginUserUseCase unit tests', () => {
 
     await sut.execute(input);
 
+    expect(findByEmailSpy).toHaveBeenCalled();
+    expect(compareHashSpy).toHaveBeenCalled();
     expect(signJwtSpy).toHaveBeenCalledWith({
       expiresIn: '4h',
       payload: {
