@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import environment from './config/environment.config';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import environment from './config/environment.config';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    UsersModule,
   ],
 })
 export class AppModule {}
