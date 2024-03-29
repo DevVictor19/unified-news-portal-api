@@ -1,4 +1,4 @@
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
 import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
@@ -34,7 +34,7 @@ export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
     const isEmailVerified = existingUser.email_is_verified;
 
     if (!isEmailVerified) {
-      throw new ForbiddenException('Email not verified');
+      throw new UnauthorizedException('Email not verified');
     }
 
     const isValidPassword = await this.hashProvider.compareHash(

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 
 import { LoginUserUseCase } from '../../login-user.usecase';
 
@@ -41,12 +41,12 @@ describe('LoginUserUseCase unit tests', () => {
     expect(findByEmailSpy).toHaveBeenCalled();
   });
 
-  test('Throw ForbiddenException if user email is not verified', async () => {
+  test('Throw UnauthorizedException if user email is not verified', async () => {
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
     findByEmailSpy.mockResolvedValue({ email_is_verified: false } as User);
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      ForbiddenException,
+      UnauthorizedException,
     );
     expect(findByEmailSpy).toHaveBeenCalled();
   });
