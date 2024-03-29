@@ -20,6 +20,7 @@ import {
   SignupUserUseCase,
   VerifyEmailUseCase,
 } from './usecases';
+import { SendEmailVerificationUseCase } from './usecases/send-email-verification.usecase';
 import { UsersController } from './users.controller';
 
 @Module({
@@ -110,6 +111,32 @@ import { UsersController } from './users.controller';
         return new LoginUserUseCase(usersRepository, hashProvider, jwtProvider);
       },
       inject: ['UsersRepository', 'HashProvider', 'JwtProvider'],
+    },
+    {
+      provide: SendEmailVerificationUseCase,
+      useFactory: (
+        usersRepository: IUsersRepository,
+        templateProvider: ITemplateEngineProvider,
+        mailProvider: IMailProvider,
+        jwtProvider: IJwtProvider,
+        configService: ConfigService,
+      ) => {
+        const serverUrl = configService.getOrThrow<string>('server.url');
+        return new SendEmailVerificationUseCase(
+          usersRepository,
+          templateProvider,
+          mailProvider,
+          jwtProvider,
+          serverUrl,
+        );
+      },
+      inject: [
+        'UsersRepository',
+        'TemplateEngineProvider',
+        'MailProvider',
+        'JwtProvider',
+        ConfigService,
+      ],
     },
     {
       provide: VerifyEmailUseCase,
