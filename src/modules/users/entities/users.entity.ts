@@ -10,7 +10,7 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User extends Entity {
-  @Prop({ type: String, default: ROLES.STUDENT })
+  @Prop({ type: Number, default: ROLES.STUDENT })
   role: ROLES = ROLES.STUDENT;
 
   @Prop()
