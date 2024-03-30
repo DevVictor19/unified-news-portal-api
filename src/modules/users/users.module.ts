@@ -29,7 +29,6 @@ import { UsersController } from './users.controller';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    ConfigModule,
   ],
   controllers: [UsersController],
   providers: [
