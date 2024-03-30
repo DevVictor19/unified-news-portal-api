@@ -1,20 +1,18 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { User, UserSchema } from './entities/users.entity';
 import { UsersFactory } from './entities/users.factory';
-import { PROVIDERS } from './enums/providers.enum';
 import { BcryptHashProvider } from './providers/hash/bcrypt/bcrypt-hash.provider';
 import { IHashProvider } from './providers/hash/hash-provider.interface';
-import { JsonWebTokenProvider } from './providers/jwt/jsonwebtoken/jsonwebtoken.provider';
-import { IJwtProvider } from './providers/jwt/jwt-provider.interface';
 import { IMailProvider } from './providers/mail/mail-provider.interface';
 import { NodeMailerMailProvider } from './providers/mail/nodemailer/nodemailer-mail.provider';
 import { HandleBarsTemplateEngineProvider } from './providers/template-engine/handlebars/handlebars-template-engine.provider';
 import { ITemplateEngineProvider } from './providers/template-engine/template-engine-provider.interface';
 import { UsersMongoRepository } from './repositories/mongo/users-mongo.repository';
+import { USERS_REPOSITORY } from './repositories/users-repository.constants';
 import { IUsersRepository } from './repositories/users-repository.interface';
 import {
   LoginUserUseCase,
@@ -25,6 +23,8 @@ import {
   ChangePasswordUseCase,
 } from './usecases';
 import { UsersController } from './users.controller';
+import { PROVIDERS } from '../../common/enums/providers.enum';
+import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { UsersController } from './users.controller';
   controllers: [UsersController],
   providers: [
     {
-      provide: PROVIDERS.REPO,
+      provide: USERS_REPOSITORY,
       useFactory: (userModel: Model<User>) => {
         return new UsersMongoRepository(userModel);
       },
@@ -50,15 +50,6 @@ import { UsersController } from './users.controller';
     {
       provide: PROVIDERS.TEMPLATE_ENGINE,
       useClass: HandleBarsTemplateEngineProvider,
-    },
-    {
-      provide: PROVIDERS.JWT,
-      useFactory: (configService: ConfigService) => {
-        return new JsonWebTokenProvider(
-          configService.getOrThrow<string>('server.secret_key'),
-        );
-      },
-      inject: [ConfigService],
     },
     {
       provide: PROVIDERS.MAIL,
@@ -94,7 +85,7 @@ import { UsersController } from './users.controller';
         );
       },
       inject: [
-        PROVIDERS.REPO,
+        USERS_REPOSITORY,
         UsersFactory,
         PROVIDERS.HASH,
         PROVIDERS.TEMPLATE_ENGINE,
@@ -112,7 +103,7 @@ import { UsersController } from './users.controller';
       ) => {
         return new LoginUserUseCase(usersRepository, hashProvider, jwtProvider);
       },
-      inject: [PROVIDERS.REPO, PROVIDERS.HASH, PROVIDERS.JWT],
+      inject: [USERS_REPOSITORY, PROVIDERS.HASH, PROVIDERS.JWT],
     },
     {
       provide: SendEmailVerificationUseCase,
@@ -133,7 +124,7 @@ import { UsersController } from './users.controller';
         );
       },
       inject: [
-        PROVIDERS.REPO,
+        USERS_REPOSITORY,
         PROVIDERS.TEMPLATE_ENGINE,
         PROVIDERS.MAIL,
         PROVIDERS.JWT,
@@ -148,7 +139,7 @@ import { UsersController } from './users.controller';
       ) => {
         return new VerifyEmailUseCase(jwtProvider, usersRepository);
       },
-      inject: [PROVIDERS.JWT, PROVIDERS.REPO],
+      inject: [PROVIDERS.JWT, USERS_REPOSITORY],
     },
     {
       provide: SendPasswordRecoveryEmailUseCase,
@@ -166,7 +157,7 @@ import { UsersController } from './users.controller';
         );
       },
       inject: [
-        PROVIDERS.REPO,
+        USERS_REPOSITORY,
         PROVIDERS.JWT,
         PROVIDERS.TEMPLATE_ENGINE,
         PROVIDERS.MAIL,
@@ -185,7 +176,7 @@ import { UsersController } from './users.controller';
           hashProvider,
         );
       },
-      inject: [PROVIDERS.REPO, PROVIDERS.JWT, PROVIDERS.HASH],
+      inject: [USERS_REPOSITORY, PROVIDERS.JWT, PROVIDERS.HASH],
     },
   ],
 })

@@ -1,7 +1,7 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
+import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
-import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { PasswordRecoveryJwtParsed } from '@/common/@types/users/jwt-payloads.type';

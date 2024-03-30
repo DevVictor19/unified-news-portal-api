@@ -4,8 +4,8 @@ import { VerifyEmailUseCase } from '../../verify-email.usecase';
 
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { User } from '@/modules/users/entities/users.entity';
-import { JwtProviderMock } from '@/modules/users/providers/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/users/providers/jwt/jwt-provider.interface';
+import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
 import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
 import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
 

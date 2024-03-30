@@ -6,8 +6,8 @@ import { SendPasswordRecoveryEmailUseCase } from '../../send-password-recovery-e
 import { PasswordRecoveryJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { User } from '@/modules/users/entities/users.entity';
-import { JwtProviderMock } from '@/modules/users/providers/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/users/providers/jwt/jwt-provider.interface';
+import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
 import { MailProviderMock } from '@/modules/users/providers/mail/__MOCKS__/mail-provider.mock';
 import { IMailProvider } from '@/modules/users/providers/mail/mail-provider.interface';
 import { TemplateEngineProviderMock } from '@/modules/users/providers/template-engine/__MOCKS__/template-engine-provider.mock';

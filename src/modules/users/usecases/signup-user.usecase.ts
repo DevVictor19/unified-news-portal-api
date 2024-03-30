@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
 
+import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { UsersFactory } from '../entities/users.factory';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
-import { IJwtProvider } from '../providers/jwt/jwt-provider.interface';
 import { IMailProvider } from '../providers/mail/mail-provider.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IUsersRepository } from '../repositories/users-repository.interface';

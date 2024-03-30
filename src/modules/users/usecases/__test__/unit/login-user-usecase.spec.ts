@@ -5,11 +5,11 @@ import { LoginUserUseCase } from '../../login-user.usecase';
 
 import { ROLES } from '@/common/enums/roles.enum';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
 import { User } from '@/modules/users/entities/users.entity';
 import { HashProviderMock } from '@/modules/users/providers/hash/__MOCKS__/hash-provider.mock';
 import { IHashProvider } from '@/modules/users/providers/hash/hash-provider.interface';
-import { JwtProviderMock } from '@/modules/users/providers/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/users/providers/jwt/jwt-provider.interface';
 import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
 import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
 
