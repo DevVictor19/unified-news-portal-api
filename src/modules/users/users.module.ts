@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 
 import { User, UserSchema } from './entities/users.entity';
 import { UsersFactory } from './entities/users.factory';
+import { PROVIDERS } from './enums/providers.enum';
 import { BcryptHashProvider } from './providers/hash/bcrypt/bcrypt-hash.provider';
 import { IHashProvider } from './providers/hash/hash-provider.interface';
 import { JsonWebTokenProvider } from './providers/jwt/jsonwebtoken/jsonwebtoken.provider';
@@ -33,7 +34,7 @@ import { UsersController } from './users.controller';
   controllers: [UsersController],
   providers: [
     {
-      provide: 'UsersRepository',
+      provide: PROVIDERS.REPO,
       useFactory: (userModel: Model<User>) => {
         return new UsersMongoRepository(userModel);
       },
@@ -44,15 +45,15 @@ import { UsersController } from './users.controller';
       useClass: UsersFactory,
     },
     {
-      provide: 'HashProvider',
+      provide: PROVIDERS.HASH,
       useClass: BcryptHashProvider,
     },
     {
-      provide: 'TemplateEngineProvider',
+      provide: PROVIDERS.TEMPLATE_ENGINE,
       useClass: HandleBarsTemplateEngineProvider,
     },
     {
-      provide: 'JwtProvider',
+      provide: PROVIDERS.JWT,
       useFactory: (configService: ConfigService) => {
         return new JsonWebTokenProvider(
           configService.getOrThrow<string>('server.secret_key'),
@@ -61,7 +62,7 @@ import { UsersController } from './users.controller';
       inject: [ConfigService],
     },
     {
-      provide: 'MailProvider',
+      provide: PROVIDERS.MAIL,
       useFactory: (configService: ConfigService) => {
         const mailUser = configService.getOrThrow<string>('mail.email');
         const mailName = configService.getOrThrow<string>('mail.name');
@@ -94,12 +95,12 @@ import { UsersController } from './users.controller';
         );
       },
       inject: [
-        'UsersRepository',
+        PROVIDERS.REPO,
         UsersFactory,
-        'HashProvider',
-        'TemplateEngineProvider',
-        'JwtProvider',
-        'MailProvider',
+        PROVIDERS.HASH,
+        PROVIDERS.TEMPLATE_ENGINE,
+        PROVIDERS.JWT,
+        PROVIDERS.MAIL,
         ConfigService,
       ],
     },
@@ -112,7 +113,7 @@ import { UsersController } from './users.controller';
       ) => {
         return new LoginUserUseCase(usersRepository, hashProvider, jwtProvider);
       },
-      inject: ['UsersRepository', 'HashProvider', 'JwtProvider'],
+      inject: [PROVIDERS.REPO, PROVIDERS.HASH, PROVIDERS.JWT],
     },
     {
       provide: SendEmailVerificationUseCase,
@@ -133,10 +134,10 @@ import { UsersController } from './users.controller';
         );
       },
       inject: [
-        'UsersRepository',
-        'TemplateEngineProvider',
-        'MailProvider',
-        'JwtProvider',
+        PROVIDERS.REPO,
+        PROVIDERS.TEMPLATE_ENGINE,
+        PROVIDERS.MAIL,
+        PROVIDERS.JWT,
         ConfigService,
       ],
     },
@@ -148,7 +149,7 @@ import { UsersController } from './users.controller';
       ) => {
         return new VerifyEmailUseCase(jwtProvider, usersRepository);
       },
-      inject: ['JwtProvider', 'UsersRepository'],
+      inject: [PROVIDERS.JWT, PROVIDERS.REPO],
     },
     {
       provide: SendPasswordRecoveryEmailUseCase,
@@ -166,10 +167,10 @@ import { UsersController } from './users.controller';
         );
       },
       inject: [
-        'UsersRepository',
-        'JwtProvider',
-        'TemplateEngineProvider',
-        'MailProvider',
+        PROVIDERS.REPO,
+        PROVIDERS.JWT,
+        PROVIDERS.TEMPLATE_ENGINE,
+        PROVIDERS.MAIL,
       ],
     },
     {
@@ -185,7 +186,7 @@ import { UsersController } from './users.controller';
           hashProvider,
         );
       },
-      inject: ['UsersRepository', 'JwtProvider', 'HashProvider'],
+      inject: [PROVIDERS.REPO, PROVIDERS.JWT, PROVIDERS.HASH],
     },
   ],
 })
