@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import environment from './config/environment.config';
 import { JwtModule } from './modules/common/jwt/jwt.module';
+import { SubjectsModule } from './modules/subjects/subjects.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -18,6 +19,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     JwtModule,
     UsersModule,
+    SubjectsModule,
   ],
 })
 export class AppModule {}
