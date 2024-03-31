@@ -6,7 +6,9 @@ import { Subject, SubjectSchema } from './entities/subjects.entity';
 import { SubjectsFactory } from './entities/subjects.factory';
 import { SubjectsMongoRepository } from './repositories/mongo/subjects-mongo.repository';
 import { SUBJECTS_REPOSITORY } from './repositories/subjects-repository.constants';
+import { ISubjectsRepository } from './repositories/subjects-repository.interface';
 import { SubjectsController } from './subjects.controller';
+import { CreateSubjectsUseCase } from './usecases';
 
 @Module({
   controllers: [SubjectsController],
@@ -24,6 +26,16 @@ import { SubjectsController } from './subjects.controller';
     {
       provide: SubjectsFactory,
       useClass: SubjectsFactory,
+    },
+    {
+      provide: CreateSubjectsUseCase,
+      useFactory: (
+        subjectsFactory: SubjectsFactory,
+        subjectsRepository: ISubjectsRepository,
+      ) => {
+        return new CreateSubjectsUseCase(subjectsFactory, subjectsRepository);
+      },
+      inject: [SubjectsFactory, SUBJECTS_REPOSITORY],
     },
   ],
 })
