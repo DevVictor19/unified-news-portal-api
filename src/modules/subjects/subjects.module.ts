@@ -8,7 +8,7 @@ import { SubjectsMongoRepository } from './repositories/mongo/subjects-mongo.rep
 import { SUBJECTS_REPOSITORY } from './repositories/subjects-repository.constants';
 import { ISubjectsRepository } from './repositories/subjects-repository.interface';
 import { SubjectsController } from './subjects.controller';
-import { CreateSubjectsUseCase } from './usecases';
+import { CreateSubjectsUseCase, SearchSubjectsUseCase } from './usecases';
 
 @Module({
   controllers: [SubjectsController],
@@ -36,6 +36,13 @@ import { CreateSubjectsUseCase } from './usecases';
         return new CreateSubjectsUseCase(subjectsFactory, subjectsRepository);
       },
       inject: [SubjectsFactory, SUBJECTS_REPOSITORY],
+    },
+    {
+      provide: SearchSubjectsUseCase,
+      useFactory: (subjectsRepository: ISubjectsRepository) => {
+        return new SearchSubjectsUseCase(subjectsRepository);
+      },
+      inject: [SUBJECTS_REPOSITORY],
     },
   ],
 })
