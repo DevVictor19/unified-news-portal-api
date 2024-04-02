@@ -6,8 +6,8 @@ export type EntityProps = {
 };
 
 export abstract class Entity {
-  id?: string;
-  created_at?: Date;
+  id: string;
+  created_at: Date;
 
   constructor(props: EntityProps) {
     props.id = props.id ?? randomUUID();
