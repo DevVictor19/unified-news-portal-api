@@ -1,57 +1,49 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-
 import { Subscriptions } from '@/common/@types/users/subscriptions.type';
-import { Entity } from '@/common/abstractions/entities/entity.abstraction';
+import {
+  Entity,
+  EntityProps,
+} from '@/common/abstractions/entities/entity.abstraction';
 import { COMUNICATIONS } from '@/common/enums/comunications.enum';
 import { ROLES } from '@/common/enums/roles.enum';
 
-export type UserDocument = HydratedDocument<User>;
-
-@Schema()
-export class User extends Entity {
-  @Prop({ type: Number, default: ROLES.STUDENT })
-  role: ROLES = ROLES.STUDENT;
-
-  @Prop()
-  photo_url?: string = undefined;
-
-  @Prop()
+export type UserEntityProps = EntityProps & {
+  role?: ROLES;
+  photo_url?: string;
   name: string;
-
-  @Prop()
   email: string;
-
-  @Prop()
-  phone?: string = undefined;
-
-  @Prop()
+  phone?: string;
   password: string;
+  email_is_verified?: boolean;
+  subscriptions?: Subscriptions;
+  comunications?: COMUNICATIONS[];
+};
+export class UserEntity extends Entity {
+  role: ROLES = ROLES.STUDENT;
+  photo_url?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  password: string;
+  email_is_verified: boolean;
+  subscriptions: Subscriptions;
+  comunications: COMUNICATIONS[];
 
-  @Prop({ default: false })
-  email_is_verified?: boolean = false;
+  constructor(props: UserEntityProps) {
+    const { id, created_at, ...userProps } = props;
 
-  @Prop({
-    type: {
-      categories: [String],
-      classes: [String],
-      courses: [String],
-      post_type: [String],
-      subjects: [String],
-    },
-  })
-  subscriptions: Subscriptions = {
-    categories: [],
-    classes: [],
-    courses: [],
-    post_type: [],
-    subjects: [],
-  };
+    super({ id, created_at });
 
-  @Prop({ type: [String] })
-  comunications: COMUNICATIONS[] = [];
+    userProps.role = userProps.role ?? ROLES.STUDENT;
+    userProps.email_is_verified = userProps.email_is_verified ?? false;
+    userProps.subscriptions = userProps.subscriptions ?? {
+      categories: [],
+      classes: [],
+      courses: [],
+      post_type: [],
+      subjects: [],
+    };
+    userProps.comunications = userProps.comunications ?? [];
+
+    Object.assign(this, userProps);
+  }
 }
-
-export const UserSchema = SchemaFactory.createForClass(User);
-
-export const UserModel = mongoose.model('users', UserSchema);
