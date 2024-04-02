@@ -1,8 +1,17 @@
-import { Prop } from '@nestjs/mongoose';
+import { randomUUID } from 'crypto';
+
+export type EntityProps = {
+  id?: string;
+  created_at?: Date;
+};
 
 export abstract class Entity {
-  _id?: string;
+  id?: string;
+  created_at?: Date;
 
-  @Prop({ default: new Date() })
-  created_at: Date = new Date();
+  constructor(props: EntityProps) {
+    props.id = props.id ?? randomUUID();
+    props.created_at = props.created_at ?? new Date();
+    Object.assign(this, props);
+  }
 }
