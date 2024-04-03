@@ -1,9 +1,9 @@
 import * as nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
-import { IMailProvider, IMessage } from '../mail-provider.interface';
+import { IMailService, IMessage } from '../mail-service.interface';
 
-export class NodeMailerMailProvider implements IMailProvider {
+export class NodeMailerMailService implements IMailService {
   private transporter: Mail;
 
   constructor(

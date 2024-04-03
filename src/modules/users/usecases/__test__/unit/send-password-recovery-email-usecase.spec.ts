@@ -10,23 +10,23 @@ import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.in
 import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
 import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
 import { UserEntity } from '@/modules/users/entities/users.entity';
-import { MailProviderMock } from '@/modules/users/providers/mail/__MOCKS__/mail-provider.mock';
-import { IMailProvider } from '@/modules/users/providers/mail/mail-provider.interface';
 import { TemplateEngineProviderMock } from '@/modules/users/providers/template-engine/__MOCKS__/template-engine-provider.mock';
 import { ITemplateEngineProvider } from '@/modules/users/providers/template-engine/template-engine-provider.interface';
+import { MailServiceMock } from '@/modules/users/services/mail/__MOCKS__/mail-service.mock';
+import { IMailService } from '@/modules/users/services/mail/mail-service.interface';
 
 describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   let sut: SendPasswordRecoveryEmailUseCase;
   let repository: IUsersRepository;
   let templateProvider: ITemplateEngineProvider;
   let jwtProvider: IJwtProvider;
-  let mailProvider: IMailProvider;
+  let mailProvider: IMailService;
 
   beforeEach(() => {
     repository = new UsersInMemoryRepository();
     templateProvider = new TemplateEngineProviderMock();
     jwtProvider = new JwtProviderMock();
-    mailProvider = new MailProviderMock();
+    mailProvider = new MailServiceMock();
     sut = new SendPasswordRecoveryEmailUseCase(
       repository,
       jwtProvider,

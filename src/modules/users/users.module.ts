@@ -13,10 +13,10 @@ import { IUsersRepository } from './database/repositories/users-repository.inter
 import { UserEntityFactory } from './entities/users.factory';
 import { BcryptHashProvider } from './providers/hash/bcrypt/bcrypt-hash.provider';
 import { IHashProvider } from './providers/hash/hash-provider.interface';
-import { IMailProvider } from './providers/mail/mail-provider.interface';
-import { NodeMailerMailProvider } from './providers/mail/nodemailer/nodemailer-mail.provider';
 import { HandleBarsTemplateEngineProvider } from './providers/template-engine/handlebars/handlebars-template-engine.provider';
 import { ITemplateEngineProvider } from './providers/template-engine/template-engine-provider.interface';
+import { IMailService } from './services/mail/mail-service.interface';
+import { NodeMailerMailService } from './services/mail/nodemailer/nodemailer-mail.service';
 import {
   LoginUserUseCase,
   SignupUserUseCase,
@@ -62,7 +62,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
         const mailUser = configService.getOrThrow<string>('mail.email');
         const mailName = configService.getOrThrow<string>('mail.name');
         const mailPassword = configService.getOrThrow<string>('mail.password');
-        return new NodeMailerMailProvider(mailUser, mailName, mailPassword);
+        return new NodeMailerMailService(mailUser, mailName, mailPassword);
       },
       inject: [ConfigService],
     },
@@ -74,7 +74,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
         hashProvider: IHashProvider,
         templateProvider: ITemplateEngineProvider,
         jwtProvider: IJwtProvider,
-        mailProvider: IMailProvider,
+        mailProvider: IMailService,
         configService: ConfigService,
       ) => {
         const serverUrl = configService.getOrThrow<string>('server.url');
@@ -115,7 +115,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
       useFactory: (
         usersRepository: IUsersRepository,
         templateProvider: ITemplateEngineProvider,
-        mailProvider: IMailProvider,
+        mailProvider: IMailService,
         jwtProvider: IJwtProvider,
         configService: ConfigService,
       ) => {
@@ -152,7 +152,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
         usersRepository: IUsersRepository,
         jwtProvider: IJwtProvider,
         templateProvider: ITemplateEngineProvider,
-        mailProvider: IMailProvider,
+        mailProvider: IMailService,
       ) => {
         return new SendPasswordRecoveryEmailUseCase(
           usersRepository,

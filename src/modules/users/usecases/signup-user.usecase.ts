@@ -4,8 +4,8 @@ import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interf
 import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { UserEntityFactory } from '../entities/users.factory';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
-import { IMailProvider } from '../providers/mail/mail-provider.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
+import { IMailService } from '../services/mail/mail-service.interface';
 
 import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
@@ -26,7 +26,7 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
     private hashProvider: IHashProvider,
     private templateProvider: ITemplateEngineProvider,
     private jwtProvider: IJwtProvider,
-    private mailProvider: IMailProvider,
+    private mailProvider: IMailService,
     private serverUrl: string,
   ) {}
 

@@ -2,8 +2,8 @@ import { BadRequestException } from '@nestjs/common';
 
 import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../database/repositories/users-repository.interface';
-import { IMailProvider } from '../providers/mail/mail-provider.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
+import { IMailService } from '../services/mail/mail-service.interface';
 
 import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
@@ -19,7 +19,7 @@ export class SendEmailVerificationUseCase
   constructor(
     private usersRepository: IUsersRepository,
     private templateProvider: ITemplateEngineProvider,
-    private mailProvider: IMailProvider,
+    private mailProvider: IMailService,
     private jwtProvider: IJwtProvider,
     private serverUrl: string,
   ) {}
