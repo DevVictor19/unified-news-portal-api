@@ -1,18 +1,19 @@
-import { User } from '../../entities/users.entity';
 import { IUsersRepository } from '../users-repository.interface';
 
-export class UsersInMemoryRepository implements IUsersRepository {
-  users: User[] = [];
+import { UserEntity } from '@/modules/users/entities/users.entity';
 
-  async insert(entity: User): Promise<void> {
+export class UsersInMemoryRepository implements IUsersRepository {
+  users: UserEntity[] = [];
+
+  async insert(entity: UserEntity): Promise<void> {
     this.users.push(entity);
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserEntity[]> {
     return this.users;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserEntity | null> {
     const existentUser = this.users.find((u) => u.email === email);
 
     if (!existentUser) {
@@ -22,8 +23,8 @@ export class UsersInMemoryRepository implements IUsersRepository {
     return existentUser;
   }
 
-  async findById(id: string): Promise<User | null> {
-    const existentUser = this.users.find((u) => u._id === id);
+  async findById(id: string): Promise<UserEntity | null> {
+    const existentUser = this.users.find((u) => u.id === id);
 
     if (!existentUser) {
       return null;
@@ -32,8 +33,8 @@ export class UsersInMemoryRepository implements IUsersRepository {
     return existentUser;
   }
 
-  async update(id: string, entity: User): Promise<void> {
-    const existentUser = this.users.find((u) => u._id === id);
+  async update(id: string, entity: UserEntity): Promise<void> {
+    const existentUser = this.users.find((u) => u.id === id);
 
     if (!existentUser) {
       return;
@@ -43,7 +44,7 @@ export class UsersInMemoryRepository implements IUsersRepository {
   }
 
   async delete(id: string): Promise<void> {
-    const updatedUsers = this.users.filter((u) => u._id !== id);
+    const updatedUsers = this.users.filter((u) => u.id !== id);
     this.users = updatedUsers;
   }
 }
