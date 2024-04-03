@@ -5,7 +5,7 @@ import { SubjectsPresenter } from '../../subjects.presenter';
 describe('SubjectsPresenter unit tests', () => {
   it('Should format the provided output', () => {
     const subject = {
-      _id: faker.database.mongodbObjectId(),
+      id: faker.database.mongodbObjectId(),
       name: faker.internet.domainName(),
       created_at: faker.date.anytime(),
       anyInfo1: 'random info1',
@@ -15,7 +15,7 @@ describe('SubjectsPresenter unit tests', () => {
     const result = SubjectsPresenter.format(subject);
 
     expect(result).toStrictEqual({
-      id: subject._id,
+      id: subject.id,
       name: subject.name,
       created_at: subject.created_at,
     });

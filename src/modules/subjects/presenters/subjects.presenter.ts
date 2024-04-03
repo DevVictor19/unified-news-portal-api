@@ -1,9 +1,9 @@
-import { Subject } from '../entities/subjects.entity';
+import { SubjectEntity } from '../entities/subjects.entity';
 
 export class SubjectsPresenter {
-  static format(input: Subject) {
+  static format(input: SubjectEntity) {
     return {
-      id: input._id,
+      id: input.id,
       name: input.name,
       created_at: input.created_at,
     };
