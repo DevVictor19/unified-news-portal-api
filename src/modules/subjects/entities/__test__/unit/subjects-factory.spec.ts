@@ -1,11 +1,12 @@
-import { CreateSubjectProps, SubjectsFactory } from '../../subjects.factory';
+import { SubjectEntityProps } from '../../subjects.entity';
+import { SubjectEntityFactory } from '../../subjects.factory';
 
 describe('SubjectsFactory unit tests', () => {
-  let sut: SubjectsFactory;
-  let subjectProps: CreateSubjectProps;
+  let sut: SubjectEntityFactory;
+  let subjectProps: SubjectEntityProps;
 
   beforeEach(() => {
-    sut = new SubjectsFactory();
+    sut = new SubjectEntityFactory();
 
     subjectProps = {
       name: 'subject name',
