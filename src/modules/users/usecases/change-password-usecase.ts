@@ -1,8 +1,8 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
+import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
-import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { PasswordRecoveryJwtParsed } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
@@ -47,6 +47,6 @@ export class ChangePasswordUseCase implements IBaseUseCase<Input, Output> {
 
     existingUser.password = newPassword;
 
-    await this.usersRepository.update(existingUser._id!, existingUser);
+    await this.usersRepository.update(existingUser.id!, existingUser);
   }
 }

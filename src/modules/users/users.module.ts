@@ -3,17 +3,20 @@ import { ConfigService } from '@nestjs/config';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { User, UserSchema } from './entities/users.entity';
-import { UsersFactory } from './entities/users.factory';
+import {
+  UserMongoEntity,
+  UserMongoSchema,
+} from './database/models/mongo/users-mongo.model';
+import { UsersMongoRepository } from './database/repositories/mongo/users-mongo.repository';
+import { USERS_REPOSITORY } from './database/repositories/users-repository.constants';
+import { IUsersRepository } from './database/repositories/users-repository.interface';
+import { UserEntityFactory } from './entities/users.factory';
 import { BcryptHashProvider } from './providers/hash/bcrypt/bcrypt-hash.provider';
 import { IHashProvider } from './providers/hash/hash-provider.interface';
 import { IMailProvider } from './providers/mail/mail-provider.interface';
 import { NodeMailerMailProvider } from './providers/mail/nodemailer/nodemailer-mail.provider';
 import { HandleBarsTemplateEngineProvider } from './providers/template-engine/handlebars/handlebars-template-engine.provider';
 import { ITemplateEngineProvider } from './providers/template-engine/template-engine-provider.interface';
-import { UsersMongoRepository } from './repositories/mongo/users-mongo.repository';
-import { USERS_REPOSITORY } from './repositories/users-repository.constants';
-import { IUsersRepository } from './repositories/users-repository.interface';
 import {
   LoginUserUseCase,
   SignupUserUseCase,
@@ -28,20 +31,22 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: UserMongoEntity.name, schema: UserMongoSchema },
+    ]),
   ],
   controllers: [UsersController],
   providers: [
     {
       provide: USERS_REPOSITORY,
-      useFactory: (userModel: Model<User>) => {
+      useFactory: (userModel: Model<UserMongoEntity>) => {
         return new UsersMongoRepository(userModel);
       },
-      inject: [getModelToken(User.name)],
+      inject: [getModelToken(UserMongoEntity.name)],
     },
     {
-      provide: UsersFactory,
-      useClass: UsersFactory,
+      provide: UserEntityFactory,
+      useClass: UserEntityFactory,
     },
     {
       provide: PROVIDERS.HASH,
@@ -65,7 +70,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
       provide: SignupUserUseCase,
       useFactory: (
         usersRepository: IUsersRepository,
-        usersFactory: UsersFactory,
+        userEntityFactory: UserEntityFactory,
         hashProvider: IHashProvider,
         templateProvider: ITemplateEngineProvider,
         jwtProvider: IJwtProvider,
@@ -76,7 +81,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
 
         return new SignupUserUseCase(
           usersRepository,
-          usersFactory,
+          userEntityFactory,
           hashProvider,
           templateProvider,
           jwtProvider,
@@ -86,7 +91,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
       },
       inject: [
         USERS_REPOSITORY,
-        UsersFactory,
+        UserEntityFactory,
         PROVIDERS.HASH,
         PROVIDERS.TEMPLATE_ENGINE,
         PROVIDERS.JWT,

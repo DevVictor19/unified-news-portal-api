@@ -7,11 +7,11 @@ import { ROLES } from '@/common/enums/roles.enum';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
 import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
-import { User } from '@/modules/users/entities/users.entity';
+import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
+import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { UserEntity } from '@/modules/users/entities/users.entity';
 import { HashProviderMock } from '@/modules/users/providers/hash/__MOCKS__/hash-provider.mock';
 import { IHashProvider } from '@/modules/users/providers/hash/hash-provider.interface';
-import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
-import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
 
 const input = {
   email: faker.internet.email(),
@@ -43,7 +43,9 @@ describe('LoginUserUseCase unit tests', () => {
 
   test('Throw UnauthorizedException if user email is not verified', async () => {
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
-    findByEmailSpy.mockResolvedValue({ email_is_verified: false } as User);
+    findByEmailSpy.mockResolvedValue({
+      email_is_verified: false,
+    } as UserEntity);
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
       UnauthorizedException,
@@ -53,7 +55,7 @@ describe('LoginUserUseCase unit tests', () => {
 
   test('Throw UnauthorizedException if user password is wrong', async () => {
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
-    findByEmailSpy.mockResolvedValue({ email_is_verified: true } as User);
+    findByEmailSpy.mockResolvedValue({ email_is_verified: true } as UserEntity);
     const compareHashSpy = jest.spyOn(hashProvider, 'compareHash');
     compareHashSpy.mockResolvedValue(false);
 
@@ -66,10 +68,10 @@ describe('LoginUserUseCase unit tests', () => {
 
   it('Should create a login jwt token', async () => {
     const user = {
-      _id: 'id',
+      id: 'id',
       email_is_verified: true,
       role: ROLES.STUDENT,
-    } as User;
+    } as UserEntity;
 
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
@@ -84,7 +86,7 @@ describe('LoginUserUseCase unit tests', () => {
     expect(signJwtSpy).toHaveBeenCalledWith({
       expiresIn: '4h',
       payload: {
-        userId: user._id,
+        userId: user.id,
         role: ROLES.STUDENT,
         token_type: TOKEN_TYPE.AUTH,
       },

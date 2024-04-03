@@ -1,8 +1,8 @@
 import { UnauthorizedException } from '@nestjs/common';
 
 import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
+import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
-import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { AuthJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
@@ -47,7 +47,7 @@ export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
     }
 
     const payload: AuthJwtPayload = {
-      userId: existingUser._id!,
+      userId: existingUser.id!,
       role: existingUser.role,
       token_type: TOKEN_TYPE.AUTH,
     };
