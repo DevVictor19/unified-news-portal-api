@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { SubjectsFactory } from '../entities/subjects.factory';
-import { ISubjectsRepository } from '../repositories/subjects-repository.interface';
+import { ISubjectsRepository } from '../database/repositories/subjects-repository.interface';
+import { SubjectEntityFactory } from '../entities/subjects.factory';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 
@@ -13,7 +13,7 @@ type Output = void;
 
 export class CreateSubjectsUseCase implements IBaseUseCase<Input, Output> {
   constructor(
-    private subjectsFactory: SubjectsFactory,
+    private subjectEntityFactory: SubjectEntityFactory,
     private subjectsRepository: ISubjectsRepository,
   ) {}
 
@@ -26,7 +26,7 @@ export class CreateSubjectsUseCase implements IBaseUseCase<Input, Output> {
       throw new BadRequestException('Subject already exists');
     }
 
-    const subject = this.subjectsFactory.create(input);
+    const subject = this.subjectEntityFactory.create(input);
 
     await this.subjectsRepository.insert(subject);
   }

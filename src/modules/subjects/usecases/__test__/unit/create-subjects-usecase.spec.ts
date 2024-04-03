@@ -2,25 +2,25 @@ import { BadRequestException } from '@nestjs/common';
 
 import { CreateSubjectsUseCase } from '../../create-subjects.usecase';
 
-import { Subject } from '@/modules/subjects/entities/subjects.entity';
-import { SubjectsFactory } from '@/modules/subjects/entities/subjects.factory';
-import { SubjectsInMemoryRepository } from '@/modules/subjects/repositories/in-memory/subjects-in-memory.repository';
-import { ISubjectsRepository } from '@/modules/subjects/repositories/subjects-repository.interface';
+import { SubjectsInMemoryRepository } from '@/modules/subjects/database/repositories/in-memory/subjects-in-memory.repository';
+import { ISubjectsRepository } from '@/modules/subjects/database/repositories/subjects-repository.interface';
+import { SubjectEntity } from '@/modules/subjects/entities/subjects.entity';
+import { SubjectEntityFactory } from '@/modules/subjects/entities/subjects.factory';
 
 describe('CreateSubjectsUseCase unit tests', () => {
-  let factory: SubjectsFactory;
+  let factory: SubjectEntityFactory;
   let repository: ISubjectsRepository;
   let sut: CreateSubjectsUseCase;
 
   beforeEach(() => {
-    factory = new SubjectsFactory();
+    factory = new SubjectEntityFactory();
     repository = new SubjectsInMemoryRepository();
     sut = new CreateSubjectsUseCase(factory, repository);
   });
 
   it('Should throw a BadRequestException if subject already exists', async () => {
     const findByNameSpy = jest.spyOn(repository, 'findByName');
-    findByNameSpy.mockResolvedValue({} as Subject);
+    findByNameSpy.mockResolvedValue({} as SubjectEntity);
 
     await expect(() => sut.execute({ name: 'name' })).rejects.toBeInstanceOf(
       BadRequestException,

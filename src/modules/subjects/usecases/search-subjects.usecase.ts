@@ -1,12 +1,12 @@
-import { Subject } from '../entities/subjects.entity';
-import { ISubjectsRepository } from '../repositories/subjects-repository.interface';
+import { ISubjectsRepository } from '../database/repositories/subjects-repository.interface';
+import { SubjectEntity } from '../entities/subjects.entity';
 
 import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 
 type Input = RepositorySearch;
 
-type Output = Subject[];
+type Output = SubjectEntity[];
 
 export class SearchSubjectsUseCase implements IBaseUseCase<Input, Output> {
   constructor(private subjectsRepository: ISubjectsRepository) {}
