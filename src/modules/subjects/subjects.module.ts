@@ -2,40 +2,45 @@ import { Module } from '@nestjs/common';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { Subject, SubjectSchema } from './entities/subjects.entity';
-import { SubjectsFactory } from './entities/subjects.factory';
-import { SubjectsMongoRepository } from './repositories/mongo/subjects-mongo.repository';
-import { SUBJECTS_REPOSITORY } from './repositories/subjects-repository.constants';
-import { ISubjectsRepository } from './repositories/subjects-repository.interface';
+import {
+  SubjectMongoEntity,
+  SubjectMongoSchema,
+} from './database/models/mongo/subjects-mongo.model';
+import { SubjectsMongoRepository } from './database/repositories/mongo/subjects-mongo.repository';
+import { SUBJECTS_REPOSITORY } from './database/repositories/subjects-repository.constants';
+import { ISubjectsRepository } from './database/repositories/subjects-repository.interface';
+import { SubjectEntityFactory } from './entities/subjects.factory';
 import { SubjectsController } from './subjects.controller';
 import { CreateSubjectsUseCase, SearchSubjectsUseCase } from './usecases';
 
 @Module({
   controllers: [SubjectsController],
   imports: [
-    MongooseModule.forFeature([{ name: Subject.name, schema: SubjectSchema }]),
+    MongooseModule.forFeature([
+      { name: SubjectMongoEntity.name, schema: SubjectMongoSchema },
+    ]),
   ],
   providers: [
     {
       provide: SUBJECTS_REPOSITORY,
-      useFactory: (subjectModel: Model<Subject>) => {
+      useFactory: (subjectModel: Model<SubjectMongoEntity>) => {
         return new SubjectsMongoRepository(subjectModel);
       },
-      inject: [getModelToken(Subject.name)],
+      inject: [getModelToken(SubjectMongoEntity.name)],
     },
     {
-      provide: SubjectsFactory,
-      useClass: SubjectsFactory,
+      provide: SubjectEntityFactory,
+      useClass: SubjectEntityFactory,
     },
     {
       provide: CreateSubjectsUseCase,
       useFactory: (
-        subjectsFactory: SubjectsFactory,
+        subjectsFactory: SubjectEntityFactory,
         subjectsRepository: ISubjectsRepository,
       ) => {
         return new CreateSubjectsUseCase(subjectsFactory, subjectsRepository);
       },
-      inject: [SubjectsFactory, SUBJECTS_REPOSITORY],
+      inject: [SubjectEntityFactory, SUBJECTS_REPOSITORY],
     },
     {
       provide: SearchSubjectsUseCase,
