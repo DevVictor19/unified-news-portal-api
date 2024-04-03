@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 import { CreateSubjectsDto } from './dtos';
-import { Subject } from './entities/subjects.entity';
+import { SubjectEntity } from './entities/subjects.entity';
 import { SubjectsPresenter } from './presenters/subjects.presenter';
 import { SearchSubjectsUseCase, CreateSubjectsUseCase } from './usecases';
 
@@ -30,7 +30,7 @@ export class SubjectsController {
     return this.formatCollection(results);
   }
 
-  private formatCollection(input: Subject[]) {
+  private formatCollection(input: SubjectEntity[]) {
     return input.map((data) => SubjectsPresenter.format(data));
   }
 }
