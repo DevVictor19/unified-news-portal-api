@@ -5,15 +5,15 @@ import { SendPasswordRecoveryEmailUseCase } from '../../send-password-recovery-e
 
 import { PasswordRecoveryJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
-import { User } from '@/modules/users/entities/users.entity';
 import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
 import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
+import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
+import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { UserEntity } from '@/modules/users/entities/users.entity';
 import { MailProviderMock } from '@/modules/users/providers/mail/__MOCKS__/mail-provider.mock';
 import { IMailProvider } from '@/modules/users/providers/mail/mail-provider.interface';
 import { TemplateEngineProviderMock } from '@/modules/users/providers/template-engine/__MOCKS__/template-engine-provider.mock';
 import { ITemplateEngineProvider } from '@/modules/users/providers/template-engine/template-engine-provider.interface';
-import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
-import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
 
 describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   let sut: SendPasswordRecoveryEmailUseCase;
@@ -47,7 +47,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   });
 
   it('Should throw a UnauthorizedException when user email is not verified', async () => {
-    const user = { _id: 'userId', email_is_verified: false } as User;
+    const user = { id: 'userId', email_is_verified: false } as UserEntity;
 
     const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
@@ -60,7 +60,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   });
 
   it('Should create a jwt of type PasswordRecoveryJwtPayload', async () => {
-    const user = { _id: 'userId', email_is_verified: true } as User;
+    const user = { id: 'userId', email_is_verified: true } as UserEntity;
 
     const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
@@ -68,7 +68,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
 
     const payload: PasswordRecoveryJwtPayload = {
       token_type: TOKEN_TYPE.PASSWORD_RECOVERY,
-      userId: user._id!,
+      userId: user.id,
     };
 
     await sut.execute({ email: faker.internet.email() });
@@ -78,10 +78,10 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
 
   it('Should send an email with the provided html template', async () => {
     const user = {
-      _id: 'userId',
+      id: 'userId',
       name: faker.internet.userName(),
       email_is_verified: true,
-    } as User;
+    } as UserEntity;
 
     const input = { email: faker.internet.email() };
 
@@ -93,7 +93,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
 
     const payload: PasswordRecoveryJwtPayload = {
       token_type: TOKEN_TYPE.PASSWORD_RECOVERY,
-      userId: user._id!,
+      userId: user.id,
     };
 
     await sut.execute(input);

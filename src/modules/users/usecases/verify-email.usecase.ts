@@ -1,7 +1,7 @@
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
-import { IUsersRepository } from '../repositories/users-repository.interface';
+import { IUsersRepository } from '../database/repositories/users-repository.interface';
 
 import { EmailVerificationJwtParsed } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
@@ -48,6 +48,6 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
 
     existingUser.email_is_verified = true;
 
-    await this.usersRepository.update(existingUser._id!, existingUser);
+    await this.usersRepository.update(existingUser.id, existingUser);
   }
 }

@@ -3,11 +3,11 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { VerifyEmailUseCase } from '../../verify-email.usecase';
 
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
-import { User } from '@/modules/users/entities/users.entity';
 import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
 import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
-import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
-import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
+import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
+import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { UserEntity } from '@/modules/users/entities/users.entity';
 
 describe('VerifyEmailUseCase unit tests', () => {
   let jwtProvider: IJwtProvider;
@@ -57,7 +57,7 @@ describe('VerifyEmailUseCase unit tests', () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
     const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
-    findByEmailSpy.mockResolvedValue({ email_is_verified: true } as User);
+    findByEmailSpy.mockResolvedValue({ email_is_verified: true } as UserEntity);
     const updateUserSpy = jest.spyOn(usersRepository, 'update');
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
@@ -74,7 +74,7 @@ describe('VerifyEmailUseCase unit tests', () => {
       email: 'email',
       token_type: TOKEN_TYPE.EMAIL_VERIFY,
     };
-    const user = { _id: 'id', email_is_verified: false } as User;
+    const user = { id: 'id', email_is_verified: false } as UserEntity;
 
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue(tokenPayload);
@@ -86,7 +86,7 @@ describe('VerifyEmailUseCase unit tests', () => {
 
     expect(verifyJwtSpy).toHaveBeenCalledWith(token);
     expect(findByEmailSpy).toHaveBeenCalledWith(tokenPayload.email);
-    expect(updateUserSpy).toHaveBeenCalledWith(user._id, {
+    expect(updateUserSpy).toHaveBeenCalledWith(user.id, {
       ...user,
       email_is_verified: true,
     });

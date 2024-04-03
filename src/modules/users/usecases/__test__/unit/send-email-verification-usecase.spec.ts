@@ -6,13 +6,13 @@ import { SendEmailVerificationUseCase } from '../../send-email-verification.usec
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
 import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
-import { User } from '@/modules/users/entities/users.entity';
+import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
+import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { UserEntity } from '@/modules/users/entities/users.entity';
 import { MailProviderMock } from '@/modules/users/providers/mail/__MOCKS__/mail-provider.mock';
 import { IMailProvider } from '@/modules/users/providers/mail/mail-provider.interface';
 import { TemplateEngineProviderMock } from '@/modules/users/providers/template-engine/__MOCKS__/template-engine-provider.mock';
 import { ITemplateEngineProvider } from '@/modules/users/providers/template-engine/template-engine-provider.interface';
-import { UsersInMemoryRepository } from '@/modules/users/repositories/in-memory/users-in-memory.repository';
-import { IUsersRepository } from '@/modules/users/repositories/users-repository.interface';
 
 describe('SendEmailVerificationUseCase unit tests', () => {
   let sut: SendEmailVerificationUseCase;
@@ -45,7 +45,7 @@ describe('SendEmailVerificationUseCase unit tests', () => {
 
   it('Should throw a BadRequestException if email is already verified', async () => {
     const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
-    findByEmailSpy.mockResolvedValue({ email_is_verified: true } as User);
+    findByEmailSpy.mockResolvedValue({ email_is_verified: true } as UserEntity);
 
     await expect(() =>
       sut.execute({ email: faker.internet.email() }),
@@ -55,7 +55,9 @@ describe('SendEmailVerificationUseCase unit tests', () => {
 
   it('Should create a jwt token with user email as payload', async () => {
     const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
-    findByEmailSpy.mockResolvedValue({ email_is_verified: false } as User);
+    findByEmailSpy.mockResolvedValue({
+      email_is_verified: false,
+    } as UserEntity);
     const signTokenSpy = jest.spyOn(jwtProvider, 'sign');
 
     const email = faker.internet.email();
@@ -73,7 +75,7 @@ describe('SendEmailVerificationUseCase unit tests', () => {
     const user = {
       name: 'username',
       email_is_verified: false,
-    } as User;
+    } as UserEntity;
 
     const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);

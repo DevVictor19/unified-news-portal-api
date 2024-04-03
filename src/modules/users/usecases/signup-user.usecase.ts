@@ -1,11 +1,11 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
-import { UsersFactory } from '../entities/users.factory';
+import { IUsersRepository } from '../database/repositories/users-repository.interface';
+import { UserEntityFactory } from '../entities/users.factory';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
 import { IMailProvider } from '../providers/mail/mail-provider.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
-import { IUsersRepository } from '../repositories/users-repository.interface';
 
 import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
@@ -22,7 +22,7 @@ type Output = void;
 export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
   constructor(
     private usersRepository: IUsersRepository,
-    private usersFactory: UsersFactory,
+    private userEntityFactory: UserEntityFactory,
     private hashProvider: IHashProvider,
     private templateProvider: ITemplateEngineProvider,
     private jwtProvider: IJwtProvider,
@@ -64,7 +64,7 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
 
     const hashedPassword = await this.hashProvider.generateHash(input.password);
 
-    const user = this.usersFactory.create({
+    const user = this.userEntityFactory.create({
       email: input.email,
       name: input.name,
       password: hashedPassword,
