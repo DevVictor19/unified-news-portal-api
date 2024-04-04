@@ -29,6 +29,8 @@ import { UsersController } from './users.controller';
 import { PROVIDERS } from '../../common/enums/providers.enum';
 import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface';
 
+import { SERVICES } from '@/common/enums/services.enum';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -57,7 +59,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
       useClass: HandleBarsTemplateEngineProvider,
     },
     {
-      provide: PROVIDERS.MAIL,
+      provide: SERVICES.MAIL,
       useFactory: (configService: ConfigService) => {
         const mailUser = configService.getOrThrow<string>('mail.email');
         const mailName = configService.getOrThrow<string>('mail.name');
@@ -95,7 +97,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
         PROVIDERS.HASH,
         PROVIDERS.TEMPLATE_ENGINE,
         PROVIDERS.JWT,
-        PROVIDERS.MAIL,
+        SERVICES.MAIL,
         ConfigService,
       ],
     },
@@ -131,7 +133,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
       inject: [
         USERS_REPOSITORY,
         PROVIDERS.TEMPLATE_ENGINE,
-        PROVIDERS.MAIL,
+        SERVICES.MAIL,
         PROVIDERS.JWT,
         ConfigService,
       ],
@@ -165,7 +167,7 @@ import { IJwtProvider } from '../common/jwt/providers/jwt/jwt-provider.interface
         USERS_REPOSITORY,
         PROVIDERS.JWT,
         PROVIDERS.TEMPLATE_ENGINE,
-        PROVIDERS.MAIL,
+        SERVICES.MAIL,
       ],
     },
     {
