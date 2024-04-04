@@ -12,6 +12,7 @@ import { ISubjectsRepository } from './database/repositories/subjects-repository
 import { SubjectEntityFactory } from './entities/subjects.factory';
 import { SubjectsController } from './subjects.controller';
 import { CreateSubjectsUseCase, SearchSubjectsUseCase } from './usecases';
+import { DeleteSubjectsUseCase } from './usecases/delete-subjects.usecase';
 
 @Module({
   controllers: [SubjectsController],
@@ -46,6 +47,13 @@ import { CreateSubjectsUseCase, SearchSubjectsUseCase } from './usecases';
       provide: SearchSubjectsUseCase,
       useFactory: (subjectsRepository: ISubjectsRepository) => {
         return new SearchSubjectsUseCase(subjectsRepository);
+      },
+      inject: [SUBJECTS_REPOSITORY],
+    },
+    {
+      provide: DeleteSubjectsUseCase,
+      useFactory: (subjectsRepository: ISubjectsRepository) => {
+        return new DeleteSubjectsUseCase(subjectsRepository);
       },
       inject: [SUBJECTS_REPOSITORY],
     },
