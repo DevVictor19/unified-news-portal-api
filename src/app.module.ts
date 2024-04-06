@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import environment from './config/environment.config';
 import { ClassesModule } from './modules/classes/classes.module';
 import { JwtModule } from './modules/common/jwt/jwt.module';
+import { CoursesModule } from './modules/courses/courses.module';
 import { SubjectsModule } from './modules/subjects/subjects.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -23,6 +24,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     SubjectsModule,
     ClassesModule,
+    CoursesModule,
   ],
 })
 export class AppModule {}
