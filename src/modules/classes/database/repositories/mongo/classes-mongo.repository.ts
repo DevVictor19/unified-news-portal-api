@@ -12,8 +12,8 @@ export class ClassesMongoRepository implements IClassesRepository {
 
   async insert(entity: ClassEntity): Promise<void> {
     const mongoEntity = ClassMongoEntityMapper.toMongoEntity(entity);
-    const createdSubject = new this.classModel(mongoEntity);
-    await createdSubject.save();
+    const createdClass = new this.classModel(mongoEntity);
+    await createdClass.save();
   }
 
   async search({
