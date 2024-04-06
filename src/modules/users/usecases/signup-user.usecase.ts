@@ -26,7 +26,7 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
     private hashProvider: IHashProvider,
     private templateProvider: ITemplateEngineProvider,
     private jwtProvider: IJwtProvider,
-    private mailProvider: IMailService,
+    private mailService: IMailService,
     private serverUrl: string,
   ) {}
 
@@ -53,7 +53,7 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
       link: verifyEmailUrl,
     });
 
-    this.mailProvider.sendMail({
+    this.mailService.sendMail({
       body: html,
       subject: 'Verificação de Email',
       to: {

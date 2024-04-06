@@ -24,7 +24,7 @@ describe('SignupUserUseCase unit tests', () => {
   let hashProvider: IHashProvider;
   let templateProvider: ITemplateEngineProvider;
   let jwtProvider: IJwtProvider;
-  let mailProvider: IMailService;
+  let mailService: IMailService;
   let serverUrl: string;
   let payload: any;
 
@@ -39,7 +39,7 @@ describe('SignupUserUseCase unit tests', () => {
     hashProvider = new HashProviderMock();
     templateProvider = new TemplateEngineProviderMock();
     jwtProvider = new JwtProviderMock();
-    mailProvider = new MailServiceMock();
+    mailService = new MailServiceMock();
     serverUrl = 'server url';
     sut = new SignupUserUseCase(
       repository,
@@ -47,7 +47,7 @@ describe('SignupUserUseCase unit tests', () => {
       hashProvider,
       templateProvider,
       jwtProvider,
-      mailProvider,
+      mailService,
       serverUrl,
     );
   });
@@ -76,7 +76,7 @@ describe('SignupUserUseCase unit tests', () => {
   it('Should send a verification email with a url for verify', async () => {
     const signJwtSpy = jest.spyOn(jwtProvider, 'sign');
     const compileTemplateSpy = jest.spyOn(templateProvider, 'compile');
-    const sendEmailSpy = jest.spyOn(mailProvider, 'sendMail');
+    const sendEmailSpy = jest.spyOn(mailService, 'sendMail');
 
     await sut.execute(payload);
 

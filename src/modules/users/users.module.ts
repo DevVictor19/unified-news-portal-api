@@ -76,7 +76,7 @@ import { SERVICES } from '@/common/enums/services.enum';
         hashProvider: IHashProvider,
         templateProvider: ITemplateEngineProvider,
         jwtProvider: IJwtProvider,
-        mailProvider: IMailService,
+        mailService: IMailService,
         configService: ConfigService,
       ) => {
         const serverUrl = configService.getOrThrow<string>('server.url');
@@ -87,7 +87,7 @@ import { SERVICES } from '@/common/enums/services.enum';
           hashProvider,
           templateProvider,
           jwtProvider,
-          mailProvider,
+          mailService,
           serverUrl,
         );
       },
@@ -117,7 +117,7 @@ import { SERVICES } from '@/common/enums/services.enum';
       useFactory: (
         usersRepository: IUsersRepository,
         templateProvider: ITemplateEngineProvider,
-        mailProvider: IMailService,
+        mailService: IMailService,
         jwtProvider: IJwtProvider,
         configService: ConfigService,
       ) => {
@@ -125,7 +125,7 @@ import { SERVICES } from '@/common/enums/services.enum';
         return new SendEmailVerificationUseCase(
           usersRepository,
           templateProvider,
-          mailProvider,
+          mailService,
           jwtProvider,
           serverUrl,
         );
@@ -154,13 +154,13 @@ import { SERVICES } from '@/common/enums/services.enum';
         usersRepository: IUsersRepository,
         jwtProvider: IJwtProvider,
         templateProvider: ITemplateEngineProvider,
-        mailProvider: IMailService,
+        mailService: IMailService,
       ) => {
         return new SendPasswordRecoveryEmailUseCase(
           usersRepository,
           jwtProvider,
           templateProvider,
-          mailProvider,
+          mailService,
         );
       },
       inject: [

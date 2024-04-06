@@ -19,19 +19,19 @@ describe('SendEmailVerificationUseCase unit tests', () => {
   let repository: IUsersRepository;
   let templateProvider: ITemplateEngineProvider;
   let jwtProvider: IJwtProvider;
-  let mailProvider: IMailService;
+  let mailService: IMailService;
   let serverUrl: string;
 
   beforeEach(() => {
     repository = new UsersInMemoryRepository();
     templateProvider = new TemplateEngineProviderMock();
     jwtProvider = new JwtProviderMock();
-    mailProvider = new MailServiceMock();
+    mailService = new MailServiceMock();
     serverUrl = 'server url';
     sut = new SendEmailVerificationUseCase(
       repository,
       templateProvider,
-      mailProvider,
+      mailService,
       jwtProvider,
       serverUrl,
     );
@@ -81,7 +81,7 @@ describe('SendEmailVerificationUseCase unit tests', () => {
     findByEmailSpy.mockResolvedValue(user);
     const signJwtSpy = jest.spyOn(jwtProvider, 'sign');
     const compileTemplateSpy = jest.spyOn(templateProvider, 'compile');
-    const sendEmailSpy = jest.spyOn(mailProvider, 'sendMail');
+    const sendEmailSpy = jest.spyOn(mailService, 'sendMail');
 
     const email = faker.internet.email();
 

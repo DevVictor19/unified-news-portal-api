@@ -22,7 +22,7 @@ export class SendPasswordRecoveryEmailUseCase
     private usersRepository: IUsersRepository,
     private jwtProvider: IJwtProvider,
     private templateProvider: ITemplateEngineProvider,
-    private mailProvider: IMailService,
+    private mailService: IMailService,
   ) {}
 
   async execute(input: Input): Promise<Output> {
@@ -51,7 +51,7 @@ export class SendPasswordRecoveryEmailUseCase
       link: recoveryPasswordUrl,
     });
 
-    this.mailProvider.sendMail({
+    this.mailService.sendMail({
       body: html,
       subject: 'Recuperação de Senha',
       to: { email: input.email, name: existingUser.name },

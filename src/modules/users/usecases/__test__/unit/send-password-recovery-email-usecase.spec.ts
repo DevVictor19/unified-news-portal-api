@@ -20,18 +20,18 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   let repository: IUsersRepository;
   let templateProvider: ITemplateEngineProvider;
   let jwtProvider: IJwtProvider;
-  let mailProvider: IMailService;
+  let mailService: IMailService;
 
   beforeEach(() => {
     repository = new UsersInMemoryRepository();
     templateProvider = new TemplateEngineProviderMock();
     jwtProvider = new JwtProviderMock();
-    mailProvider = new MailServiceMock();
+    mailService = new MailServiceMock();
     sut = new SendPasswordRecoveryEmailUseCase(
       repository,
       jwtProvider,
       templateProvider,
-      mailProvider,
+      mailService,
     );
   });
 
@@ -89,7 +89,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
     findByEmailSpy.mockResolvedValue(user);
     const signJwtSpy = jest.spyOn(jwtProvider, 'sign');
     const compileTemplateSpy = jest.spyOn(templateProvider, 'compile');
-    const sendMailSpy = jest.spyOn(mailProvider, 'sendMail');
+    const sendMailSpy = jest.spyOn(mailService, 'sendMail');
 
     const payload: PasswordRecoveryJwtPayload = {
       token_type: TOKEN_TYPE.PASSWORD_RECOVERY,

@@ -19,7 +19,7 @@ export class SendEmailVerificationUseCase
   constructor(
     private usersRepository: IUsersRepository,
     private templateProvider: ITemplateEngineProvider,
-    private mailProvider: IMailService,
+    private mailService: IMailService,
     private jwtProvider: IJwtProvider,
     private serverUrl: string,
   ) {}
@@ -53,7 +53,7 @@ export class SendEmailVerificationUseCase
       link: verifyEmailUrl,
     });
 
-    this.mailProvider.sendMail({
+    this.mailService.sendMail({
       body: html,
       subject: 'Verificação de Email',
       to: {
