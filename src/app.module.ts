@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import environment from './config/environment.config';
+import { CategoriesModule } from './modules/categories/categories.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { JwtModule } from './modules/common/jwt/jwt.module';
 import { CoursesModule } from './modules/courses/courses.module';
@@ -25,6 +26,7 @@ import { UsersModule } from './modules/users/users.module';
     SubjectsModule,
     ClassesModule,
     CoursesModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}
