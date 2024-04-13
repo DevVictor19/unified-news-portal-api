@@ -17,7 +17,7 @@ export type JwtPayload = {
   jti?: string | undefined;
 };
 
-export interface IJwtProvider {
-  sign({ payload, expiresIn }: TokenSignOptions): string;
-  verify<T extends JwtPayload>(token: string): T | string | null;
+export abstract class IJwtProvider {
+  abstract sign({ payload, expiresIn }: TokenSignOptions): string;
+  abstract verify<T extends JwtPayload>(token: string): T | string | null;
 }

@@ -1,23 +1,16 @@
 import { Global, Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
-import { JsonWebTokenProvider } from './providers/jwt/jsonwebtoken/jsonwebtoken.provider';
-
-import { PROVIDERS } from '@/common/enums/providers.enum';
+import { IJwtProvider } from './jwt-provider.interface';
+import { JwtProvider } from './jwt.provider';
 
 @Global()
 @Module({
   providers: [
     {
-      provide: PROVIDERS.JWT,
-      useFactory: (configService: ConfigService) => {
-        return new JsonWebTokenProvider(
-          configService.getOrThrow<string>('server.secret_key'),
-        );
-      },
-      inject: [ConfigService],
+      provide: IJwtProvider,
+      useClass: JwtProvider,
     },
   ],
-  exports: [PROVIDERS.JWT],
+  exports: [IJwtProvider],
 })
 export class JwtModule {}
