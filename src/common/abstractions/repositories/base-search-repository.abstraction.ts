@@ -7,7 +7,8 @@ export type RepositorySearch = {
   pageNumber: number;
 };
 
-export interface IBaseSearchRepository<T extends Entity>
-  extends IBaseRepository<T> {
-  search(params: RepositorySearch): Promise<T[]>;
+export abstract class IBaseSearchRepository<
+  T extends Entity,
+> extends IBaseRepository<T> {
+  abstract search(params: RepositorySearch): Promise<T[]>;
 }

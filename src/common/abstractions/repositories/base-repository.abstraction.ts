@@ -1,9 +1,9 @@
 import { Entity } from '../entities/entity.abstraction';
 
-export interface IBaseRepository<T extends Entity> {
-  insert(entity: T): Promise<void>;
-  findById(id: string): Promise<T | null>;
-  findAll(): Promise<T[]>;
-  update(id: string, entity: T): Promise<void>;
-  delete(id: string): Promise<void>;
+export abstract class IBaseRepository<T extends Entity> {
+  abstract insert(entity: T): Promise<void>;
+  abstract findById(id: string): Promise<T | null>;
+  abstract findAll(): Promise<T[]>;
+  abstract update(id: string, entity: T): Promise<void>;
+  abstract delete(id: string): Promise<void>;
 }
