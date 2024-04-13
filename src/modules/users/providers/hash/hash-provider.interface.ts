@@ -1,4 +1,4 @@
-export interface IHashProvider {
-  generateHash(payload: string): Promise<string>;
-  compareHash(payload: string, hash: string): Promise<boolean>;
+export abstract class IHashProvider {
+  abstract generateHash(payload: string): Promise<string>;
+  abstract compareHash(payload: string, hash: string): Promise<boolean>;
 }

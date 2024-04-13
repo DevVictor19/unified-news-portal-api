@@ -1,12 +1,16 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 
-import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
 
 import { PasswordRecoveryJwtParsed } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = {
   token: string;
@@ -15,6 +19,7 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class ChangePasswordUseCase implements IBaseUseCase<Input, Output> {
   constructor(
     private usersRepository: IUsersRepository,

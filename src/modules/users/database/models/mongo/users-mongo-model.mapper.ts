@@ -1,12 +1,17 @@
-import { UserMongoEntity } from './users-mongo.model';
+import { Injectable } from '@nestjs/common';
 
+import { UserMongoEntity, UserMongoModel } from './users-mongo.model';
+
+import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
 import { UserEntity } from '@/modules/users/entities/users.entity';
-import { UserEntityFactory } from '@/modules/users/entities/users.factory';
 
-export class UserMongoEntityMapper {
-  static toDomainEntity(entity: UserMongoEntity): UserEntity {
-    return new UserEntityFactory().create({
-      id: entity._id,
+@Injectable()
+export class UserMongoEntityMapper
+  implements IBaseEntityMapper<UserEntity, UserMongoEntity>
+{
+  toDatabaseEntity(entity: UserEntity): UserMongoEntity {
+    return new UserMongoModel({
+      _id: entity.id,
       comunications: entity.comunications,
       email: entity.email,
       email_is_verified: entity.email_is_verified,
@@ -20,9 +25,9 @@ export class UserMongoEntityMapper {
     });
   }
 
-  static toMongoEntity(entity: UserEntity): UserMongoEntity {
-    return {
-      _id: entity.id,
+  toDomainEntity(entity: UserMongoEntity): UserEntity {
+    return new UserEntity({
+      id: entity._id,
       comunications: entity.comunications,
       email: entity.email,
       email_is_verified: entity.email_is_verified,
@@ -33,6 +38,6 @@ export class UserMongoEntityMapper {
       created_at: entity.created_at,
       phone: entity.phone,
       photo_url: entity.photo_url,
-    };
+    });
   }
 }

@@ -1,12 +1,12 @@
+import { Injectable } from '@nestjs/common';
 import { compile } from 'handlebars';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { ITemplateEngineProvider } from '../template-engine-provider.interface';
+import { ITemplateEngineProvider } from './template-engine-provider.interface';
 
-export class HandleBarsTemplateEngineProvider
-  implements ITemplateEngineProvider
-{
+@Injectable()
+export class TemplateEngineProvider implements ITemplateEngineProvider {
   compile(
     fileName: string,
     variables?: { [key: string]: string | object } | undefined,

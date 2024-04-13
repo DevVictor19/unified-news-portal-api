@@ -1,6 +1,9 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 
-import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IMailService } from '../services/mail/mail-service.interface';
@@ -8,6 +11,7 @@ import { IMailService } from '../services/mail/mail-service.interface';
 import { PasswordRecoveryJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = {
   email: string;
@@ -15,6 +19,7 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class SendPasswordRecoveryEmailUseCase
   implements IBaseUseCase<Input, Output>
 {

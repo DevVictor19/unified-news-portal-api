@@ -1,12 +1,12 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
 
 import { AuthJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = {
   email: string;
@@ -17,6 +17,7 @@ type Output = {
   token: string;
 };
 
+@Injectable()
 export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
   constructor(
     private usersRepository: IUsersRepository,

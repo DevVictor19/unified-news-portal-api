@@ -1,6 +1,5 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IMailService } from '../services/mail/mail-service.interface';
@@ -8,21 +7,28 @@ import { IMailService } from '../services/mail/mail-service.interface';
 import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IEnvConfigProvider } from '@/modules/common/env-config/env-config-provider.interface';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = { email: string };
 
 type Output = void;
 
+@Injectable()
 export class SendEmailVerificationUseCase
   implements IBaseUseCase<Input, Output>
 {
+  private serverUrl: string;
+
   constructor(
     private usersRepository: IUsersRepository,
     private templateProvider: ITemplateEngineProvider,
     private mailService: IMailService,
     private jwtProvider: IJwtProvider,
-    private serverUrl: string,
-  ) {}
+    private envConfigProvider: IEnvConfigProvider,
+  ) {
+    this.serverUrl = this.envConfigProvider.getServerUrl();
+  }
 
   async execute(input: Input): Promise<Output> {
     const existingUser = await this.usersRepository.findByEmail(input.email);

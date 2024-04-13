@@ -1,6 +1,5 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { IJwtProvider } from '../../common/jwt/providers/jwt/jwt-provider.interface';
 import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { UserEntityFactory } from '../entities/users.factory';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
@@ -10,6 +9,8 @@ import { IMailService } from '../services/mail/mail-service.interface';
 import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IEnvConfigProvider } from '@/modules/common/env-config/env-config-provider.interface';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = {
   name: string;
@@ -19,7 +20,10 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
+  private serverUrl: string;
+
   constructor(
     private usersRepository: IUsersRepository,
     private userEntityFactory: UserEntityFactory,
@@ -27,8 +31,10 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
     private templateProvider: ITemplateEngineProvider,
     private jwtProvider: IJwtProvider,
     private mailService: IMailService,
-    private serverUrl: string,
-  ) {}
+    private envConfigProvider: IEnvConfigProvider,
+  ) {
+    this.serverUrl = this.envConfigProvider.getServerUrl();
+  }
 
   async execute(input: Input): Promise<Output> {
     const existingUser = await this.usersRepository.findByEmail(input.email);

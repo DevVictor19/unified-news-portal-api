@@ -9,6 +9,6 @@ export interface IMessage {
   body: string;
 }
 
-export interface IMailService {
-  sendMail(message: IMessage): Promise<void>;
+export abstract class IMailService {
+  abstract sendMail(message: IMessage): Promise<void>;
 }
