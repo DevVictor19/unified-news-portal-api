@@ -1,11 +1,8 @@
-import { Injectable } from '@nestjs/common';
-
 import { UserMongoEntity, UserMongoModel } from './users-mongo.model';
 
 import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
 import { UserEntity } from '@/modules/users/entities/users.entity';
 
-@Injectable()
 export class UserMongoEntityMapper
   implements IBaseEntityMapper<UserEntity, UserMongoEntity>
 {
