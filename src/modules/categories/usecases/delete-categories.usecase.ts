@@ -1,8 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
-
-import { ICategoriesRepository } from '../database/repositories/categories-repository.interface';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   categoryId: string;
@@ -10,11 +9,12 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class DeleteCategoriesUseCase implements IBaseUseCase<Input, Output> {
-  constructor(private categoriesRepository: ICategoriesRepository) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentCategory = await this.categoriesRepository.findById(
+    const existentCategory = await this.databaseService.categories.findById(
       input.categoryId,
     );
 
@@ -22,6 +22,6 @@ export class DeleteCategoriesUseCase implements IBaseUseCase<Input, Output> {
       throw new NotFoundException('Category not found');
     }
 
-    await this.categoriesRepository.delete(input.categoryId);
+    await this.databaseService.categories.delete(input.categoryId);
   }
 }

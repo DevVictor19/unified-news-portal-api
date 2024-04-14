@@ -2,24 +2,21 @@ import { BadRequestException } from '@nestjs/common';
 
 import { CreateCategoriesUseCase } from '../../create-categories.usecase';
 
-import { ICategoriesRepository } from '@/modules/categories/database/repositories/categories-repository.interface';
-import { CategoriesInMemoryRepository } from '@/modules/categories/database/repositories/in-memory/categories-in-memory.repository';
 import { CategoryEntity } from '@/modules/categories/entities/categories.entity';
-import { CategoryEntityFactory } from '@/modules/categories/entities/categories.factory';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('CreateCategoriesUseCase unit tests', () => {
-  let factory: CategoryEntityFactory;
-  let repository: ICategoriesRepository;
+  let databaseService: IDatabaseService;
   let sut: CreateCategoriesUseCase;
 
   beforeEach(() => {
-    factory = new CategoryEntityFactory();
-    repository = new CategoriesInMemoryRepository();
-    sut = new CreateCategoriesUseCase(factory, repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new CreateCategoriesUseCase(databaseService);
   });
 
   it('Should throw a BadRequestException if category already exists', async () => {
-    const findByNameSpy = jest.spyOn(repository, 'findByName');
+    const findByNameSpy = jest.spyOn(databaseService.categories, 'findByName');
     findByNameSpy.mockResolvedValue({} as CategoryEntity);
 
     await expect(() => sut.execute({ name: 'name' })).rejects.toBeInstanceOf(
@@ -31,17 +28,13 @@ describe('CreateCategoriesUseCase unit tests', () => {
   it('Should create and save a new category', async () => {
     const input = { name: 'name' };
 
-    const findByNameSpy = jest.spyOn(repository, 'findByName');
+    const findByNameSpy = jest.spyOn(databaseService.categories, 'findByName');
     findByNameSpy.mockResolvedValue(null);
 
-    const createCategorySpy = jest.spyOn(factory, 'create');
-    const insertSpy = jest.spyOn(repository, 'insert');
+    const insertSpy = jest.spyOn(databaseService.categories, 'insert');
 
     await sut.execute(input);
 
-    const categoryEntity = await createCategorySpy.mock.results[0].value;
-
-    expect(createCategorySpy).toHaveBeenCalledWith(input);
-    expect(insertSpy).toHaveBeenCalledWith(categoryEntity);
+    expect(insertSpy).toHaveBeenCalled();
   });
 });

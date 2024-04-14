@@ -1,16 +1,16 @@
 import { SearchCategoriesUseCase } from '../../search-categories.usecase';
 
 import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { ICategoriesRepository } from '@/modules/categories/database/repositories/categories-repository.interface';
-import { CategoriesInMemoryRepository } from '@/modules/categories/database/repositories/in-memory/categories-in-memory.repository';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('SearchCategoriesUseCase unit tests', () => {
-  let repository: ICategoriesRepository;
+  let databaseService: IDatabaseService;
   let sut: SearchCategoriesUseCase;
 
   beforeEach(() => {
-    repository = new CategoriesInMemoryRepository();
-    sut = new SearchCategoriesUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new SearchCategoriesUseCase(databaseService);
   });
 
   it('Should search for categories with the provided search params', async () => {
@@ -20,7 +20,7 @@ describe('SearchCategoriesUseCase unit tests', () => {
       searchTerm: 'searchTerm',
     };
 
-    const searchSpy = jest.spyOn(repository, 'search');
+    const searchSpy = jest.spyOn(databaseService.categories, 'search');
 
     await sut.execute(input);
 

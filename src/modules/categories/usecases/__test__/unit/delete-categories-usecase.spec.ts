@@ -2,21 +2,21 @@ import { NotFoundException } from '@nestjs/common';
 
 import { DeleteCategoriesUseCase } from '../../delete-categories.usecase';
 
-import { ICategoriesRepository } from '@/modules/categories/database/repositories/categories-repository.interface';
-import { CategoriesInMemoryRepository } from '@/modules/categories/database/repositories/in-memory/categories-in-memory.repository';
 import { CategoryEntity } from '@/modules/categories/entities/categories.entity';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('DeleteCategoriesUseCase unit tests', () => {
-  let repository: ICategoriesRepository;
+  let databaseService: IDatabaseService;
   let sut: DeleteCategoriesUseCase;
 
   beforeEach(() => {
-    repository = new CategoriesInMemoryRepository();
-    sut = new DeleteCategoriesUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new DeleteCategoriesUseCase(databaseService);
   });
 
   it('Should throw a NotFoundException if category not found', async () => {
-    const findByIdSpy = jest.spyOn(repository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.categories, 'findById');
     findByIdSpy.mockResolvedValue(null);
 
     const input = { categoryId: 'uuid' };
@@ -26,9 +26,9 @@ describe('DeleteCategoriesUseCase unit tests', () => {
   });
 
   it('Should delete a category with provided id', async () => {
-    const findByIdSpy = jest.spyOn(repository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.categories, 'findById');
     findByIdSpy.mockResolvedValue({} as CategoryEntity);
-    const deleteSpy = jest.spyOn(repository, 'delete');
+    const deleteSpy = jest.spyOn(databaseService.categories, 'delete');
 
     const input = { categoryId: 'uuid' };
 

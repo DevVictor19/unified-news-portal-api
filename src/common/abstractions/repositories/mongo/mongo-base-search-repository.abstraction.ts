@@ -14,8 +14,8 @@ export abstract class MongoBaseSearchRepository<
 > implements IBaseSearchRepository<DomainEntity>
 {
   constructor(
-    private entityMapper: IBaseEntityMapper<DomainEntity, DatabaseEntity>,
-    private entityModel: Model<DatabaseEntity>,
+    protected entityMapper: IBaseEntityMapper<DomainEntity, DatabaseEntity>,
+    protected entityModel: Model<DatabaseEntity>,
   ) {}
 
   async insert(entity: DomainEntity): Promise<void> {

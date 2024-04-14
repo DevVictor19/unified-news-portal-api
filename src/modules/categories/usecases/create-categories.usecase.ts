@@ -1,9 +1,9 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { ICategoriesRepository } from '../database/repositories/categories-repository.interface';
-import { CategoryEntityFactory } from '../entities/categories.factory';
+import { CategoryEntity } from '../entities/categories.entity';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   name: string;
@@ -11,14 +11,12 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class CreateCategoriesUseCase implements IBaseUseCase<Input, Output> {
-  constructor(
-    private categoryEntityFactory: CategoryEntityFactory,
-    private categoriesRepository: ICategoriesRepository,
-  ) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentCategory = await this.categoriesRepository.findByName(
+    const existentCategory = await this.databaseService.categories.findByName(
       input.name,
     );
 
@@ -26,8 +24,8 @@ export class CreateCategoriesUseCase implements IBaseUseCase<Input, Output> {
       throw new BadRequestException('Category already exists');
     }
 
-    const categoryEntity = this.categoryEntityFactory.create(input);
+    const categoryEntity = new CategoryEntity(input);
 
-    await this.categoriesRepository.insert(categoryEntity);
+    await this.databaseService.categories.insert(categoryEntity);
   }
 }
