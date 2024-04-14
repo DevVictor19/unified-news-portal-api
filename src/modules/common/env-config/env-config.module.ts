@@ -20,9 +20,9 @@ import environmentConfig from '@/config/environment.config';
 export class EnvConfigModule extends ConfigModule {
   static forRoot(options: ConfigModuleOptions = {}): DynamicModule {
     return super.forRoot({
-      ...options,
       load: [environmentConfig],
       isGlobal: true,
+      ...options,
     });
   }
 }
