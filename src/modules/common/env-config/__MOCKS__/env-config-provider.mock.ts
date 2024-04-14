@@ -1,6 +1,6 @@
 import { IEnvConfigProvider } from '../env-config-provider.interface';
 
-export class EnvProviderMock implements IEnvConfigProvider {
+export class EnvConfigProviderMock implements IEnvConfigProvider {
   getDbHost(): string {
     return 'db host';
   }
