@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { ClassEntity } from '../entities/classes.entity';
 
@@ -11,6 +11,7 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class CreateClassesUseCase implements IBaseUseCase<Input, Output> {
   constructor(private databaseService: IDatabaseService) {}
 
