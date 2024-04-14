@@ -1,9 +1,9 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { ISubjectsRepository } from '../database/repositories/subjects-repository.interface';
-import { SubjectEntityFactory } from '../entities/subjects.factory';
+import { SubjectEntity } from '../entities/subjects.entity';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   name: string;
@@ -11,14 +11,12 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class CreateSubjectsUseCase implements IBaseUseCase<Input, Output> {
-  constructor(
-    private subjectEntityFactory: SubjectEntityFactory,
-    private subjectsRepository: ISubjectsRepository,
-  ) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentSubject = await this.subjectsRepository.findByName(
+    const existentSubject = await this.databaseService.subjects.findByName(
       input.name,
     );
 
@@ -26,8 +24,8 @@ export class CreateSubjectsUseCase implements IBaseUseCase<Input, Output> {
       throw new BadRequestException('Subject already exists');
     }
 
-    const subject = this.subjectEntityFactory.create(input);
+    const subject = new SubjectEntity(input);
 
-    await this.subjectsRepository.insert(subject);
+    await this.databaseService.subjects.insert(subject);
   }
 }

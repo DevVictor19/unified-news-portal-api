@@ -1,22 +1,24 @@
-import { SubjectMongoEntity } from './subjects-mongo.model';
+import { SubjectMongoEntity, SubjectMongoModel } from './subjects-mongo.model';
 
+import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
 import { SubjectEntity } from '@/modules/subjects/entities/subjects.entity';
-import { SubjectEntityFactory } from '@/modules/subjects/entities/subjects.factory';
 
-export class SubjectMongoEntityMapper {
-  static toDomainEntity(entity: SubjectMongoEntity): SubjectEntity {
-    return new SubjectEntityFactory().create({
+export class SubjectMongoEntityMapper
+  implements IBaseEntityMapper<SubjectEntity, SubjectMongoEntity>
+{
+  toDomainEntity(entity: SubjectMongoEntity): SubjectEntity {
+    return new SubjectEntity({
       name: entity.name,
       created_at: entity.created_at,
       id: entity._id,
     });
   }
 
-  static toMongoEntity(entity: SubjectEntity): SubjectMongoEntity {
-    return {
+  toDatabaseEntity(entity: SubjectEntity): SubjectMongoEntity {
+    return new SubjectMongoModel({
       _id: entity.id,
       created_at: entity.created_at,
       name: entity.name,
-    };
+    });
   }
 }

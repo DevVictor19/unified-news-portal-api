@@ -1,8 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
-
-import { ISubjectsRepository } from '../database/repositories/subjects-repository.interface';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   subjectId: string;
@@ -10,11 +9,12 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class DeleteSubjectsUseCase implements IBaseUseCase<Input, Output> {
-  constructor(private subjectsRepository: ISubjectsRepository) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentSubject = await this.subjectsRepository.findById(
+    const existentSubject = await this.databaseService.subjects.findById(
       input.subjectId,
     );
 
@@ -22,6 +22,6 @@ export class DeleteSubjectsUseCase implements IBaseUseCase<Input, Output> {
       throw new NotFoundException('Subject not found');
     }
 
-    await this.subjectsRepository.delete(input.subjectId);
+    await this.databaseService.subjects.delete(input.subjectId);
   }
 }

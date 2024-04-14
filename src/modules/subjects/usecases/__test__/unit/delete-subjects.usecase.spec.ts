@@ -2,21 +2,21 @@ import { NotFoundException } from '@nestjs/common';
 
 import { DeleteSubjectsUseCase } from '../../delete-subjects.usecase';
 
-import { SubjectsInMemoryRepository } from '@/modules/subjects/database/repositories/in-memory/subjects-in-memory.repository';
-import { ISubjectsRepository } from '@/modules/subjects/database/repositories/subjects-repository.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 import { SubjectEntity } from '@/modules/subjects/entities/subjects.entity';
 
 describe('DeleteSubjectsUseCase unit tests', () => {
-  let subjectsRepository: ISubjectsRepository;
+  let databaseService: IDatabaseService;
   let sut: DeleteSubjectsUseCase;
 
   beforeEach(() => {
-    subjectsRepository = new SubjectsInMemoryRepository();
-    sut = new DeleteSubjectsUseCase(subjectsRepository);
+    databaseService = new DatabaseServiceMock();
+    sut = new DeleteSubjectsUseCase(databaseService);
   });
 
   it('Should throw a NotFoundException if subject is not found', async () => {
-    const findByIdSpy = jest.spyOn(subjectsRepository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.subjects, 'findById');
     findByIdSpy.mockResolvedValue(null);
 
     const input = { subjectId: 'uuid' };
@@ -26,9 +26,9 @@ describe('DeleteSubjectsUseCase unit tests', () => {
   });
 
   it('Should delete a subject with provided id', async () => {
-    const findByIdSpy = jest.spyOn(subjectsRepository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.subjects, 'findById');
     findByIdSpy.mockResolvedValue({} as SubjectEntity);
-    const deleteSpy = jest.spyOn(subjectsRepository, 'delete');
+    const deleteSpy = jest.spyOn(databaseService.subjects, 'delete');
 
     const input = { subjectId: 'uuid' };
 

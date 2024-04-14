@@ -1,16 +1,16 @@
 import { SearchSubjectsUseCase } from '../../search-subjects.usecase';
 
 import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { SubjectsInMemoryRepository } from '@/modules/subjects/database/repositories/in-memory/subjects-in-memory.repository';
-import { ISubjectsRepository } from '@/modules/subjects/database/repositories/subjects-repository.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('SearchSubjectsUseCase unit tests', () => {
-  let repository: ISubjectsRepository;
+  let databaseService: IDatabaseService;
   let sut: SearchSubjectsUseCase;
 
   beforeEach(() => {
-    repository = new SubjectsInMemoryRepository();
-    sut = new SearchSubjectsUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new SearchSubjectsUseCase(databaseService);
   });
 
   it('Should search for subjects with the provided search params', async () => {
@@ -20,7 +20,7 @@ describe('SearchSubjectsUseCase unit tests', () => {
       searchTerm: 'searchTerm',
     };
 
-    const searchSpy = jest.spyOn(repository, 'search');
+    const searchSpy = jest.spyOn(databaseService.subjects, 'search');
 
     await sut.execute(input);
 
