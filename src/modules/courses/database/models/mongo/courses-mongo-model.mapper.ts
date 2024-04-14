@@ -1,22 +1,24 @@
-import { CourseMongoEntity } from './courses-mongo.model';
+import { CourseMongoEntity, CourseMongoModel } from './courses-mongo.model';
 
+import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
 import { CourseEntity } from '@/modules/courses/entities/courses.entity';
-import { CourseEntityFactory } from '@/modules/courses/entities/courses.factory';
 
-export class CourseMongoEntityMapper {
-  static toMongoEntity(entity: CourseEntity): CourseMongoEntity {
-    return {
+export class CourseMongoEntityMapper
+  implements IBaseEntityMapper<CourseEntity, CourseMongoEntity>
+{
+  toDomainEntity(entity: CourseMongoEntity): CourseEntity {
+    return new CourseEntity({
+      name: entity.name,
+      created_at: entity.created_at,
+      id: entity._id,
+    });
+  }
+
+  toDatabaseEntity(entity: CourseEntity): CourseMongoEntity {
+    return new CourseMongoModel({
       _id: entity.id,
       created_at: entity.created_at,
       name: entity.name,
-    };
-  }
-
-  static toDomainEntity(entity: CourseMongoEntity): CourseEntity {
-    return new CourseEntityFactory().create({
-      id: entity._id,
-      name: entity.name,
-      created_at: entity.created_at,
     });
   }
 }

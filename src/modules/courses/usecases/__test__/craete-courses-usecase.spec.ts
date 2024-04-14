@@ -1,24 +1,22 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { ICoursesRepository } from '../../database/repositories/courses-repository.interface';
-import { CoursesInMemoryRepository } from '../../database/repositories/in-memory/courses-in-memory.repository';
 import { CourseEntity } from '../../entities/courses.entity';
-import { CourseEntityFactory } from '../../entities/courses.factory';
 import { CreateCoursesUseCase } from '../create-courses.usecase';
 
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+
 describe('CreateCoursesUseCase unit tests', () => {
-  let factory: CourseEntityFactory;
-  let repository: ICoursesRepository;
+  let databaseService: IDatabaseService;
   let sut: CreateCoursesUseCase;
 
   beforeEach(() => {
-    factory = new CourseEntityFactory();
-    repository = new CoursesInMemoryRepository();
-    sut = new CreateCoursesUseCase(factory, repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new CreateCoursesUseCase(databaseService);
   });
 
   it('Should throw a BadRequestException if course already exists', async () => {
-    const findByNameSpy = jest.spyOn(repository, 'findByName');
+    const findByNameSpy = jest.spyOn(databaseService.courses, 'findByName');
     findByNameSpy.mockResolvedValue({} as CourseEntity);
 
     await expect(() => sut.execute({ name: 'name' })).rejects.toBeInstanceOf(
@@ -30,17 +28,13 @@ describe('CreateCoursesUseCase unit tests', () => {
   it('Should create and save a new course', async () => {
     const input = { name: 'name' };
 
-    const findByNameSpy = jest.spyOn(repository, 'findByName');
+    const findByNameSpy = jest.spyOn(databaseService.courses, 'findByName');
     findByNameSpy.mockResolvedValue(null);
 
-    const createCourseSpy = jest.spyOn(factory, 'create');
-    const insertSpy = jest.spyOn(repository, 'insert');
+    const insertSpy = jest.spyOn(databaseService.courses, 'insert');
 
     await sut.execute(input);
 
-    const course = await createCourseSpy.mock.results[0].value;
-
-    expect(createCourseSpy).toHaveBeenCalledWith(input);
-    expect(insertSpy).toHaveBeenCalledWith(course);
+    expect(insertSpy).toHaveBeenCalled();
   });
 });

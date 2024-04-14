@@ -1,9 +1,9 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { ICoursesRepository } from '../database/repositories/courses-repository.interface';
-import { CourseEntityFactory } from '../entities/courses.factory';
+import { CourseEntity } from '../entities/courses.entity';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   name: string;
@@ -11,21 +11,21 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class CreateCoursesUseCase implements IBaseUseCase<Input, Output> {
-  constructor(
-    private courseEntityFactory: CourseEntityFactory,
-    private coursesRepository: ICoursesRepository,
-  ) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentCourse = await this.coursesRepository.findByName(input.name);
+    const existentCourse = await this.databaseService.courses.findByName(
+      input.name,
+    );
 
     if (existentCourse) {
       throw new BadRequestException('Course already exists');
     }
 
-    const courseEntity = this.courseEntityFactory.create(input);
+    const courseEntity = new CourseEntity(input);
 
-    await this.coursesRepository.insert(courseEntity);
+    await this.databaseService.courses.insert(courseEntity);
   }
 }

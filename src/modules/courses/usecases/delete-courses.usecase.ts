@@ -1,8 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
-
-import { ICoursesRepository } from '../database/repositories/courses-repository.interface';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   courseId: string;
@@ -10,11 +9,12 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class DeleteCoursesUseCase implements IBaseUseCase<Input, Output> {
-  constructor(private coursesRepository: ICoursesRepository) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentCourse = await this.coursesRepository.findById(
+    const existentCourse = await this.databaseService.courses.findById(
       input.courseId,
     );
 
@@ -22,6 +22,6 @@ export class DeleteCoursesUseCase implements IBaseUseCase<Input, Output> {
       throw new NotFoundException('Course not found');
     }
 
-    await this.coursesRepository.delete(input.courseId);
+    await this.databaseService.courses.delete(input.courseId);
   }
 }

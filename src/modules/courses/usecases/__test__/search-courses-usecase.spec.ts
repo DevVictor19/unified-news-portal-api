@@ -1,16 +1,16 @@
-import { ICoursesRepository } from '../../database/repositories/courses-repository.interface';
-import { CoursesInMemoryRepository } from '../../database/repositories/in-memory/courses-in-memory.repository';
 import { SearchCoursesUseCase } from '../search-courses.usecase';
 
 import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('SearchCoursesUseCase unit tests', () => {
-  let repository: ICoursesRepository;
+  let databaseService: IDatabaseService;
   let sut: SearchCoursesUseCase;
 
   beforeEach(() => {
-    repository = new CoursesInMemoryRepository();
-    sut = new SearchCoursesUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new SearchCoursesUseCase(databaseService);
   });
 
   it('Should search for courses with the provided search params', async () => {
@@ -20,7 +20,7 @@ describe('SearchCoursesUseCase unit tests', () => {
       searchTerm: 'searchTerm',
     };
 
-    const searchSpy = jest.spyOn(repository, 'search');
+    const searchSpy = jest.spyOn(databaseService.courses, 'search');
 
     await sut.execute(input);
 
