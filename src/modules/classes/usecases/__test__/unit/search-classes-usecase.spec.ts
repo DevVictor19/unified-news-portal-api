@@ -1,16 +1,16 @@
 import { SearchClassesUseCase } from '../../search-classes.usecase';
 
 import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { IClassesRepository } from '@/modules/classes/database/repositories/classes-repository.interface';
-import { ClassesInMemoryRepository } from '@/modules/classes/database/repositories/in-memory/classes-in-memory.repository';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('SearchClassesUseCase unit tests', () => {
-  let repository: IClassesRepository;
+  let databaseService: IDatabaseService;
   let sut: SearchClassesUseCase;
 
   beforeEach(() => {
-    repository = new ClassesInMemoryRepository();
-    sut = new SearchClassesUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new SearchClassesUseCase(databaseService);
   });
 
   it('Should search for classes with the provided search params', async () => {
@@ -20,7 +20,7 @@ describe('SearchClassesUseCase unit tests', () => {
       searchTerm: 'searchTerm',
     };
 
-    const searchSpy = jest.spyOn(repository, 'search');
+    const searchSpy = jest.spyOn(databaseService.classes, 'search');
 
     await sut.execute(input);
 

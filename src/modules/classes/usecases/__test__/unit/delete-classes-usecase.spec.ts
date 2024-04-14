@@ -2,21 +2,21 @@ import { NotFoundException } from '@nestjs/common';
 
 import { DeleteClassesUseCase } from '../../delete-classes.usecase';
 
-import { IClassesRepository } from '@/modules/classes/database/repositories/classes-repository.interface';
-import { ClassesInMemoryRepository } from '@/modules/classes/database/repositories/in-memory/classes-in-memory.repository';
 import { ClassEntity } from '@/modules/classes/entities/classes.entity';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('DeleteClassesUseCase unit tests', () => {
-  let repository: IClassesRepository;
+  let databaseService: IDatabaseService;
   let sut: DeleteClassesUseCase;
 
   beforeEach(() => {
-    repository = new ClassesInMemoryRepository();
-    sut = new DeleteClassesUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new DeleteClassesUseCase(databaseService);
   });
 
   it('Should throw a NotFoundException if class not found', async () => {
-    const findByIdSpy = jest.spyOn(repository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.classes, 'findById');
     findByIdSpy.mockResolvedValue(null);
 
     const input = { classId: 'uuid' };
@@ -26,9 +26,9 @@ describe('DeleteClassesUseCase unit tests', () => {
   });
 
   it('Should delete a class with provided id', async () => {
-    const findByIdSpy = jest.spyOn(repository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.classes, 'findById');
     findByIdSpy.mockResolvedValue({} as ClassEntity);
-    const deleteSpy = jest.spyOn(repository, 'delete');
+    const deleteSpy = jest.spyOn(databaseService.classes, 'delete');
 
     const input = { classId: 'uuid' };
 

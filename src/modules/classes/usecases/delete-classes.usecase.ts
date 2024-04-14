@@ -1,8 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { IClassesRepository } from '../database/repositories/classes-repository.interface';
-
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   classId: string;
@@ -11,15 +10,17 @@ type Input = {
 type Output = void;
 
 export class DeleteClassesUseCase implements IBaseUseCase<Input, Output> {
-  constructor(private classesRepository: IClassesRepository) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentClass = await this.classesRepository.findById(input.classId);
+    const existentClass = await this.databaseService.classes.findById(
+      input.classId,
+    );
 
     if (!existentClass) {
       throw new NotFoundException('Class not found');
     }
 
-    await this.classesRepository.delete(input.classId);
+    await this.databaseService.classes.delete(input.classId);
   }
 }
