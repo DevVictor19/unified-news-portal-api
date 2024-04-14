@@ -1,11 +1,8 @@
-import { Injectable } from '@nestjs/common';
-
 import { IUsersRepository } from '../users-repository.interface';
 
 import { InMemoryBaseRepository } from '@/common/abstractions/repositories/in-memory/in-memory-base-repository.abstraction';
 import { UserEntity } from '@/modules/users/entities/users.entity';
 
-@Injectable()
 export class UsersInMemoryRepository
   extends InMemoryBaseRepository<UserEntity>
   implements IUsersRepository
