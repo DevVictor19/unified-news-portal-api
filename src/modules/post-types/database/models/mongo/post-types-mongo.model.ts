@@ -1,18 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 
+import { MongoEntity } from '@/common/abstractions/entities/mongo/mongo-entity.abstraction';
+
 export type PostTypeMongoDocument = HydratedDocument<PostTypeMongoEntity>;
 
 @Schema({ collection: 'post-types' })
-export class PostTypeMongoEntity {
-  @Prop()
-  _id: string;
-
+export class PostTypeMongoEntity extends MongoEntity {
   @Prop()
   name: string;
-
-  @Prop()
-  created_at: Date;
 }
 
 export const PostTypeMongoSchema =

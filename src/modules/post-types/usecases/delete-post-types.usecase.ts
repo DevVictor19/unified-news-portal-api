@@ -1,8 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
-
-import { IPostTypesRepository } from '../database/repositories/post-types-repository.interface';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 type Input = {
   postTypeId: string;
@@ -10,11 +9,12 @@ type Input = {
 
 type Output = void;
 
+@Injectable()
 export class DeletePostTypesUseCase implements IBaseUseCase<Input, Output> {
-  constructor(private postTypesRepository: IPostTypesRepository) {}
+  constructor(private databaseService: IDatabaseService) {}
 
   async execute(input: Input): Promise<Output> {
-    const existentPostType = await this.postTypesRepository.findById(
+    const existentPostType = await this.databaseService.postTypes.findById(
       input.postTypeId,
     );
 
@@ -22,6 +22,6 @@ export class DeletePostTypesUseCase implements IBaseUseCase<Input, Output> {
       throw new NotFoundException('Post type not found');
     }
 
-    await this.postTypesRepository.delete(input.postTypeId);
+    await this.databaseService.postTypes.delete(input.postTypeId);
   }
 }

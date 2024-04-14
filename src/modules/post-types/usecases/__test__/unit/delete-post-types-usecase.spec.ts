@@ -2,21 +2,21 @@ import { NotFoundException } from '@nestjs/common';
 
 import { DeletePostTypesUseCase } from '../../delete-post-types.usecase';
 
-import { PostTypesInMemoryRepository } from '@/modules/post-types/database/repositories/in-memory/post-types-in-memory.repository';
-import { IPostTypesRepository } from '@/modules/post-types/database/repositories/post-types-repository.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 import { PostTypeEntity } from '@/modules/post-types/entities/post-types.entity';
 
 describe('DeletePostTypesUseCase unit tests', () => {
-  let repository: IPostTypesRepository;
+  let databaseService: IDatabaseService;
   let sut: DeletePostTypesUseCase;
 
   beforeEach(() => {
-    repository = new PostTypesInMemoryRepository();
-    sut = new DeletePostTypesUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new DeletePostTypesUseCase(databaseService);
   });
 
   it('Should throw a NotFoundException if postType is not found', async () => {
-    const findByIdSpy = jest.spyOn(repository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.postTypes, 'findById');
     findByIdSpy.mockResolvedValue(null);
 
     const input = { postTypeId: 'uuid' };
@@ -26,9 +26,9 @@ describe('DeletePostTypesUseCase unit tests', () => {
   });
 
   it('Should delete a postType with provided id', async () => {
-    const findByIdSpy = jest.spyOn(repository, 'findById');
+    const findByIdSpy = jest.spyOn(databaseService.postTypes, 'findById');
     findByIdSpy.mockResolvedValue({} as PostTypeEntity);
-    const deleteSpy = jest.spyOn(repository, 'delete');
+    const deleteSpy = jest.spyOn(databaseService.postTypes, 'delete');
 
     const input = { postTypeId: 'uuid' };
 

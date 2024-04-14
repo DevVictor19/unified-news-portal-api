@@ -1,16 +1,16 @@
 import { SearchPostTypesUseCase } from '../../search-post-types.usecase';
 
 import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { PostTypesInMemoryRepository } from '@/modules/post-types/database/repositories/in-memory/post-types-in-memory.repository';
-import { IPostTypesRepository } from '@/modules/post-types/database/repositories/post-types-repository.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 
 describe('SearchPostTypesUseCase unit tests', () => {
-  let repository: IPostTypesRepository;
+  let databaseService: IDatabaseService;
   let sut: SearchPostTypesUseCase;
 
   beforeEach(() => {
-    repository = new PostTypesInMemoryRepository();
-    sut = new SearchPostTypesUseCase(repository);
+    databaseService = new DatabaseServiceMock();
+    sut = new SearchPostTypesUseCase(databaseService);
   });
 
   it('Should search for postTypes with the provided search params', async () => {
@@ -20,7 +20,7 @@ describe('SearchPostTypesUseCase unit tests', () => {
       searchTerm: 'searchTerm',
     };
 
-    const searchSpy = jest.spyOn(repository, 'search');
+    const searchSpy = jest.spyOn(databaseService.postTypes, 'search');
 
     await sut.execute(input);
 
