@@ -4,13 +4,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IMailService } from '../services/mail/mail-service.interface';
 
 import { PasswordRecoveryJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = {
@@ -24,14 +24,16 @@ export class SendPasswordRecoveryEmailUseCase
   implements IBaseUseCase<Input, Output>
 {
   constructor(
-    private usersRepository: IUsersRepository,
+    private databaseService: IDatabaseService,
     private jwtProvider: IJwtProvider,
     private templateProvider: ITemplateEngineProvider,
     private mailService: IMailService,
   ) {}
 
   async execute(input: Input): Promise<Output> {
-    const existingUser = await this.usersRepository.findByEmail(input.email);
+    const existingUser = await this.databaseService.users.findByEmail(
+      input.email,
+    );
 
     if (!existingUser) {
       throw new NotFoundException('User not found');

@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { IUsersRepository } from '../database/repositories/users-repository.interface';
-import { UserEntityFactory } from '../entities/users.factory';
+import { UserEntity } from '../entities/users.entity';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IMailService } from '../services/mail/mail-service.interface';
@@ -9,6 +8,7 @@ import { IMailService } from '../services/mail/mail-service.interface';
 import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 import { IEnvConfigProvider } from '@/modules/common/env-config/env-config-provider.interface';
 import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
@@ -25,8 +25,7 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
   private serverUrl: string;
 
   constructor(
-    private usersRepository: IUsersRepository,
-    private userEntityFactory: UserEntityFactory,
+    private databaseService: IDatabaseService,
     private hashProvider: IHashProvider,
     private templateProvider: ITemplateEngineProvider,
     private jwtProvider: IJwtProvider,
@@ -37,7 +36,9 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
   }
 
   async execute(input: Input): Promise<Output> {
-    const existingUser = await this.usersRepository.findByEmail(input.email);
+    const existingUser = await this.databaseService.users.findByEmail(
+      input.email,
+    );
 
     if (existingUser) {
       throw new BadRequestException('Email already in use');
@@ -70,12 +71,12 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
 
     const hashedPassword = await this.hashProvider.generateHash(input.password);
 
-    const user = this.userEntityFactory.create({
+    const user = new UserEntity({
       email: input.email,
       name: input.name,
       password: hashedPassword,
     });
 
-    await this.usersRepository.insert(user);
+    await this.databaseService.users.insert(user);
   }
 }

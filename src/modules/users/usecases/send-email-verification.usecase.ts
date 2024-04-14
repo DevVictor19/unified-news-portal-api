@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { ITemplateEngineProvider } from '../providers/template-engine/template-engine-provider.interface';
 import { IMailService } from '../services/mail/mail-service.interface';
 
 import { EmailVerificationJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 import { IEnvConfigProvider } from '@/modules/common/env-config/env-config-provider.interface';
 import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
@@ -21,7 +21,7 @@ export class SendEmailVerificationUseCase
   private serverUrl: string;
 
   constructor(
-    private usersRepository: IUsersRepository,
+    private databaseService: IDatabaseService,
     private templateProvider: ITemplateEngineProvider,
     private mailService: IMailService,
     private jwtProvider: IJwtProvider,
@@ -31,7 +31,9 @@ export class SendEmailVerificationUseCase
   }
 
   async execute(input: Input): Promise<Output> {
-    const existingUser = await this.usersRepository.findByEmail(input.email);
+    const existingUser = await this.databaseService.users.findByEmail(
+      input.email,
+    );
 
     if (!existingUser) {
       throw new BadRequestException('Email not registered');

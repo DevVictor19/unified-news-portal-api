@@ -5,10 +5,10 @@ import { SendPasswordRecoveryEmailUseCase } from '../../send-password-recovery-e
 
 import { PasswordRecoveryJwtPayload } from '@/common/@types/users/jwt-payloads.type';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
-import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
-import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
-import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { JwtProviderMock } from '@/modules/common/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 import { UserEntity } from '@/modules/users/entities/users.entity';
 import { TemplateEngineProviderMock } from '@/modules/users/providers/template-engine/__MOCKS__/template-engine-provider.mock';
 import { ITemplateEngineProvider } from '@/modules/users/providers/template-engine/template-engine-provider.interface';
@@ -17,18 +17,18 @@ import { IMailService } from '@/modules/users/services/mail/mail-service.interfa
 
 describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   let sut: SendPasswordRecoveryEmailUseCase;
-  let repository: IUsersRepository;
+  let databaseService: IDatabaseService;
   let templateProvider: ITemplateEngineProvider;
   let jwtProvider: IJwtProvider;
   let mailService: IMailService;
 
   beforeEach(() => {
-    repository = new UsersInMemoryRepository();
+    databaseService = new DatabaseServiceMock();
     templateProvider = new TemplateEngineProviderMock();
     jwtProvider = new JwtProviderMock();
     mailService = new MailServiceMock();
     sut = new SendPasswordRecoveryEmailUseCase(
-      repository,
+      databaseService,
       jwtProvider,
       templateProvider,
       mailService,
@@ -36,7 +36,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   });
 
   it('Should throw a NotFoundException when user is not found', async () => {
-    const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(null);
 
     await expect(() =>
@@ -49,7 +49,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   it('Should throw a UnauthorizedException when user email is not verified', async () => {
     const user = { id: 'userId', email_is_verified: false } as UserEntity;
 
-    const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
 
     await expect(() =>
@@ -62,7 +62,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
   it('Should create a jwt of type PasswordRecoveryJwtPayload', async () => {
     const user = { id: 'userId', email_is_verified: true } as UserEntity;
 
-    const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
     const signJwtSpy = jest.spyOn(jwtProvider, 'sign');
 
@@ -85,7 +85,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
 
     const input = { email: faker.internet.email() };
 
-    const findByEmailSpy = jest.spyOn(repository, 'findByEmail');
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
     const signJwtSpy = jest.spyOn(jwtProvider, 'sign');
     const compileTemplateSpy = jest.spyOn(templateProvider, 'compile');

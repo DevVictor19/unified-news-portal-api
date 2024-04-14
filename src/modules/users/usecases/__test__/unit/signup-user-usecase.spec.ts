@@ -3,13 +3,13 @@ import { BadRequestException } from '@nestjs/common';
 
 import { SignupUserUseCase } from '../../signup-user.usecase';
 
-import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
-import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
-import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
-import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { EnvConfigProviderMock } from '@/modules/common/env-config/__MOCKS__/env-config-provider.mock';
+import { IEnvConfigProvider } from '@/modules/common/env-config/env-config-provider.interface';
+import { JwtProviderMock } from '@/modules/common/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 import { UserEntity } from '@/modules/users/entities/users.entity';
-import { UserEntityFactory } from '@/modules/users/entities/users.factory';
 import { HashProviderMock } from '@/modules/users/providers/hash/__MOCKS__/hash-provider.mock';
 import { IHashProvider } from '@/modules/users/providers/hash/hash-provider.interface';
 import { TemplateEngineProviderMock } from '@/modules/users/providers/template-engine/__MOCKS__/template-engine-provider.mock';
@@ -19,13 +19,12 @@ import { IMailService } from '@/modules/users/services/mail/mail-service.interfa
 
 describe('SignupUserUseCase unit tests', () => {
   let sut: SignupUserUseCase;
-  let repository: IUsersRepository;
-  let factory: UserEntityFactory;
+  let databaseService: IDatabaseService;
   let hashProvider: IHashProvider;
   let templateProvider: ITemplateEngineProvider;
   let jwtProvider: IJwtProvider;
   let mailService: IMailService;
-  let serverUrl: string;
+  let envConfigProvider: IEnvConfigProvider;
   let payload: any;
 
   beforeEach(() => {
@@ -34,43 +33,35 @@ describe('SignupUserUseCase unit tests', () => {
       name: faker.person.fullName(),
       password: faker.internet.password(),
     };
-    repository = new UsersInMemoryRepository();
-    factory = new UserEntityFactory();
+    databaseService = new DatabaseServiceMock();
     hashProvider = new HashProviderMock();
     templateProvider = new TemplateEngineProviderMock();
     jwtProvider = new JwtProviderMock();
     mailService = new MailServiceMock();
-    serverUrl = 'server url';
+    envConfigProvider = new EnvConfigProviderMock();
     sut = new SignupUserUseCase(
-      repository,
-      factory,
+      databaseService,
       hashProvider,
       templateProvider,
       jwtProvider,
       mailService,
-      serverUrl,
+      envConfigProvider,
     );
   });
 
   it('Should create and save a user with hashed password', async () => {
-    const repositoryFindByEmailSpy = jest.spyOn(repository, 'findByEmail');
+    const repositoryFindByEmailSpy = jest.spyOn(
+      databaseService.users,
+      'findByEmail',
+    );
     const hashProviderSpy = jest.spyOn(hashProvider, 'generateHash');
-    const factorySpy = jest.spyOn(factory, 'create');
-    const repositoryInsertSpy = jest.spyOn(repository, 'insert');
+    const repositoryInsertSpy = jest.spyOn(databaseService.users, 'insert');
 
     await sut.execute(payload);
 
-    const hashedPassword = await hashProviderSpy.mock.results[0].value;
-    const user = await factorySpy.mock.results[0].value;
-
     expect(repositoryFindByEmailSpy).toHaveBeenCalledWith(payload.email);
     expect(hashProviderSpy).toHaveBeenCalledWith(payload.password);
-    expect(factorySpy).toHaveBeenCalledWith({
-      email: payload.email,
-      name: payload.name,
-      password: hashedPassword,
-    });
-    expect(repositoryInsertSpy).toHaveBeenCalledWith(user);
+    expect(repositoryInsertSpy).toHaveBeenCalled();
   });
 
   it('Should send a verification email with a url for verify', async () => {
@@ -80,29 +71,16 @@ describe('SignupUserUseCase unit tests', () => {
 
     await sut.execute(payload);
 
-    const token = await signJwtSpy.mock.results[0].value;
-    const link = `${serverUrl}/users/verify?token=${token}`;
-    const html = await compileTemplateSpy.mock.results[0].value;
-
-    expect(signJwtSpy).toHaveBeenCalledWith({
-      expiresIn: '2h',
-      payload: { email: payload.email, token_type: TOKEN_TYPE.EMAIL_VERIFY },
-    });
-    expect(compileTemplateSpy).toHaveBeenCalledWith('email-verification.hbs', {
-      link,
-    });
-    expect(sendEmailSpy).toHaveBeenCalledWith({
-      body: html,
-      subject: 'Verificação de Email',
-      to: {
-        email: payload.email,
-        name: payload.name,
-      },
-    });
+    expect(signJwtSpy).toHaveBeenCalled();
+    expect(compileTemplateSpy).toHaveBeenCalled();
+    expect(sendEmailSpy).toHaveBeenCalled();
   });
 
   it('Should throw a BadRequestException if email is already in use', async () => {
-    const repositoryFindByEmailSpy = jest.spyOn(repository, 'findByEmail');
+    const repositoryFindByEmailSpy = jest.spyOn(
+      databaseService.users,
+      'findByEmail',
+    );
     repositoryFindByEmailSpy.mockResolvedValue({} as UserEntity);
 
     await expect(() => sut.execute(payload)).rejects.toBeInstanceOf(

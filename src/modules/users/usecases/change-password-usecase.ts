@@ -4,12 +4,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { IUsersRepository } from '../database/repositories/users-repository.interface';
 import { IHashProvider } from '../providers/hash/hash-provider.interface';
 
 import { PasswordRecoveryJwtParsed } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = {
@@ -22,7 +22,7 @@ type Output = void;
 @Injectable()
 export class ChangePasswordUseCase implements IBaseUseCase<Input, Output> {
   constructor(
-    private usersRepository: IUsersRepository,
+    private databaseService: IDatabaseService,
     private jwtProvider: IJwtProvider,
     private hashProvider: IHashProvider,
   ) {}
@@ -42,7 +42,9 @@ export class ChangePasswordUseCase implements IBaseUseCase<Input, Output> {
       throw new UnauthorizedException('Invalid token type');
     }
 
-    const existingUser = await this.usersRepository.findById(jwtPayload.userId);
+    const existingUser = await this.databaseService.users.findById(
+      jwtPayload.userId,
+    );
 
     if (!existingUser) {
       throw new NotFoundException('User not found');
@@ -52,6 +54,6 @@ export class ChangePasswordUseCase implements IBaseUseCase<Input, Output> {
 
     existingUser.password = newPassword;
 
-    await this.usersRepository.update(existingUser.id!, existingUser);
+    await this.databaseService.users.update(existingUser.id!, existingUser);
   }
 }

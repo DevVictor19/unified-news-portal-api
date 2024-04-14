@@ -3,21 +3,21 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { VerifyEmailUseCase } from '../../verify-email.usecase';
 
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
-import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
-import { UsersInMemoryRepository } from '@/modules/users/database/repositories/in-memory/users-in-memory.repository';
-import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { JwtProviderMock } from '@/modules/common/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 import { UserEntity } from '@/modules/users/entities/users.entity';
 
 describe('VerifyEmailUseCase unit tests', () => {
   let jwtProvider: IJwtProvider;
-  let usersRepository: IUsersRepository;
+  let databaseService: IDatabaseService;
   let sut: VerifyEmailUseCase;
 
   beforeEach(() => {
     jwtProvider = new JwtProviderMock();
-    usersRepository = new UsersInMemoryRepository();
-    sut = new VerifyEmailUseCase(jwtProvider, usersRepository);
+    databaseService = new DatabaseServiceMock();
+    sut = new VerifyEmailUseCase(jwtProvider, databaseService);
   });
 
   it('Should throw UnauthorizedException when token is invalid', async () => {
@@ -43,7 +43,7 @@ describe('VerifyEmailUseCase unit tests', () => {
   it('Should throw UnauthorizedException when user not exists', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
-    const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(null);
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
@@ -56,9 +56,9 @@ describe('VerifyEmailUseCase unit tests', () => {
   it('Should throw a BadRequestException if email is already verified', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
-    const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue({ email_is_verified: true } as UserEntity);
-    const updateUserSpy = jest.spyOn(usersRepository, 'update');
+    const updateUserSpy = jest.spyOn(databaseService.users, 'update');
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
       BadRequestException,
@@ -78,9 +78,9 @@ describe('VerifyEmailUseCase unit tests', () => {
 
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue(tokenPayload);
-    const findByEmailSpy = jest.spyOn(usersRepository, 'findByEmail');
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(user);
-    const updateUserSpy = jest.spyOn(usersRepository, 'update');
+    const updateUserSpy = jest.spyOn(databaseService.users, 'update');
 
     await sut.execute({ token });
 

@@ -4,11 +4,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { IUsersRepository } from '../database/repositories/users-repository.interface';
-
 import { EmailVerificationJwtParsed } from '@/common/@types/users/jwt-payloads.type';
 import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+import { IDatabaseService } from '@/modules/common/database/database-service.interface';
 import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 type Input = {
@@ -21,7 +20,7 @@ type Output = void;
 export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
   constructor(
     private jwtProvider: IJwtProvider,
-    private usersRepository: IUsersRepository,
+    private databaseService: IDatabaseService,
   ) {}
 
   async execute(input: Input): Promise<Output> {
@@ -39,7 +38,9 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
       throw new UnauthorizedException('Invalid token type');
     }
 
-    const existingUser = await this.usersRepository.findByEmail(token.email);
+    const existingUser = await this.databaseService.users.findByEmail(
+      token.email,
+    );
 
     if (!existingUser) {
       throw new UnauthorizedException(
@@ -53,6 +54,6 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
 
     existingUser.email_is_verified = true;
 
-    await this.usersRepository.update(existingUser.id, existingUser);
+    await this.databaseService.users.update(existingUser.id, existingUser);
   }
 }
