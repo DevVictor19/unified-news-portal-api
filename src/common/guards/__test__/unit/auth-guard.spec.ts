@@ -11,8 +11,8 @@ import { AuthJwtParsed } from '@/common/@types/users/jwt-payloads.type';
 import { ROLES } from '@/common/enums/roles.enum';
 import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
 import { ExecutionContextMock } from '@/common/guards/__test__/testing/mocks/execution-context.mock';
-import { JwtProviderMock } from '@/modules/common/jwt/providers/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/common/jwt/providers/jwt/jwt-provider.interface';
+import { JwtProviderMock } from '@/modules/common/jwt/__MOCKS__/jwt-provider.mock';
+import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
 
 describe('AuthGuard unit tests', () => {
   let jwtProvider: IJwtProvider;
