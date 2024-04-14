@@ -1,6 +1,6 @@
 import { Prop } from '@nestjs/mongoose';
 
-export class MongoEntity {
+export abstract class MongoEntity {
   @Prop()
   _id: string;
 
