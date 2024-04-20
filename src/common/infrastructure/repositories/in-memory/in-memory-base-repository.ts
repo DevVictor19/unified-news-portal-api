@@ -1,5 +1,5 @@
-import { Entity } from '../../entities/entity.abstraction';
-import { IBaseRepository } from '../base-repository.abstraction';
+import { Entity } from '@/common/domain/entities/entity';
+import { IBaseRepository } from '@/common/domain/repositories/base-repository.interface';
 
 export abstract class InMemoryBaseRepository<T extends Entity>
   implements IBaseRepository<T>

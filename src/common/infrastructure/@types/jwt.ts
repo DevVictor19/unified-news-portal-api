@@ -1,7 +1,7 @@
-import { ParsedJwt } from '../jwt/parsed-jwt.type';
+import { ROLES } from '@/common/domain/enums/roles.enum';
+import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 
-import { ROLES } from '@/common/enums/roles.enum';
-import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
+export type ParsedJwt<T extends object> = T & JwtPayload;
 
 export type EmailVerificationJwtPayload = {
   email: string;

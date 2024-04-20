@@ -1,12 +1,13 @@
 import { FilterQuery, Model } from 'mongoose';
 
-import { Entity } from '../../entities/entity.abstraction';
-import { MongoEntity } from '../../entities/mongo/mongo-entity.abstraction';
-import { IBaseEntityMapper } from '../../mappers/base-entity-mapper.abstraction';
+import { MongoEntity } from '../../entities/mongo/mongo-entity';
+
+import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
+import { Entity } from '@/common/domain/entities/entity';
 import {
   IBaseSearchRepository,
   RepositorySearch,
-} from '../base-search-repository.abstraction';
+} from '@/common/domain/repositories/base-search-repository.interface';
 
 export abstract class MongoBaseSearchRepository<
   DomainEntity extends Entity,

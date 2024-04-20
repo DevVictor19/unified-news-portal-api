@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { Entity } from '../../entity.abstraction';
+import { Entity } from '../../entity';
 
 class StubEntity extends Entity {}
 

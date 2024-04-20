@@ -1,4 +1,4 @@
-import { Entity } from '../entities/entity.abstraction';
+import { Entity } from '../entities/entity';
 
 export abstract class IBaseRepository<T extends Entity> {
   abstract insert(entity: T): Promise<void>;

@@ -1,5 +1,5 @@
-import { IBaseRepository } from './base-repository.abstraction';
-import { Entity } from '../entities/entity.abstraction';
+import { IBaseRepository } from './base-repository.interface';
+import { Entity } from '../entities/entity';
 
 export type RepositorySearch = {
   searchTerm?: string;
