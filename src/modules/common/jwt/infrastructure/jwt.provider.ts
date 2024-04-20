@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { sign, verify } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 
+import { IEnvConfigProvider } from '../../env-config/application/providers/env-config-provider.interface';
 import {
   IJwtProvider,
-  JwtPayload,
   TokenSignOptions,
-} from './jwt-provider.interface';
-import { IEnvConfigProvider } from '../env-config/env-config-provider.interface';
+} from '../application/providers/jwt-provider.interface';
 
 @Injectable()
 export class JwtProvider implements IJwtProvider {

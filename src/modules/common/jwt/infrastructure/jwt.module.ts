@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 
-import { IJwtProvider } from './jwt-provider.interface';
 import { JwtProvider } from './jwt.provider';
-import { EnvConfigModule } from '../env-config/env-config.module';
+import { EnvConfigModule } from '../../env-config/infrastructure/env-config.module';
+import { IJwtProvider } from '../application/providers/jwt-provider.interface';
 
 @Global()
 @Module({

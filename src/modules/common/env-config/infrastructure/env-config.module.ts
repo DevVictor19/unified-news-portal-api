@@ -1,10 +1,9 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 
-import { IEnvConfigProvider } from './env-config-provider.interface';
 import { EnvConfigProvider } from './env-config.provider';
-
-import environmentConfig from '@/config/environment.config';
+import environmentConfig from './environment.config';
+import { IEnvConfigProvider } from '../application/providers/env-config-provider.interface';
 
 @Global()
 @Module({

@@ -1,3 +1,5 @@
+import { JwtPayload } from '../providers/jwt-provider.interface';
+
 import { ROLES } from '@/common/domain/enums/roles.enum';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 

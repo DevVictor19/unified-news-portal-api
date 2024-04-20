@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
+import { JwtPayload } from 'jsonwebtoken';
+
 import {
   IJwtProvider,
-  JwtPayload,
   TokenSignOptions,
-} from '../jwt-provider.interface';
+} from '../providers/jwt-provider.interface';
 
 export class JwtProviderMock implements IJwtProvider {
   sign({ payload, expiresIn }: TokenSignOptions): string {
