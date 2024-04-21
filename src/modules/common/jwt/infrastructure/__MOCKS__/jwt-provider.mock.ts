@@ -5,7 +5,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import {
   IJwtProvider,
   TokenSignOptions,
-} from '../providers/jwt-provider.interface';
+} from '../../application/providers/jwt-provider.interface';
 
 export class JwtProviderMock implements IJwtProvider {
   sign({ payload, expiresIn }: TokenSignOptions): string {

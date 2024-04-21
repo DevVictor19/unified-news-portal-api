@@ -1,4 +1,4 @@
-import { IDatabaseService } from '../services/database-service.interface';
+import { IDatabaseService } from '../../application/services/database-service.interface';
 
 export class DatabaseServiceMock implements IDatabaseService {
   public categories: ICategoriesRepository;
