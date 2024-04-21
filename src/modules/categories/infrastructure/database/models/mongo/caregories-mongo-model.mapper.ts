@@ -3,8 +3,8 @@ import {
   CategoryMongoModel,
 } from './categories-mongo.model';
 
-import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
-import { CategoryEntity } from '@/modules/categories/entities/categories.entity';
+import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
+import { CategoryEntity } from '@/modules/categories/domain/entities/categories.entity';
 
 export class CategoryMongoEntityMapper
   implements IBaseEntityMapper<CategoryEntity, CategoryMongoEntity>

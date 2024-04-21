@@ -5,7 +5,7 @@ import {
   CreateCategoriesUseCase,
   DeleteCategoriesUseCase,
   SearchCategoriesUseCase,
-} from './usecases';
+} from '../application/usecases';
 
 @Module({
   controllers: [CategoriesController],

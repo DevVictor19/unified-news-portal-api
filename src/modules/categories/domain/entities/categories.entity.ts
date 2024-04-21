@@ -1,7 +1,4 @@
-import {
-  Entity,
-  EntityProps,
-} from '@/common/abstractions/entities/entity.abstraction';
+import { EntityProps, Entity } from '@/common/domain/entities/entity';
 
 export type CategoryEntityProps = EntityProps & {
   name: string;

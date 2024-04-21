@@ -2,9 +2,9 @@ import { NotFoundException } from '@nestjs/common';
 
 import { DeleteCategoriesUseCase } from '../../delete-categories.usecase';
 
-import { CategoryEntity } from '@/modules/categories/entities/categories.entity';
-import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { CategoryEntity } from '@/modules/categories/domain/entities/categories.entity';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 
 describe('DeleteCategoriesUseCase unit tests', () => {
   let databaseService: IDatabaseService;

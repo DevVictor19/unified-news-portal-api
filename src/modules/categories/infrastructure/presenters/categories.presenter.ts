@@ -1,4 +1,4 @@
-import { CategoryEntity } from '../entities/categories.entity';
+import { CategoryEntity } from '../../domain/entities/categories.entity';
 
 export class CategoriesPresenter {
   static format(input: CategoryEntity) {

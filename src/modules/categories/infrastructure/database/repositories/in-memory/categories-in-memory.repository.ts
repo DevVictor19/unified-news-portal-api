@@ -1,8 +1,8 @@
-import { ICategoriesRepository } from '../categories-repository.interface';
+import { ICategoriesRepository } from '../../../../domain/repositories/categories-repository.interface';
 
-import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { InMemoryBaseRepository } from '@/common/abstractions/repositories/in-memory/in-memory-base-repository.abstraction';
-import { CategoryEntity } from '@/modules/categories/entities/categories.entity';
+import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import { InMemoryBaseRepository } from '@/common/infrastructure/repositories/in-memory/in-memory-base-repository';
+import { CategoryEntity } from '@/modules/categories/domain/entities/categories.entity';
 
 export class CategoriesInMemoryRepository
   extends InMemoryBaseRepository<CategoryEntity>
