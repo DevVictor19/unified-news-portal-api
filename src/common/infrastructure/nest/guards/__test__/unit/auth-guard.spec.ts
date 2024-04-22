@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 
 import { AuthGuard } from '../../auth.guard';
+import { ExecutionContextMock } from '../testing/mocks/execution-context.mock';
 
-import { AuthJwtParsed } from '@/common/@types/users/jwt-payloads.type';
-import { ROLES } from '@/common/enums/roles.enum';
-import { TOKEN_TYPE } from '@/common/enums/token-type.enum';
-import { ExecutionContextMock } from '@/common/guards/__test__/testing/mocks/execution-context.mock';
-import { JwtProviderMock } from '@/modules/common/jwt/__MOCKS__/jwt-provider.mock';
-import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
+import { ROLES } from '@/common/domain/enums/roles.enum';
+import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
+import { AuthJwtParsed } from '@/modules/common/jwt/application/@types/jwt';
+import { IJwtProvider } from '@/modules/common/jwt/application/providers/jwt-provider.interface';
+import { JwtProviderMock } from '@/modules/common/jwt/infrastructure/__MOCKS__/jwt-provider.mock';
 
 describe('AuthGuard unit tests', () => {
   let jwtProvider: IJwtProvider;

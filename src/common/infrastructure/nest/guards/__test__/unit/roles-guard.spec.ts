@@ -5,7 +5,7 @@ import { RolesGuard } from '../../roles.guard';
 import { ExecutionContextMock } from '../testing/mocks/execution-context.mock';
 import { ReflectorMock } from '../testing/mocks/reflector.mock';
 
-import { ROLES } from '@/common/enums/roles.enum';
+import { ROLES } from '@/common/domain/enums/roles.enum';
 
 describe('RolesGuard unit tests', () => {
   let sut: RolesGuard;

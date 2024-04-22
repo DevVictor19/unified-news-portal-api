@@ -6,10 +6,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { AuthJwtParsed } from '../@types/users/jwt-payloads.type';
-import { TOKEN_TYPE } from '../enums/token-type.enum';
-
-import { IJwtProvider } from '@/modules/common/jwt/jwt-provider.interface';
+import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
+import { AuthJwtParsed } from '@/modules/common/jwt/application/@types/jwt';
+import { IJwtProvider } from '@/modules/common/jwt/application/providers/jwt-provider.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
