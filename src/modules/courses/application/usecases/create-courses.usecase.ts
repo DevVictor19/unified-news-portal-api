@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 
-import { CourseEntity } from '../entities/courses.entity';
+import { CourseEntity } from '../../domain/entities/courses.entity';
 
-import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
 type Input = {
   name: string;

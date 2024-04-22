@@ -1,7 +1,7 @@
 import { CourseMongoEntity, CourseMongoModel } from './courses-mongo.model';
 
-import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
-import { CourseEntity } from '@/modules/courses/entities/courses.entity';
+import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
+import { CourseEntity } from '@/modules/courses/domain/entities/courses.entity';
 
 export class CourseMongoEntityMapper
   implements IBaseEntityMapper<CourseEntity, CourseMongoEntity>

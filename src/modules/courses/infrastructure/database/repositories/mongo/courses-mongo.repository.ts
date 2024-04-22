@@ -2,10 +2,10 @@ import { Model } from 'mongoose';
 
 import { CourseMongoEntityMapper } from '../../models/mongo/courses-mongo-model.mapper';
 import { CourseMongoEntity } from '../../models/mongo/courses-mongo.model';
-import { ICoursesRepository } from '../courses-repository.interface';
 
-import { MongoBaseSearchRepository } from '@/common/abstractions/repositories/mongo/mongo-base-search-repository.abstraction';
-import { CourseEntity } from '@/modules/courses/entities/courses.entity';
+import { MongoBaseSearchRepository } from '@/common/infrastructure/repositories/mongo/mongo-base-search-repository';
+import { CourseEntity } from '@/modules/courses/domain/entities/courses.entity';
+import { ICoursesRepository } from '@/modules/courses/domain/repositories/courses-repository.interface';
 
 export class CoursesMongoRepository
   extends MongoBaseSearchRepository<CourseEntity, CourseMongoEntity>

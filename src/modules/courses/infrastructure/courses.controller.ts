@@ -10,20 +10,20 @@ import {
 } from '@nestjs/common';
 
 import { CreateCoursesDto } from './dtos';
-import { CourseEntity } from './entities/courses.entity';
 import { CoursesPresenter } from './presenters/courses.presenter';
 import {
   CreateCoursesUseCase,
-  DeleteCoursesUseCase,
   SearchCoursesUseCase,
-} from './usecases';
+  DeleteCoursesUseCase,
+} from '../application/usecases';
+import { CourseEntity } from '../domain/entities/courses.entity';
 
 import {
   LeaderRoute,
   StudentRoute,
   TeacherRoute,
-} from '@/common/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/dtos/search-query.dto';
+} from '@/common/infrastructure/nest/decorators/roles.decorator';
+import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
 
 @Controller('/courses')
 export class CoursesController {

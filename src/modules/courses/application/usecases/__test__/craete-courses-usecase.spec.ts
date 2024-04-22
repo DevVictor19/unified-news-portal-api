@@ -1,10 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { CourseEntity } from '../../entities/courses.entity';
 import { CreateCoursesUseCase } from '../create-courses.usecase';
 
-import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
+import { CourseEntity } from '@/modules/courses/domain/entities/courses.entity';
 
 describe('CreateCoursesUseCase unit tests', () => {
   let databaseService: IDatabaseService;
