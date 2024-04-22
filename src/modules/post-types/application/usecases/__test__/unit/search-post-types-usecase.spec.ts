@@ -1,8 +1,8 @@
 import { SearchPostTypesUseCase } from '../../search-post-types.usecase';
 
-import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 
 describe('SearchPostTypesUseCase unit tests', () => {
   let databaseService: IDatabaseService;

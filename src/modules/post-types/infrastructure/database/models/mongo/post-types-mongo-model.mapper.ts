@@ -3,8 +3,8 @@ import {
   PostTypeMongoModel,
 } from './post-types-mongo.model';
 
-import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
-import { PostTypeEntity } from '@/modules/post-types/entities/post-types.entity';
+import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
+import { PostTypeEntity } from '@/modules/post-types/domain/entities/post-types.entity';
 
 export class PostTypeMongoEntityMapper
   implements IBaseEntityMapper<PostTypeEntity, PostTypeMongoEntity>

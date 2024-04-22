@@ -15,15 +15,15 @@ import {
   CreatePostTypesUseCase,
   SearchPostTypesUseCase,
   DeletePostTypesUseCase,
-} from './usecases';
-import { CourseEntity } from '../courses/entities/courses.entity';
+} from '../application/usecases';
 
 import {
   LeaderRoute,
   StudentRoute,
   TeacherRoute,
-} from '@/common/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/dtos/search-query.dto';
+} from '@/common/infrastructure/nest/decorators/roles.decorator';
+import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
+import { CourseEntity } from '@/modules/courses/domain/entities/courses.entity';
 
 @Controller('/post-types')
 export class PostTypesController {

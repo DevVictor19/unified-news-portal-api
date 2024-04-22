@@ -1,8 +1,7 @@
-import { IPostTypesRepository } from '../post-types-repository.interface';
-
-import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { InMemoryBaseRepository } from '@/common/abstractions/repositories/in-memory/in-memory-base-repository.abstraction';
-import { PostTypeEntity } from '@/modules/post-types/entities/post-types.entity';
+import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import { InMemoryBaseRepository } from '@/common/infrastructure/repositories/in-memory/in-memory-base-repository';
+import { PostTypeEntity } from '@/modules/post-types/domain/entities/post-types.entity';
+import { IPostTypesRepository } from '@/modules/post-types/domain/repositories/post-types-repository.interface';
 
 export class PostTypesInMemoryRepository
   extends InMemoryBaseRepository<PostTypeEntity>

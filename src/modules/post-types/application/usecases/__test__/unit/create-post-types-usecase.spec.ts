@@ -2,9 +2,9 @@ import { BadRequestException } from '@nestjs/common';
 
 import { CreatePostTypesUseCase } from '../../create-post-types.usecase';
 
-import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
-import { PostTypeEntity } from '@/modules/post-types/entities/post-types.entity';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
+import { PostTypeEntity } from '@/modules/post-types/domain/entities/post-types.entity';
 
 describe('CreatePostTypesUseCase unit tests', () => {
   let databaseService: IDatabaseService;

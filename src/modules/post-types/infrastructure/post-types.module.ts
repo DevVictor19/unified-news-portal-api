@@ -5,7 +5,7 @@ import {
   CreatePostTypesUseCase,
   DeletePostTypesUseCase,
   SearchPostTypesUseCase,
-} from './usecases';
+} from '../application/usecases';
 
 @Module({
   controllers: [PostTypesController],
