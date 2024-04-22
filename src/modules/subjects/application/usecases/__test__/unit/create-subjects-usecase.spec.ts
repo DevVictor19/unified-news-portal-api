@@ -2,9 +2,9 @@ import { BadRequestException } from '@nestjs/common';
 
 import { CreateSubjectsUseCase } from '../../create-subjects.usecase';
 
-import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
-import { SubjectEntity } from '@/modules/subjects/entities/subjects.entity';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
+import { SubjectEntity } from '@/modules/subjects/domain/entities/subjects.entity';
 
 describe('CreateSubjectsUseCase unit tests', () => {
   let databaseService: IDatabaseService;

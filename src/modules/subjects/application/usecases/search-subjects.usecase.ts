@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { SubjectEntity } from '../entities/subjects.entity';
+import { SubjectEntity } from '../../domain/entities/subjects.entity';
 
-import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { IBaseUseCase } from '@/common/abstractions/usecases/base-usecase.abstraction';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
+import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
 type Input = RepositorySearch;
 

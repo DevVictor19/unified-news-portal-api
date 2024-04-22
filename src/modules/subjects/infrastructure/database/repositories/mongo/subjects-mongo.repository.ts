@@ -2,10 +2,10 @@ import { Model } from 'mongoose';
 
 import { SubjectMongoEntityMapper } from '../../models/mongo/subjects-mongo-model.mapper';
 import { SubjectMongoEntity } from '../../models/mongo/subjects-mongo.model';
-import { ISubjectsRepository } from '../subjects-repository.interface';
 
-import { MongoBaseSearchRepository } from '@/common/abstractions/repositories/mongo/mongo-base-search-repository.abstraction';
-import { SubjectEntity } from '@/modules/subjects/entities/subjects.entity';
+import { MongoBaseSearchRepository } from '@/common/infrastructure/repositories/mongo/mongo-base-search-repository';
+import { SubjectEntity } from '@/modules/subjects/domain/entities/subjects.entity';
+import { ISubjectsRepository } from '@/modules/subjects/domain/repositories/subjects-repository.interface';
 
 export class SubjectsMongoRepository
   extends MongoBaseSearchRepository<SubjectEntity, SubjectMongoEntity>

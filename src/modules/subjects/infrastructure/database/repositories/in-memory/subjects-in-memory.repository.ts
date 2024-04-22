@@ -1,8 +1,7 @@
-import { ISubjectsRepository } from '../subjects-repository.interface';
-
-import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { InMemoryBaseRepository } from '@/common/abstractions/repositories/in-memory/in-memory-base-repository.abstraction';
-import { SubjectEntity } from '@/modules/subjects/entities/subjects.entity';
+import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import { InMemoryBaseRepository } from '@/common/infrastructure/repositories/in-memory/in-memory-base-repository';
+import { SubjectEntity } from '@/modules/subjects/domain/entities/subjects.entity';
+import { ISubjectsRepository } from '@/modules/subjects/domain/repositories/subjects-repository.interface';
 
 export class SubjectsInMemoryRepository
   extends InMemoryBaseRepository<SubjectEntity>

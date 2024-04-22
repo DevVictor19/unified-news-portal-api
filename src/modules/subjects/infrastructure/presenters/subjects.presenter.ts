@@ -1,4 +1,4 @@
-import { SubjectEntity } from '../entities/subjects.entity';
+import { SubjectEntity } from '../../domain/entities/subjects.entity';
 
 export class SubjectsPresenter {
   static format(input: SubjectEntity) {

@@ -10,18 +10,21 @@ import {
 } from '@nestjs/common';
 
 import { CreateSubjectsDto } from './dtos';
-import { SubjectEntity } from './entities/subjects.entity';
 import { SubjectsPresenter } from './presenters/subjects.presenter';
-import { SearchSubjectsUseCase, CreateSubjectsUseCase } from './usecases';
-import { DeleteSubjectsUseCase } from './usecases/delete-subjects.usecase';
+import {
+  CreateSubjectsUseCase,
+  SearchSubjectsUseCase,
+  DeleteSubjectsUseCase,
+} from '../application/usecases';
+import { SubjectEntity } from '../domain/entities/subjects.entity';
 
-import ProtectedRoute from '@/common/decorators/protected-route.decorator';
+import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import {
   LeaderRoute,
   StudentRoute,
   TeacherRoute,
-} from '@/common/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/dtos/search-query.dto';
+} from '@/common/infrastructure/nest/decorators/roles.decorator';
+import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
 
 @Controller('/subjects')
 @ProtectedRoute()
