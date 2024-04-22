@@ -2,26 +2,26 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { IDatabaseService } from '../database-service.interface';
+import { IDatabaseService } from '../../application/services/database-service.interface';
 
-import { CategoryMongoEntity } from '@/modules/categories/database/models/mongo/categories-mongo.model';
-import { ICategoriesRepository } from '@/modules/categories/database/repositories/categories-repository.interface';
-import { CategoriesMongoRepository } from '@/modules/categories/database/repositories/mongo/categories-mongo.repository';
-import { ClassMongoEntity } from '@/modules/classes/database/models/mongo/classes-mongo.model';
-import { IClassesRepository } from '@/modules/classes/database/repositories/classes-repository.interface';
-import { ClassesMongoRepository } from '@/modules/classes/database/repositories/mongo/classes-mongo.repository';
-import { CourseMongoEntity } from '@/modules/courses/database/models/mongo/courses-mongo.model';
-import { ICoursesRepository } from '@/modules/courses/database/repositories/courses-repository.interface';
-import { CoursesMongoRepository } from '@/modules/courses/database/repositories/mongo/courses-mongo.repository';
-import { PostTypeMongoEntity } from '@/modules/post-types/database/models/mongo/post-types-mongo.model';
-import { PostTypesMongoRepository } from '@/modules/post-types/database/repositories/mongo/post-types-mongo.repository';
-import { IPostTypesRepository } from '@/modules/post-types/database/repositories/post-types-repository.interface';
-import { SubjectMongoEntity } from '@/modules/subjects/database/models/mongo/subjects-mongo.model';
-import { SubjectsMongoRepository } from '@/modules/subjects/database/repositories/mongo/subjects-mongo.repository';
-import { ISubjectsRepository } from '@/modules/subjects/database/repositories/subjects-repository.interface';
-import { UserMongoEntity } from '@/modules/users/database/models/mongo/users-mongo.model';
-import { UsersMongoRepository } from '@/modules/users/database/repositories/mongo/users-mongo.repository';
-import { IUsersRepository } from '@/modules/users/database/repositories/users-repository.interface';
+import { ICategoriesRepository } from '@/modules/categories/domain/repositories/categories-repository.interface';
+import { CategoryMongoEntity } from '@/modules/categories/infrastructure/database/models/mongo/categories-mongo.model';
+import { CategoriesMongoRepository } from '@/modules/categories/infrastructure/database/repositories/mongo/categories-mongo.repository';
+import { IClassesRepository } from '@/modules/classes/domain/repositories/classes-repository.interface';
+import { ClassMongoEntity } from '@/modules/classes/infrastrucutre/database/models/mongo/classes-mongo.model';
+import { ClassesMongoRepository } from '@/modules/classes/infrastrucutre/database/repositories/mongo/classes-mongo.repository';
+import { ICoursesRepository } from '@/modules/courses/domain/repositories/courses-repository.interface';
+import { CourseMongoEntity } from '@/modules/courses/infrastructure/database/models/mongo/courses-mongo.model';
+import { CoursesMongoRepository } from '@/modules/courses/infrastructure/database/repositories/mongo/courses-mongo.repository';
+import { IPostTypesRepository } from '@/modules/post-types/domain/repositories/post-types-repository.interface';
+import { PostTypeMongoEntity } from '@/modules/post-types/infrastructure/database/models/mongo/post-types-mongo.model';
+import { PostTypesMongoRepository } from '@/modules/post-types/infrastructure/database/repositories/mongo/post-types-mongo.repository';
+import { ISubjectsRepository } from '@/modules/subjects/domain/repositories/subjects-repository.interface';
+import { SubjectMongoEntity } from '@/modules/subjects/infrastructure/database/models/mongo/subjects-mongo.model';
+import { SubjectsMongoRepository } from '@/modules/subjects/infrastructure/database/repositories/mongo/subjects-mongo.repository';
+import { IUsersRepository } from '@/modules/users/domain/repositories/users-repository.interface';
+import { UserMongoEntity } from '@/modules/users/infrastructure/database/models/mongo/users-mongo.model';
+import { UsersMongoRepository } from '@/modules/users/infrastructure/database/repositories/mongo/users-mongo.repository';
 
 @Injectable()
 export class MongoDatabaseService
