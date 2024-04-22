@@ -10,21 +10,21 @@ import {
 } from '@nestjs/common';
 
 import { CreateClassesDto } from './dtos';
-import { ClassEntity } from './entities/classes.entity';
 import { ClassesPresenter } from './presenters/classes.presenter';
 import {
   CreateClassesUseCase,
-  DeleteClassesUseCase,
   SearchClassesUseCase,
-} from './usecases';
+  DeleteClassesUseCase,
+} from '../application/usecases';
+import { ClassEntity } from '../domain/entities/classes.entity';
 
-import ProtectedRoute from '@/common/decorators/protected-route.decorator';
+import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import {
   LeaderRoute,
   StudentRoute,
   TeacherRoute,
-} from '@/common/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/dtos/search-query.dto';
+} from '@/common/infrastructure/nest/decorators/roles.decorator';
+import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
 
 @Controller('/classes')
 @ProtectedRoute()

@@ -1,4 +1,4 @@
-import { ClassEntity } from '../entities/classes.entity';
+import { ClassEntity } from '../../domain/entities/classes.entity';
 
 export class ClassesPresenter {
   static format(input: ClassEntity) {

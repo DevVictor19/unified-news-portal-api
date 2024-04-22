@@ -5,7 +5,7 @@ import {
   CreateClassesUseCase,
   DeleteClassesUseCase,
   SearchClassesUseCase,
-} from './usecases';
+} from '../application/usecases';
 
 @Module({
   controllers: [ClassesController],

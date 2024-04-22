@@ -2,10 +2,10 @@ import { Model } from 'mongoose';
 
 import { ClassMongoEntityMapper } from '../../models/mongo/classes-mongo-model.mapper';
 import { ClassMongoEntity } from '../../models/mongo/classes-mongo.model';
-import { IClassesRepository } from '../classes-repository.interface';
 
-import { MongoBaseSearchRepository } from '@/common/abstractions/repositories/mongo/mongo-base-search-repository.abstraction';
-import { ClassEntity } from '@/modules/classes/entities/classes.entity';
+import { MongoBaseSearchRepository } from '@/common/infrastructure/repositories/mongo/mongo-base-search-repository';
+import { ClassEntity } from '@/modules/classes/domain/entities/classes.entity';
+import { IClassesRepository } from '@/modules/classes/domain/repositories/classes-repository.interface';
 
 export class ClassesMongoRepository
   extends MongoBaseSearchRepository<ClassEntity, ClassMongoEntity>

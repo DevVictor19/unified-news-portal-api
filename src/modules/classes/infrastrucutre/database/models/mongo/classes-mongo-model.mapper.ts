@@ -1,7 +1,7 @@
 import { ClassMongoEntity, ClassMongoModel } from './classes-mongo.model';
 
-import { IBaseEntityMapper } from '@/common/abstractions/mappers/base-entity-mapper.abstraction';
-import { ClassEntity } from '@/modules/classes/entities/classes.entity';
+import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
+import { ClassEntity } from '@/modules/classes/domain/entities/classes.entity';
 
 export class ClassMongoEntityMapper
   implements IBaseEntityMapper<ClassEntity, ClassMongoEntity>

@@ -2,9 +2,9 @@ import { BadRequestException } from '@nestjs/common';
 
 import { CreateClassesUseCase } from '../../create-classes.usecase';
 
-import { ClassEntity } from '@/modules/classes/entities/classes.entity';
-import { DatabaseServiceMock } from '@/modules/common/database/__MOCKS__/database-service.mock';
-import { IDatabaseService } from '@/modules/common/database/database-service.interface';
+import { ClassEntity } from '@/modules/classes/domain/entities/classes.entity';
+import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
+import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 
 describe('CreateClassesUseCase unit tests', () => {
   let databaseService: IDatabaseService;

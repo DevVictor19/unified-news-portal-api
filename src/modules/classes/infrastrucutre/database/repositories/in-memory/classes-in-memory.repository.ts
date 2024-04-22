@@ -1,8 +1,7 @@
-import { IClassesRepository } from '../classes-repository.interface';
-
-import { RepositorySearch } from '@/common/abstractions/repositories/base-search-repository.abstraction';
-import { InMemoryBaseRepository } from '@/common/abstractions/repositories/in-memory/in-memory-base-repository.abstraction';
-import { ClassEntity } from '@/modules/classes/entities/classes.entity';
+import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import { InMemoryBaseRepository } from '@/common/infrastructure/repositories/in-memory/in-memory-base-repository';
+import { ClassEntity } from '@/modules/classes/domain/entities/classes.entity';
+import { IClassesRepository } from '@/modules/classes/domain/repositories/classes-repository.interface';
 
 export class ClassesInMemoryRepository
   extends InMemoryBaseRepository<ClassEntity>
