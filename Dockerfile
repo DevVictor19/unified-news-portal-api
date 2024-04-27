@@ -20,4 +20,4 @@ RUN npm install --only-production
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
