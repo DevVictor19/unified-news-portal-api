@@ -14,6 +14,8 @@ import { UsersMongoRepository } from '../../users-mongo.repository';
 import { AppModule } from '@/app.module';
 import { UserEntity } from '@/modules/users/domain/entities/users.entity';
 describe('UsersMongoRepository integration tests', () => {
+  const collectionName = 'users';
+
   let app: NestApplication;
   let connection: Connection;
   let sut: UsersMongoRepository;
@@ -28,7 +30,7 @@ describe('UsersMongoRepository integration tests', () => {
     await app.init();
 
     connection = app.get<Connection>(getConnectionToken());
-    await connection.collection('users').deleteMany();
+    await connection.collection(collectionName).deleteMany();
   });
 
   beforeEach(() => {
@@ -46,7 +48,7 @@ describe('UsersMongoRepository integration tests', () => {
   });
 
   afterAll(async () => {
-    await connection.collection('users').deleteMany();
+    await connection.collection(collectionName).deleteMany();
     app.close();
   });
 
