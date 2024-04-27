@@ -40,6 +40,9 @@ jobs:
         uses: supercharge/mongodb-github-action@1.10.0
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-username: ${{ secrets.DB_USER }}
+          mongodb-password: ${{ secrets.DB_PASSWORD }}
+          mongodb-db: pnu
 
       - name: Install dependencies
         run: npm ci
