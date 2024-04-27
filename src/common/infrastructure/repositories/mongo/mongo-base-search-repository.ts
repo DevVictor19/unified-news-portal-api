@@ -1,5 +1,6 @@
 import { FilterQuery, Model } from 'mongoose';
 
+import { MongoBaseRepository } from './mongo-base-repository';
 import { MongoEntity } from '../../entities/mongo/mongo-entity';
 
 import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
@@ -10,19 +11,17 @@ import {
 } from '@/common/domain/repositories/base-search-repository.interface';
 
 export abstract class MongoBaseSearchRepository<
-  DomainEntity extends Entity,
-  DatabaseEntity extends MongoEntity,
-> implements IBaseSearchRepository<DomainEntity>
+    DomainEntity extends Entity,
+    DatabaseEntity extends MongoEntity,
+  >
+  extends MongoBaseRepository<DomainEntity, DatabaseEntity>
+  implements IBaseSearchRepository<DomainEntity>
 {
   constructor(
-    protected entityMapper: IBaseEntityMapper<DomainEntity, DatabaseEntity>,
-    protected entityModel: Model<DatabaseEntity>,
-  ) {}
-
-  async insert(entity: DomainEntity): Promise<void> {
-    const mongoEntity = this.entityMapper.toDatabaseEntity(entity);
-    const createdUser = new this.entityModel(mongoEntity);
-    await createdUser.save();
+    entityMapper: IBaseEntityMapper<DomainEntity, DatabaseEntity>,
+    entityModel: Model<DatabaseEntity>,
+  ) {
+    super(entityMapper, entityModel);
   }
 
   async search({
@@ -57,27 +56,5 @@ export abstract class MongoBaseSearchRepository<
     return results.map((mongoEntity) =>
       this.entityMapper.toDomainEntity(mongoEntity),
     );
-  }
-
-  async findAll(): Promise<DomainEntity[]> {
-    const results = await this.entityModel.find();
-    return results.map((mongoEntity) =>
-      this.entityMapper.toDomainEntity(mongoEntity),
-    );
-  }
-
-  async findById(id: string): Promise<DomainEntity | null> {
-    const mongoEntity = await this.entityModel.findById(id);
-    if (!mongoEntity) return null;
-    return this.entityMapper.toDomainEntity(mongoEntity);
-  }
-
-  async update(id: string, entity: DomainEntity): Promise<void> {
-    const mongoEntity = this.entityMapper.toDatabaseEntity(entity);
-    await this.entityModel.findByIdAndUpdate(id, mongoEntity);
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.entityModel.deleteOne({ _id: id } as any);
   }
 }

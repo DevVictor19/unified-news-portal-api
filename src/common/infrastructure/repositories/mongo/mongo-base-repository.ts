@@ -18,8 +18,8 @@ export abstract class MongoBaseRepository<
 
   async insert(entity: DomainEntity): Promise<void> {
     const mongoEntity = this.entityMapper.toDatabaseEntity(entity);
-    const createdUser = new this.entityModel(mongoEntity);
-    await createdUser.save();
+    const model = new this.entityModel(mongoEntity);
+    await model.save();
   }
 
   async findAll(): Promise<DomainEntity[]> {
