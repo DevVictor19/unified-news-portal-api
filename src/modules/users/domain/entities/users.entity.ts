@@ -5,10 +5,10 @@ import { ROLES } from '@/common/domain/enums/roles.enum';
 
 export type UserEntityProps = EntityProps & {
   role?: ROLES;
-  photo_url?: string;
+  photo_url?: string | null;
   name: string;
   email: string;
-  phone?: string;
+  phone?: string | null;
   password: string;
   email_is_verified?: boolean;
   subscriptions?: Subscriptions;
@@ -16,10 +16,10 @@ export type UserEntityProps = EntityProps & {
 };
 export class UserEntity extends Entity {
   role: ROLES = ROLES.STUDENT;
-  photo_url?: string;
+  photo_url: string | null;
   name: string;
   email: string;
-  phone?: string;
+  phone: string | null;
   password: string;
   email_is_verified: boolean;
   subscriptions: Subscriptions;
@@ -31,6 +31,8 @@ export class UserEntity extends Entity {
     super({ id, created_at });
 
     userProps.role = userProps.role ?? ROLES.STUDENT;
+    userProps.photo_url = userProps.photo_url ?? null;
+    userProps.phone = userProps.phone ?? null;
     userProps.email_is_verified = userProps.email_is_verified ?? false;
     userProps.subscriptions = userProps.subscriptions ?? {
       categories: [],
