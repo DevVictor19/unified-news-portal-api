@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 
-import { CategoryMongoEntityMapper } from '../../models/mongo/caregories-mongo-model.mapper';
+import { CategoryMongoEntityMapper } from '../../models/mongo/categories-mongo-model.mapper';
 import { CategoryMongoEntity } from '../../models/mongo/categories-mongo.model';
 
 import { MongoBaseSearchRepository } from '@/common/infrastructure/repositories/mongo/mongo-base-search-repository';
