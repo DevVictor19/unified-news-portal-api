@@ -65,7 +65,7 @@ describe('CoursesMongoRepository integration tests', () => {
         entities.push(
           new subjectsModel({
             _id: i.toString(),
-            name: faker.internet.userName(),
+            name: `${i}`,
           }),
         );
       }
