@@ -11,12 +11,12 @@ export class PostTypesMongoRepository
   extends MongoBaseSearchRepository<PostTypeEntity, PostTypeMongoEntity>
   implements IPostTypesRepository
 {
-  constructor(protected postTypesModel: Model<PostTypeMongoEntity>) {
+  constructor(postTypesModel: Model<PostTypeMongoEntity>) {
     super(new PostTypeMongoEntityMapper(), postTypesModel);
   }
 
   async findByName(name: string): Promise<PostTypeEntity | null> {
-    const result = await this.postTypesModel.findOne({ name });
+    const result = await this.entityModel.findOne({ name });
     if (!result) return null;
     return this.entityMapper.toDomainEntity(result);
   }

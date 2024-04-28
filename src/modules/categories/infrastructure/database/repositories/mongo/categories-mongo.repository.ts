@@ -11,12 +11,12 @@ export class CategoriesMongoRepository
   extends MongoBaseSearchRepository<CategoryEntity, CategoryMongoEntity>
   implements ICategoriesRepository
 {
-  constructor(protected categoriesModel: Model<CategoryMongoEntity>) {
+  constructor(categoriesModel: Model<CategoryMongoEntity>) {
     super(new CategoryMongoEntityMapper(), categoriesModel);
   }
 
   async findByName(name: string): Promise<CategoryEntity | null> {
-    const mongoEntity = await this.categoriesModel.findOne({ name });
+    const mongoEntity = await this.entityModel.findOne({ name });
     if (!mongoEntity) return null;
     return this.entityMapper.toDomainEntity(mongoEntity);
   }

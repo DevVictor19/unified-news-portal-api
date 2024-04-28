@@ -11,12 +11,12 @@ export class ClassesMongoRepository
   extends MongoBaseSearchRepository<ClassEntity, ClassMongoEntity>
   implements IClassesRepository
 {
-  constructor(protected classesModel: Model<ClassMongoEntity>) {
+  constructor(classesModel: Model<ClassMongoEntity>) {
     super(new ClassMongoEntityMapper(), classesModel);
   }
 
   async findByName(name: string): Promise<ClassEntity | null> {
-    const result = await this.classesModel.findOne({ name });
+    const result = await this.entityModel.findOne({ name });
     if (!result) return null;
     return this.entityMapper.toDomainEntity(result);
   }
