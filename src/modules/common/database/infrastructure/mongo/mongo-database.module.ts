@@ -37,6 +37,7 @@ import {
       useFactory: (envConfigProvider: IEnvConfigProvider) => ({
         uri: envConfigProvider.getDbHost(),
         autoIndex: true,
+        dbName: 'pnu',
       }),
       inject: [IEnvConfigProvider],
       imports: [EnvConfigModule.forRoot()],
