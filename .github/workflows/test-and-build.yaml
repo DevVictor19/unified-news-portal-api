@@ -8,7 +8,21 @@ jobs:
     strategy:
       matrix:
         node-version: ['18.x', '20.x', '21.x']
-        mongodb-version: ['4.2', '4.4', '5.0', '6.0', '7.0']
+
+    services:
+      mongodb:
+        image: mongo:5
+        env:
+          MONGO_INITDB_ROOT_USERNAME: ${{ secrets.DB_USER }}
+          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MONGO_INITDB_DATABASE: pnu
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
 
     steps:
       - name: Git checkout
@@ -21,7 +35,7 @@ jobs:
           envkey_DB_USER: ${{ secrets.DB_USER }}
           envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           envkey_DB_HOST: ${{ secrets.DB_HOST }}
-          envkey_DB_PORT: ${{ secrets.DB_PORT }}
+          envkey_DB_PORT: 27017
           # Server  variables
           envkey_SERVER_PORT: ${{ secrets.SERVER_PORT }}
           envkey_SERVER_URL: ${{ secrets.SERVER_URL }}
@@ -35,14 +49,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.10.0
-        with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-username: ${{ secrets.DB_USER }}
-          mongodb-password: ${{ secrets.DB_PASSWORD }}
-          mongodb-db: pnu
 
       - name: Install dependencies
         run: npm ci
