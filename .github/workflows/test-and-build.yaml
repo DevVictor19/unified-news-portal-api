@@ -44,13 +44,6 @@ jobs:
           mongodb-password: ${{ secrets.DB_PASSWORD }}
           mongodb-db: pnu
 
-      - name: Init Mongo
-        run: |
-          mongosh <<EOF
-          use admin
-          db.auth("${{ secrets.DB_USER }}", "${{ secrets.DB_PASSWORD }}")
-          EOF
-
       - name: Install dependencies
         run: npm ci
 
