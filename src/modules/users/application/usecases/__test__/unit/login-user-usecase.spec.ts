@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 
 import { IHashProvider } from '../../../providers/hash-provider.interface';
 import { LoginUserUseCase } from '../../login-user.usecase';
@@ -41,18 +41,6 @@ describe('LoginUserUseCase unit tests', () => {
     expect(findByEmailSpy).toHaveBeenCalled();
   });
 
-  test('Throw UnauthorizedException if user email is not verified', async () => {
-    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
-    findByEmailSpy.mockResolvedValue({
-      email_is_verified: false,
-    } as UserEntity);
-
-    await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
-    expect(findByEmailSpy).toHaveBeenCalled();
-  });
-
   test('Throw UnauthorizedException if user password is wrong', async () => {
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue({ email_is_verified: true } as UserEntity);
@@ -64,6 +52,20 @@ describe('LoginUserUseCase unit tests', () => {
     );
     expect(findByEmailSpy).toHaveBeenCalled();
     expect(compareHashSpy).toHaveBeenCalled();
+  });
+
+  test('Throw ForbiddenException if user email is not verified', async () => {
+    const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
+    findByEmailSpy.mockResolvedValue({
+      email_is_verified: false,
+    } as UserEntity);
+    const compareHashSpy = jest.spyOn(hashProvider, 'compareHash');
+    compareHashSpy.mockResolvedValue(true);
+
+    await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(findByEmailSpy).toHaveBeenCalled();
   });
 
   it('Should create a login jwt token', async () => {
