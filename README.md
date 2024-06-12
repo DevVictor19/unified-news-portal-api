@@ -1,81 +1,81 @@
-# Portal de Notícias Unificado
+# Unified News Portal
 
-## Descrição
+## Description
 
-Aplicação que tem como função centralizar o canal de comunicação de uma instuição de ensino superior.
+An application designed to centralize the communication channel of a higher education institution.
 
-## Motivação
+## Motivation
 
-Imagine o seguinte caso: em uma instituição de ensino superior existem vários cursos e turmas. Para cada curso existe um coordenador, e para cada turma existe os professores, líderes, vice-líderes e alunos.
+Consider the following scenario: in a higher education institution, there are various courses and classes. Each course has a coordinator, and each class has teachers, leaders, vice-leaders, and students.
 
-Cada turma utiliza grupos de WhatsApp como principal canal de comunicação. No grupo, participa o coordenador do curso e os professores, líderes, vice-líderes e alunos.
+Each class uses WhatsApp groups as the main communication channel. These groups include the course coordinator, teachers, leaders, vice-leaders, and students.
 
-No WhatsApp é enviado avisos da coordenção, avisos sobre a instituição, possíveis greves, oportunidades de estágio, eventos da faculdade, etc.
+Announcements from the coordination, institutional notices, potential strikes, internship opportunities, college events, etc., are all communicated through WhatsApp groups.
 
-Mas o grande problema é que para cada turma e período existe um grupo de WhatsApp específico que só participam os integrantes daquela turma.
+However, a major issue is that each class and period have their specific WhatsApp groups, which include only the members of that particular class.
 
-Essa situação limita os alunos de uma turma de participar de projetos e eventos de outras turmas da instituição, simplesmente por não saber da existência daquele evento.
+This situation limits students from participating in projects and events of other classes within the institution simply because they are unaware of these events.
 
-Outra situação é a perda de oportunidades para com as vagas de emprego, uma vez que um aluno de uma turma fica limitado às oportunidades postadas apenas no seu canal de comunicação.
+Another issue is the loss of job opportunities, as a student is limited to opportunities posted only in their communication channel.
 
-Tendo em vista esses problemas, tive a ideia de criar um <b>Portal de Notícias Unificado</b> para a instituição, que visa a integração das turmas por meio de um canal de comunicação único.
+In light of these problems, I conceived the idea of creating a <b>Unified News Portal</b> for the institution, aiming to integrate classes through a single communication channel.
 
-## Objetivos
+## Objectives
 
-- Fornecer um canal de comunicação da instituição, unificado, que permita a interação entre cursos e turmas diferentes.
-- Fornecer uma alternativa que seja mais conveniente que o uso de grupos de WhatsApp.
+- Provide a unified communication channel for the institution, allowing interaction between different courses and classes.
+- Offer a more convenient alternative to using WhatsApp groups.
 
-## Requisitos Funcionais
+## Functional Requirements
 
-### Autenticação
+### Authentication
 
-- O sistema deve permitir que os usuários criem uma conta usando um email e senha.
-- O sistema deve validar o email para que o cadastro seja efetuado com sucesso.
-- O sistema deve permitir que os usuários façam o login usando email e senha verificados.
-- O sistema deve permitir a recuperação de senha por email, uma vez que o cadastro seja efetuado.
+- The system should allow users to create an account using an email and password.
+- The system should validate the email for successful registration.
+- The system should allow users to log in using a verified email and password.
+- The system should allow password recovery via email after registration.
 
-### Publicações
+### Posts
 
-- O sistema deve exigir cargos de admin, coordenador, líder, vice-líder ou professor para fazer uma postagem em uma categoria.
-- O sistema deve permitir a criação de posts com texto e foto ou texto e vídeo.
-- O sistema deve permitir os usuários que possuam permissão executar as operações basicas de criação, leitura, remoção e edição de posts.
-- O sistema deve fornecer categorias de filtragem para facilitar a visualização de postagens por parte do aluno.
-- O sistema deve categorizar as postagens, definindo o tipo de postagem, a área, o curso, a turma e a matéria.
-- O sistema deve permitir que o usuário faça uma inscrição para aquela determinada categoria.
+- The system should require roles such as admin, coordinator, leader, vice-leader, or teacher to create a post in a category.
+- The system should allow the creation of posts with text and photo or text and video.
+- The system should allow users with permission to perform basic operations like creating, reading, deleting, and editing posts.
+- The system should provide filtering categories to facilitate post viewing for students.
+- The system should categorize posts, defining the type of post, area, course, class, and subject.
+- The system should allow users to subscribe to specific categories.
 
-### Comunicação
+### Communication
 
-- O sistema deve dar a opção do usuário habilitar as formas de comunicação: e-mail e/ou WhatsApp.
-- O sistema deve notificar o usuário por e-mail sobre um novo post na categoria se o mesmo inscreveu-se e habilitou comunicação por e-mail.
-- O sistema deve notificar o usuário por mensagem no WhatsApp sobre um novo post na categoria se o mesmo inscreveu-se e habilitou comunicação por WhatsApp.
+- The system should offer the user the option to enable communication methods: email and/or WhatsApp.
+- The system should notify the user via email about a new post in the category if they have subscribed and enabled email communication.
+- The system should notify the user via WhatsApp about a new post in the category if they have subscribed and enabled WhatsApp communication.
 
-### Administração
+### Administration
 
-- O sistema deve ter uma área reservada para usuários com cargos de Admin.
-- O sistema deve permitir que o admin veja os usuários cadastrados.
-- O sistema deve permitir que o admin crie ou remova usuários.
-- O sistema deve permitir que o admin modifique os cargos dos usuários cadastrados.
-- O sistema deve permitir que admins façam a adição, modificação e remoção de categorias.
-- O sistema deve permitir que admins façam a adição, modificação e remoção de postagens.
+- The system should have a reserved area for users with Admin roles.
+- The system should allow the admin to view registered users.
+- The system should allow the admin to create or remove users.
+- The system should allow the admin to modify user roles.
+- The system should allow admins to add, modify, and remove categories.
+- The system should allow admins to add, modify, and remove posts.
 
-## Requisitos Não Funcionais
+## Non-Functional Requirements
 
-- Os dados do usuário como senha e número de telefone devem ser armazenados de forma criptografada, para conservar a privacidade dos usuários.
-- A autenticação deve usar Cookies para proteger a aplicação de ataques XSS.
-- O banco deve ser NoSQL para suportar eventuais mudanças da estruturação dos dados, além de melhorar na perfomance das filtragens.
-- A interface deve ser intuitiva e fácil de usar.
-- A interface deve ser responsiva e se adequar para desktops, tablets e celulares.
-- A aplicação deve ter testes automatizados para garantir maior segurança no funcionamento de suas atividades e facilitar a manutenção futura.
-- A aplicação deve usar o modelo de arquitetura limpa para facilitar eventuais modificações do seu escopo e funcionalidades.
+- User data such as passwords and phone numbers should be stored encrypted to maintain user privacy.
+- Authentication should use Cookies to protect the application from XSS attacks.
+- The database should be NoSQL to support potential changes in data structure and improve filtering performance.
+- The interface should be intuitive and easy to use.
+- The interface should be responsive and adapt to desktops, tablets, and mobile phones.
+- The application should have automated tests to ensure greater reliability in its operations and facilitate future maintenance.
+- The application should use the clean architecture model to facilitate potential modifications in its scope and functionalities.
 
-## Diagrama Entidade-Relacionamento (DER)
+## Entity-Relationship Diagram (ERD)
 
 <img src="./docs/images/DER.png" alt="diagrama entidade relacionamento" />
 
-## Modelagem do banco (MongoDB)
+## Database Modeling (MongoDB)
 
 <img src="./docs/images/relational-model.png" />
 
-## Diagrama de Casos de Uso
+## Use Case Diagram 
 
 <img src="./docs/images/usecases-diagram.png" alt="diagrama de cassos de uso" />
