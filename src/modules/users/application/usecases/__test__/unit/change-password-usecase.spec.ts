@@ -1,8 +1,11 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
-
 import { IHashProvider } from '../../../providers/hash-provider.interface';
 import { ChangePasswordUseCase } from '../../change-password-usecase';
 
+import {
+  InvalidTokenError,
+  InvalidTokenTypeError,
+  NotFoundError,
+} from '@/common/application/errors/application-errors';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
@@ -27,27 +30,27 @@ describe('ChangePasswordUseCase unit tests', () => {
     sut = new ChangePasswordUseCase(databaseService, jwtProvider, hashProvider);
   });
 
-  it('Should throw UnauthorizedException if token is invalid', async () => {
+  it('Should throw InvalidTokenError if token is invalid', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue(null);
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      UnauthorizedException,
+      InvalidTokenError,
     );
     expect(verifyJwtSpy).toHaveBeenCalledWith(input.token);
   });
 
-  it('Should throw UnauthorizedException if token_type is invalid', async () => {
+  it('Should throw InvalidTokenTypeError if token_type is invalid', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: 'wrong token type' });
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      UnauthorizedException,
+      InvalidTokenTypeError,
     );
     expect(verifyJwtSpy).toHaveBeenCalledWith(input.token);
   });
 
-  it('Should throw NotFoundException if user is not found', async () => {
+  it('Should throw NotFoundError if user is not found', async () => {
     const tokenPayload = {
       token_type: TOKEN_TYPE.PASSWORD_RECOVERY,
       userId: 'id',
@@ -59,7 +62,7 @@ describe('ChangePasswordUseCase unit tests', () => {
     findByIdSpy.mockResolvedValue(null);
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      NotFoundException,
+      NotFoundError,
     );
     expect(verifyJwtSpy).toHaveBeenCalledWith(input.token);
     expect(findByIdSpy).toHaveBeenCalledWith(tokenPayload.userId);

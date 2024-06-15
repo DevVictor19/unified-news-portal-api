@@ -1,8 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { ITemplateEngineProvider } from '../providers/template-engine-provider.interface';
 import { IMailService } from '../services/mail-service.interface';
 
+import {
+  BadRequestError,
+  NotFoundError,
+} from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
@@ -36,13 +40,13 @@ export class SendEmailVerificationUseCase
     );
 
     if (!existingUser) {
-      throw new BadRequestException('Email not registered');
+      throw new NotFoundError();
     }
 
     const isEmailVerified = existingUser.email_is_verified;
 
     if (isEmailVerified) {
-      throw new BadRequestException('Email is already verified');
+      throw new BadRequestError();
     }
 
     const payload: EmailVerificationJwtPayload = {

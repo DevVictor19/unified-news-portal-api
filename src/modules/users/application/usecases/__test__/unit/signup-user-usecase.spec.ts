@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker';
-import { BadRequestException } from '@nestjs/common';
 
 import { IHashProvider } from '../../../providers/hash-provider.interface';
 import { ITemplateEngineProvider } from '../../../providers/template-engine-provider.interface';
 import { IMailService } from '../../../services/mail-service.interface';
 import { SignupUserUseCase } from '../../signup-user.usecase';
 
+import { EmailInUseError } from '@/common/application/errors/application-errors'; // Import the correct error
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 import { IEnvConfigProvider } from '@/modules/common/env-config/application/providers/env-config-provider.interface';
@@ -76,7 +76,7 @@ describe('SignupUserUseCase unit tests', () => {
     expect(sendEmailSpy).toHaveBeenCalled();
   });
 
-  it('Should throw a BadRequestException if email is already in use', async () => {
+  it('Should throw an EmailInUseError if email is already in use', async () => {
     const repositoryFindByEmailSpy = jest.spyOn(
       databaseService.users,
       'findByEmail',
@@ -84,7 +84,7 @@ describe('SignupUserUseCase unit tests', () => {
     repositoryFindByEmailSpy.mockResolvedValue({} as UserEntity);
 
     await expect(() => sut.execute(payload)).rejects.toBeInstanceOf(
-      BadRequestException,
+      EmailInUseError,
     );
   });
 });

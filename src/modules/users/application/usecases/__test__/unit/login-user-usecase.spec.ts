@@ -1,9 +1,12 @@
 import { faker } from '@faker-js/faker';
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 
 import { IHashProvider } from '../../../providers/hash-provider.interface';
 import { LoginUserUseCase } from '../../login-user.usecase';
 
+import {
+  InvalidCredentialsError,
+  EmailNotVerifiedError,
+} from '@/common/application/errors/application-errors';
 import { ROLES } from '@/common/domain/enums/roles.enum';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
@@ -17,6 +20,7 @@ const input = {
   email: faker.internet.email(),
   password: faker.internet.password(),
 };
+
 describe('LoginUserUseCase unit tests', () => {
   let databaseService: IDatabaseService;
   let jwtProvider: IJwtProvider;
@@ -31,30 +35,30 @@ describe('LoginUserUseCase unit tests', () => {
     sut = new LoginUserUseCase(databaseService, hashProvider, jwtProvider);
   });
 
-  test('Throw UnauthorizedException if user not found with provided email', async () => {
+  test('Throw InvalidCredentialsError if user not found with provided email', async () => {
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(null);
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      UnauthorizedException,
+      InvalidCredentialsError,
     );
     expect(findByEmailSpy).toHaveBeenCalled();
   });
 
-  test('Throw UnauthorizedException if user password is wrong', async () => {
+  test('Throw InvalidCredentialsError if user password is wrong', async () => {
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue({ email_is_verified: true } as UserEntity);
     const compareHashSpy = jest.spyOn(hashProvider, 'compareHash');
     compareHashSpy.mockResolvedValue(false);
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      UnauthorizedException,
+      InvalidCredentialsError,
     );
     expect(findByEmailSpy).toHaveBeenCalled();
     expect(compareHashSpy).toHaveBeenCalled();
   });
 
-  test('Throw ForbiddenException if user email is not verified', async () => {
+  test('Throw EmailNotVerifiedError if user email is not verified', async () => {
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue({
       email_is_verified: false,
@@ -63,7 +67,7 @@ describe('LoginUserUseCase unit tests', () => {
     compareHashSpy.mockResolvedValue(true);
 
     await expect(() => sut.execute(input)).rejects.toBeInstanceOf(
-      ForbiddenException,
+      EmailNotVerifiedError,
     );
     expect(findByEmailSpy).toHaveBeenCalled();
   });

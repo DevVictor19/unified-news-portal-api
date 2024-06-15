@@ -1,11 +1,12 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { IHashProvider } from '../providers/hash-provider.interface';
 
+import {
+  InvalidTokenError,
+  InvalidTokenTypeError,
+  NotFoundError,
+} from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
@@ -33,13 +34,11 @@ export class ChangePasswordUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (!jwtPayload || typeof jwtPayload === 'string') {
-      throw new UnauthorizedException(
-        'Invalid token, please request another one',
-      );
+      throw new InvalidTokenError();
     }
 
     if (jwtPayload.token_type !== TOKEN_TYPE.PASSWORD_RECOVERY) {
-      throw new UnauthorizedException('Invalid token type');
+      throw new InvalidTokenTypeError();
     }
 
     const existingUser = await this.databaseService.users.findById(
@@ -47,7 +46,7 @@ export class ChangePasswordUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (!existingUser) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundError();
     }
 
     const newPassword = await this.hashProvider.generateHash(input.password);

@@ -1,12 +1,12 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { ITemplateEngineProvider } from '../providers/template-engine-provider.interface';
 import { IMailService } from '../services/mail-service.interface';
 
+import {
+  EmailNotVerifiedError,
+  NotFoundError,
+} from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
@@ -36,13 +36,13 @@ export class SendPasswordRecoveryEmailUseCase
     );
 
     if (!existingUser) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundError();
     }
 
     const isEmailVerified = existingUser.email_is_verified;
 
     if (!isEmailVerified) {
-      throw new UnauthorizedException('Email not verified');
+      throw new EmailNotVerifiedError();
     }
 
     const payload: PasswordRecoveryJwtPayload = {

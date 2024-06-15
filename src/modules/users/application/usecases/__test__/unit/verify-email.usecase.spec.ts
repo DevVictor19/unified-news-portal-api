@@ -1,7 +1,11 @@
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-
 import { VerifyEmailUseCase } from '../../verify-email.usecase';
 
+import {
+  BadRequestError,
+  InvalidTokenError,
+  InvalidTokenTypeError,
+  NotFoundError,
+} from '@/common/application/errors/application-errors'; // Atualizado
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
@@ -20,40 +24,40 @@ describe('VerifyEmailUseCase unit tests', () => {
     sut = new VerifyEmailUseCase(jwtProvider, databaseService);
   });
 
-  it('Should throw UnauthorizedException when token is invalid', async () => {
+  it('Should throw InvalidTokenError when token is invalid', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue(null);
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
-      UnauthorizedException,
+      InvalidTokenError,
     );
     expect(verifyJwtSpy).toHaveBeenCalled();
   });
 
-  it('Should throw UnauthorizedException when token_type is invalid', async () => {
+  it('Should throw InvalidTokenTypeError when token_type is invalid', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: 'wrong token type' });
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
-      UnauthorizedException,
+      InvalidTokenTypeError,
     );
     expect(verifyJwtSpy).toHaveBeenCalled();
   });
 
-  it('Should throw UnauthorizedException when user not exists', async () => {
+  it('Should throw NotFoundError when user not exists', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(null);
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
-      UnauthorizedException,
+      NotFoundError,
     );
     expect(verifyJwtSpy).toHaveBeenCalled();
     expect(findByEmailSpy).toHaveBeenCalled();
   });
 
-  it('Should throw a BadRequestException if email is already verified', async () => {
+  it('Should throw a BadRequestError if email is already verified', async () => {
     const verifyJwtSpy = jest.spyOn(jwtProvider, 'verify');
     verifyJwtSpy.mockReturnValue({ token_type: TOKEN_TYPE.EMAIL_VERIFY });
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
@@ -61,7 +65,7 @@ describe('VerifyEmailUseCase unit tests', () => {
     const updateUserSpy = jest.spyOn(databaseService.users, 'update');
 
     await expect(() => sut.execute({ token: 'token' })).rejects.toBeInstanceOf(
-      BadRequestException,
+      BadRequestError,
     );
     expect(verifyJwtSpy).toHaveBeenCalled();
     expect(findByEmailSpy).toHaveBeenCalled();
