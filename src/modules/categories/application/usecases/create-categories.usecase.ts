@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { CategoryEntity } from '../../domain/entities/categories.entity';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
@@ -21,7 +22,7 @@ export class CreateCategoriesUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (existentCategory) {
-      throw new BadRequestException('Category already exists');
+      throw new BadRequestError();
     }
 
     const categoryEntity = new CategoryEntity(input);

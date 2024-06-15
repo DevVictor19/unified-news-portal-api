@@ -1,7 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { CourseEntity } from '../../domain/entities/courses.entity';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
@@ -21,7 +22,7 @@ export class CreateCoursesUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (existentCourse) {
-      throw new BadRequestException('Course already exists');
+      throw new BadRequestError();
     }
 
     const courseEntity = new CourseEntity(input);

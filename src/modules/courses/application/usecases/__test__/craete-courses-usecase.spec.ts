@@ -1,7 +1,6 @@
-import { BadRequestException } from '@nestjs/common';
-
 import { CreateCoursesUseCase } from '../create-courses.usecase';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 import { CourseEntity } from '@/modules/courses/domain/entities/courses.entity';
@@ -15,12 +14,12 @@ describe('CreateCoursesUseCase unit tests', () => {
     sut = new CreateCoursesUseCase(databaseService);
   });
 
-  it('Should throw a BadRequestException if course already exists', async () => {
+  it('Should throw a BadRequestError if course already exists', async () => {
     const findByNameSpy = jest.spyOn(databaseService.courses, 'findByName');
     findByNameSpy.mockResolvedValue({} as CourseEntity);
 
     await expect(() => sut.execute({ name: 'name' })).rejects.toBeInstanceOf(
-      BadRequestException,
+      BadRequestError,
     );
     expect(findByNameSpy).toHaveBeenCalled();
   });

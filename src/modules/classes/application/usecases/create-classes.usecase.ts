@@ -1,7 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { ClassEntity } from '../../domain/entities/classes.entity';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
@@ -21,7 +22,7 @@ export class CreateClassesUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (existentClass) {
-      throw new BadRequestException('Class already exists');
+      throw new BadRequestError();
     }
 
     const classEntity = new ClassEntity(input);

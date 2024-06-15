@@ -1,7 +1,6 @@
-import { BadRequestException } from '@nestjs/common';
-
 import { CreateCategoriesUseCase } from '../../create-categories.usecase';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { CategoryEntity } from '@/modules/categories/domain/entities/categories.entity';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
@@ -15,12 +14,12 @@ describe('CreateCategoriesUseCase unit tests', () => {
     sut = new CreateCategoriesUseCase(databaseService);
   });
 
-  it('Should throw a BadRequestException if category already exists', async () => {
+  it('Should throw a BadRequestError if category already exists', async () => {
     const findByNameSpy = jest.spyOn(databaseService.categories, 'findByName');
     findByNameSpy.mockResolvedValue({} as CategoryEntity);
 
     await expect(() => sut.execute({ name: 'name' })).rejects.toBeInstanceOf(
-      BadRequestException,
+      BadRequestError,
     );
     expect(findByNameSpy).toHaveBeenCalled();
   });

@@ -1,7 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
-
 import { DeleteClassesUseCase } from '../../delete-classes.usecase';
 
+import { NotFoundError } from '@/common/application/errors/application-errors';
 import { ClassEntity } from '@/modules/classes/domain/entities/classes.entity';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
@@ -15,13 +14,13 @@ describe('DeleteClassesUseCase unit tests', () => {
     sut = new DeleteClassesUseCase(databaseService);
   });
 
-  it('Should throw a NotFoundException if class not found', async () => {
+  it('Should throw a NotFoundError if class not found', async () => {
     const findByIdSpy = jest.spyOn(databaseService.classes, 'findById');
     findByIdSpy.mockResolvedValue(null);
 
     const input = { classId: 'uuid' };
 
-    await expect(sut.execute(input)).rejects.toBeInstanceOf(NotFoundException);
+    await expect(sut.execute(input)).rejects.toBeInstanceOf(NotFoundError);
     expect(findByIdSpy).toHaveBeenCalledWith(input.classId);
   });
 

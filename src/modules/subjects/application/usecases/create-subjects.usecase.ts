@@ -1,7 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { SubjectEntity } from '../../domain/entities/subjects.entity';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
@@ -21,7 +22,7 @@ export class CreateSubjectsUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (existentSubject) {
-      throw new BadRequestException('Subject already exists');
+      throw new BadRequestError();
     }
 
     const subject = new SubjectEntity(input);

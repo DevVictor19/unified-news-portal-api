@@ -1,7 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
-
 import { DeletePostTypesUseCase } from '../../delete-post-types.usecase';
 
+import { NotFoundError } from '@/common/application/errors/application-errors';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 import { PostTypeEntity } from '@/modules/post-types/domain/entities/post-types.entity';
@@ -15,13 +14,13 @@ describe('DeletePostTypesUseCase unit tests', () => {
     sut = new DeletePostTypesUseCase(databaseService);
   });
 
-  it('Should throw a NotFoundException if postType is not found', async () => {
+  it('Should throw a NotFoundError if postType is not found', async () => {
     const findByIdSpy = jest.spyOn(databaseService.postTypes, 'findById');
     findByIdSpy.mockResolvedValue(null);
 
     const input = { postTypeId: 'uuid' };
 
-    await expect(sut.execute(input)).rejects.toBeInstanceOf(NotFoundException);
+    await expect(sut.execute(input)).rejects.toBeInstanceOf(NotFoundError);
     expect(findByIdSpy).toHaveBeenCalledWith(input.postTypeId);
   });
 

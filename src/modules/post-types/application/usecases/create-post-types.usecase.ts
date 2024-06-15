@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { PostTypeEntity } from '../../domain/entities/post-types.entity';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
@@ -21,7 +22,7 @@ export class CreatePostTypesUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (existentPostType) {
-      throw new BadRequestException('Post type already exists');
+      throw new BadRequestError();
     }
 
     const postTypeEntity = new PostTypeEntity(input);

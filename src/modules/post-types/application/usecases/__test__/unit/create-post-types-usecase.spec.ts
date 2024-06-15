@@ -1,7 +1,6 @@
-import { BadRequestException } from '@nestjs/common';
-
 import { CreatePostTypesUseCase } from '../../create-post-types.usecase';
 
+import { BadRequestError } from '@/common/application/errors/application-errors';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 import { PostTypeEntity } from '@/modules/post-types/domain/entities/post-types.entity';
@@ -15,12 +14,12 @@ describe('CreatePostTypesUseCase unit tests', () => {
     sut = new CreatePostTypesUseCase(databaseService);
   });
 
-  it('Should throw a BadRequestException if postType already exists', async () => {
+  it('Should throw a BadRequestError if postType already exists', async () => {
     const findByNameSpy = jest.spyOn(databaseService.postTypes, 'findByName');
     findByNameSpy.mockResolvedValue({} as PostTypeEntity);
 
     await expect(() => sut.execute({ name: 'name' })).rejects.toBeInstanceOf(
-      BadRequestException,
+      BadRequestError,
     );
     expect(findByNameSpy).toHaveBeenCalled();
   });
