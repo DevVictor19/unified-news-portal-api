@@ -1,10 +1,10 @@
 enum APPLICATION_ERROR {
   INVALID_TOKEN_TYPE = 'INVALID_TOKEN_TYPE',
   INVALID_TOKEN = 'INVALID_TOKEN',
-  SOURCE_NOT_FOUND = 'SOURCE_NOT_FOUND',
+  NOT_FOUND = 'NOT_FOUND',
   EMAIL_IN_USE = 'EMAIL_IN_USE',
   UNAUTHORIZED = 'UNAUTHORIZED',
-  FORBIDDEN_RESOURCE = 'FORBIDDEN_RESOURCE',
+  FORBIDDEN = 'FORBIDDEN',
   INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
   EMAIL_NOT_VERIFIED = 'EMAIL_NOT_VERIFIED',
   BAD_REQUEST = 'BAD_REQUEST',
@@ -37,9 +37,9 @@ export class InvalidTokenError extends ApplicationError {
 
 export class NotFoundError extends ApplicationError {
   constructor() {
-    super('Source not found');
+    super('Not found');
     this.httpStatus = 404;
-    this.error = APPLICATION_ERROR.SOURCE_NOT_FOUND;
+    this.error = APPLICATION_ERROR.NOT_FOUND;
   }
 }
 
@@ -59,11 +59,11 @@ export class UnauthorizedError extends ApplicationError {
   }
 }
 
-export class ForbiddenResourceError extends ApplicationError {
+export class ForbiddenError extends ApplicationError {
   constructor() {
-    super('Forbidden resource');
+    super('Forbidden');
     this.httpStatus = 403;
-    this.error = APPLICATION_ERROR.FORBIDDEN_RESOURCE;
+    this.error = APPLICATION_ERROR.FORBIDDEN;
   }
 }
 
