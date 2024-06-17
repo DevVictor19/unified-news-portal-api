@@ -42,7 +42,6 @@ export abstract class MongoBaseSearchRepository<
     private allowedFields: FieldMap<DatabaseEntity>,
   ) {
     super(entityMapper, entityModel);
-    this.allowedFields = allowedFields;
   }
 
   async search({
