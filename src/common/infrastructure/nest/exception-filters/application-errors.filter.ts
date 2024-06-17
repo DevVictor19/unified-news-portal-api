@@ -1,4 +1,9 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpExceptionBody,
+} from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { ApplicationError } from '@/common/application/errors/application-errors';
@@ -9,7 +14,7 @@ export class ApplicationErrorsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
 
-    const errorResponse = {
+    const errorResponse: HttpExceptionBody = {
       statusCode: exception.httpStatus,
       message: exception.message,
       error: exception.error,

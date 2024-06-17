@@ -1,6 +1,6 @@
 import { SearchCategoriesUseCase } from '../../search-categories.usecase';
 
-import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import { RepositorySearchParams } from '@/common/domain/repositories/base-search-repository.interface';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
 
@@ -14,10 +14,9 @@ describe('SearchCategoriesUseCase unit tests', () => {
   });
 
   it('Should search for categories with the provided search params', async () => {
-    const input: RepositorySearch = {
+    const input: RepositorySearchParams = {
       limitPerPage: 10,
       pageNumber: 1,
-      searchTerm: 'searchTerm',
     };
 
     const searchSpy = jest.spyOn(databaseService.categories, 'search');

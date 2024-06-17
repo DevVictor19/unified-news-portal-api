@@ -1,6 +1,9 @@
 import { ICategoriesRepository } from '../../../../domain/repositories/categories-repository.interface';
 
-import { RepositorySearch } from '@/common/domain/repositories/base-search-repository.interface';
+import {
+  RepositorySearchParams,
+  RepositorySearchResponse,
+} from '@/common/domain/repositories/base-search-repository.interface';
 import { InMemoryBaseRepository } from '@/common/infrastructure/repositories/in-memory/in-memory-base-repository';
 import { CategoryEntity } from '@/modules/categories/domain/entities/categories.entity';
 
@@ -18,21 +21,9 @@ export class CategoriesInMemoryRepository
     return existentCategory;
   }
 
-  async search(params: RepositorySearch): Promise<CategoryEntity[]> {
-    const { limitPerPage, pageNumber, searchTerm } = params;
-    const skipAmount = (pageNumber - 1) * limitPerPage;
-
-    let results = this.items;
-
-    if (searchTerm) {
-      results = this.items.filter(({ name }) => name.includes(searchTerm));
-    }
-
-    const paginatedResults = results.slice(
-      skipAmount,
-      skipAmount + limitPerPage,
-    );
-
-    return paginatedResults;
+  async search(
+    params: RepositorySearchParams,
+  ): Promise<RepositorySearchResponse<CategoryEntity>> {
+    return params as any;
   }
 }

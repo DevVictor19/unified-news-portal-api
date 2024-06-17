@@ -8,6 +8,12 @@ enum APPLICATION_ERROR {
   INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
   EMAIL_NOT_VERIFIED = 'EMAIL_NOT_VERIFIED',
   BAD_REQUEST = 'BAD_REQUEST',
+  INVALID_SEARCH_OPERATOR = 'INVALID_SEARCH_OPERATOR',
+  INVALID_SEARCH_FIELD = 'INVALID_SEARCH_FIELD',
+  INVALID_SEARCH_VALUE = 'INVALID_SEARCH_VALUE',
+  INVALID_ORDER_FIELD = 'INVALID_ORDER_FIELD',
+  INVALID_ORDER_DIRECTION = 'INVALID_ORDER_DIRECTION',
+  INVALID_JSON_QUERY = 'INVALID_JSON_QUERY',
 }
 
 export class ApplicationError extends Error {
@@ -88,5 +94,53 @@ export class BadRequestError extends ApplicationError {
     super('Bad request');
     this.httpStatus = 400;
     this.error = APPLICATION_ERROR.BAD_REQUEST;
+  }
+}
+
+export class InvalidSearchOperatorError extends ApplicationError {
+  constructor() {
+    super('Invalid search operator');
+    this.httpStatus = 400;
+    this.error = APPLICATION_ERROR.INVALID_SEARCH_OPERATOR;
+  }
+}
+
+export class InvalidSearchFieldError extends ApplicationError {
+  constructor() {
+    super('Invalid search field');
+    this.httpStatus = 400;
+    this.error = APPLICATION_ERROR.INVALID_SEARCH_FIELD;
+  }
+}
+
+export class InvalidSearchValueError extends ApplicationError {
+  constructor() {
+    super('Invalid search value');
+    this.httpStatus = 400;
+    this.error = APPLICATION_ERROR.INVALID_SEARCH_VALUE;
+  }
+}
+
+export class InvalidOrderFieldError extends ApplicationError {
+  constructor() {
+    super('Invalid order field');
+    this.httpStatus = 400;
+    this.error = APPLICATION_ERROR.INVALID_ORDER_FIELD;
+  }
+}
+
+export class InvalidOrderDirectionError extends ApplicationError {
+  constructor() {
+    super('Invalid order direction');
+    this.httpStatus = 400;
+    this.error = APPLICATION_ERROR.INVALID_ORDER_DIRECTION;
+  }
+}
+
+export class InvalidJsonQueryError extends ApplicationError {
+  constructor() {
+    super('Invalid JSON query');
+    this.httpStatus = 400;
+    this.error = APPLICATION_ERROR.INVALID_JSON_QUERY;
   }
 }

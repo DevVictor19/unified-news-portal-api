@@ -10,20 +10,19 @@ import {
 } from '@nestjs/common';
 
 import { CreateCoursesDto } from './dtos';
-import { CoursesPresenter } from './presenters/courses.presenter';
 import {
   CreateCoursesUseCase,
   SearchCoursesUseCase,
   DeleteCoursesUseCase,
 } from '../application/usecases';
-import { CourseEntity } from '../domain/entities/courses.entity';
 
 import {
   LeaderRoute,
   StudentRoute,
   TeacherRoute,
 } from '@/common/infrastructure/nest/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
+import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
+import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
 @Controller('/courses')
 export class CoursesController {
@@ -41,18 +40,14 @@ export class CoursesController {
 
   @Get('/')
   @StudentRoute()
-  async searchCourses(@Query() dto: SearchQueryDto) {
-    const results = await this.searchCoursesUseCase.execute(dto);
-    return this.formatCollection(results);
+  @UsePaginationQuery()
+  searchCourses(@Query() dto: PaginationDto) {
+    return this.searchCoursesUseCase.execute(dto);
   }
 
   @Delete('/:courseId')
   @TeacherRoute()
   deleteCourses(@Param('courseId', ParseUUIDPipe) courseId: string) {
     return this.deleteCoursesUseCase.execute({ courseId });
-  }
-
-  private formatCollection(input: CourseEntity[]) {
-    return input.map((data) => CoursesPresenter.format(data));
   }
 }

@@ -12,7 +12,11 @@ export class ClassesMongoRepository
   implements IClassesRepository
 {
   constructor(classesModel: Model<ClassMongoEntity>) {
-    super(new ClassMongoEntityMapper(), classesModel);
+    super(new ClassMongoEntityMapper(), classesModel, {
+      _id: 'string',
+      name: 'string',
+      created_at: 'date',
+    });
   }
 
   async findByName(name: string): Promise<ClassEntity | null> {
