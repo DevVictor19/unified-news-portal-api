@@ -1,11 +1,10 @@
 import { UseInterceptors } from '@nestjs/common';
 
-import { ParseOrderQueryInterceptor } from '../interceptors/parse-order-query.interceptor';
-import { ParseSearchQueryInterceptor } from '../interceptors/parse-search-query.interceptor';
+import { ParseJsonQueryInterceptor } from '../interceptors/parse-json-query.interceptor';
 
 export const UsePaginationQuery = () => {
   return UseInterceptors(
-    ParseSearchQueryInterceptor,
-    ParseOrderQueryInterceptor,
+    new ParseJsonQueryInterceptor('search'),
+    new ParseJsonQueryInterceptor('order'),
   );
 };
