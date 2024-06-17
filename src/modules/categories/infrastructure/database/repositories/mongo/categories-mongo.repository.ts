@@ -12,7 +12,11 @@ export class CategoriesMongoRepository
   implements ICategoriesRepository
 {
   constructor(categoriesModel: Model<CategoryMongoEntity>) {
-    super(new CategoryMongoEntityMapper(), categoriesModel);
+    super(new CategoryMongoEntityMapper(), categoriesModel, {
+      _id: 'string',
+      name: 'string',
+      created_at: 'date',
+    });
   }
 
   async findByName(name: string): Promise<CategoryEntity | null> {

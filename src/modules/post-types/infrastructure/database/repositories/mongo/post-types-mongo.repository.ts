@@ -12,7 +12,11 @@ export class PostTypesMongoRepository
   implements IPostTypesRepository
 {
   constructor(postTypesModel: Model<PostTypeMongoEntity>) {
-    super(new PostTypeMongoEntityMapper(), postTypesModel);
+    super(new PostTypeMongoEntityMapper(), postTypesModel, {
+      _id: 'string',
+      name: 'string',
+      created_at: 'date',
+    });
   }
 
   async findByName(name: string): Promise<PostTypeEntity | null> {

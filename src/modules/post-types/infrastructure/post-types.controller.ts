@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 
 import { CreatePostTypesDto } from './dtos';
-import { PostTypesPresenter } from './presenters/post-types.presenter';
 import {
   CreatePostTypesUseCase,
   SearchPostTypesUseCase,
@@ -22,8 +21,8 @@ import {
   StudentRoute,
   TeacherRoute,
 } from '@/common/infrastructure/nest/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
-import { CourseEntity } from '@/modules/courses/domain/entities/courses.entity';
+import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
+import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
 @Controller('/post-types')
 export class PostTypesController {
@@ -41,18 +40,14 @@ export class PostTypesController {
 
   @Get('/')
   @StudentRoute()
-  async searchPostTypes(@Query() dto: SearchQueryDto) {
-    const results = await this.searchPostTypesUseCase.execute(dto);
-    return this.formatCollection(results);
+  @UsePaginationQuery()
+  searchPostTypes(@Query() dto: PaginationDto) {
+    return this.searchPostTypesUseCase.execute(dto);
   }
 
   @Delete('/:postTypeId')
   @TeacherRoute()
   deletePostTypes(@Param('postTypeId', ParseUUIDPipe) postTypeId: string) {
     return this.deletePostTypesUseCase.execute({ postTypeId });
-  }
-
-  private formatCollection(input: CourseEntity[]) {
-    return input.map((data) => PostTypesPresenter.format(data));
   }
 }

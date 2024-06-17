@@ -12,7 +12,11 @@ export class CoursesMongoRepository
   implements ICoursesRepository
 {
   constructor(coursesModel: Model<CourseMongoEntity>) {
-    super(new CourseMongoEntityMapper(), coursesModel);
+    super(new CourseMongoEntityMapper(), coursesModel, {
+      _id: 'string',
+      name: 'string',
+      created_at: 'date',
+    });
   }
 
   async findByName(name: string): Promise<CourseEntity | null> {

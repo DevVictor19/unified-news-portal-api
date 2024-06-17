@@ -12,7 +12,11 @@ export class SubjectsMongoRepository
   implements ISubjectsRepository
 {
   constructor(subjectsModel: Model<SubjectMongoEntity>) {
-    super(new SubjectMongoEntityMapper(), subjectsModel);
+    super(new SubjectMongoEntityMapper(), subjectsModel, {
+      _id: 'string',
+      created_at: 'date',
+      name: 'string',
+    });
   }
 
   async findByName(name: string): Promise<SubjectEntity | null> {
