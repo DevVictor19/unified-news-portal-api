@@ -45,6 +45,16 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
       throw new EmailInUseError();
     }
 
+    const hashedPassword = await this.hashProvider.generateHash(input.password);
+
+    const user = new UserEntity({
+      email: input.email,
+      name: input.name,
+      password: hashedPassword,
+    });
+
+    await this.databaseService.users.insert(user);
+
     const payload: EmailVerificationJwtPayload = {
       email: input.email,
       token_type: TOKEN_TYPE.EMAIL_VERIFY,
@@ -69,15 +79,5 @@ export class SignupUserUseCase implements IBaseUseCase<Input, Output> {
         name: input.name,
       },
     });
-
-    const hashedPassword = await this.hashProvider.generateHash(input.password);
-
-    const user = new UserEntity({
-      email: input.email,
-      name: input.name,
-      password: hashedPassword,
-    });
-
-    await this.databaseService.users.insert(user);
   }
 }
