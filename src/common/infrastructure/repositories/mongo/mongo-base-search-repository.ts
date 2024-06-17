@@ -23,10 +23,10 @@ import {
   StringOperators,
 } from '@/common/domain/repositories/base-search-repository.interface';
 
-export type SearchOperatorType = 'string' | 'number' | 'date';
+export type FieldType = 'string' | 'number' | 'date';
 
 export type FieldMap<T> = {
-  [key in keyof T]: SearchOperatorType;
+  [key in keyof T]: FieldType;
 };
 
 export abstract class MongoBaseSearchRepository<
@@ -84,10 +84,9 @@ export abstract class MongoBaseSearchRepository<
   private buildOrderFilter(order: Order): { [key: string]: SortOrder } {
     const field = order.field as keyof DatabaseEntity;
 
-    const searchOperatorType: SearchOperatorType | undefined =
-      this.allowedFields[field];
+    const fieldType: FieldType | undefined = this.allowedFields[field];
 
-    if (!searchOperatorType) {
+    if (!fieldType) {
       throw new InvalidOrderFieldError();
     }
 
@@ -113,16 +112,15 @@ export abstract class MongoBaseSearchRepository<
     search.forEach((input) => {
       const field = input.field as keyof DatabaseEntity;
 
-      const searchOperatorType: SearchOperatorType | undefined =
-        this.allowedFields[field];
+      const fieldType: FieldType | undefined = this.allowedFields[field];
 
-      if (!searchOperatorType) {
+      if (!fieldType) {
         throw new InvalidSearchFieldError();
       }
 
       const filter: any = {};
 
-      switch (searchOperatorType) {
+      switch (fieldType) {
         case 'string':
           filter[field] = this.buildStringQuery(
             input.operator as StringOperators,
