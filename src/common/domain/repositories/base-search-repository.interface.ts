@@ -6,6 +6,12 @@ export type NumberOperators = 'equals' | 'greaterThan' | 'lessThan';
 export type DateOperators = 'equals' | 'greaterThan' | 'lessThan';
 export type Operator = StringOperators | NumberOperators | DateOperators;
 
+export type FieldType = 'string' | 'number' | 'date';
+
+export type FieldMap<T> = {
+  [key in keyof T]: FieldType;
+};
+
 export type Search = {
   field: string;
   operator: Operator;

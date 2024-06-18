@@ -14,6 +14,8 @@ import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapp
 import { Entity } from '@/common/domain/entities/entity';
 import {
   DateOperators,
+  FieldMap,
+  FieldType,
   IBaseSearchRepository,
   NumberOperators,
   Order,
@@ -22,12 +24,6 @@ import {
   Search,
   StringOperators,
 } from '@/common/domain/repositories/base-search-repository.interface';
-
-export type FieldType = 'string' | 'number' | 'date';
-
-export type FieldMap<T> = {
-  [key in keyof T]: FieldType;
-};
 
 export abstract class MongoBaseSearchRepository<
     DomainEntity extends Entity,
