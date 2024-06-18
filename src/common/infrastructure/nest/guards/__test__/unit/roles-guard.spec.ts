@@ -5,6 +5,7 @@ import { RolesGuard } from '../../roles.guard';
 import { ExecutionContextMock } from '../testing/mocks/execution-context.mock';
 import { ReflectorMock } from '../testing/mocks/reflector.mock';
 
+import { ForbiddenError } from '@/common/application/errors/application-errors';
 import { ROLES } from '@/common/domain/enums/roles.enum';
 
 describe('RolesGuard unit tests', () => {
@@ -16,7 +17,7 @@ describe('RolesGuard unit tests', () => {
     sut = new RolesGuard(reflector);
   });
 
-  it('Should return false if user has no permissions', () => {
+  it('Should return ForbiddenError if user has no permissions', () => {
     const getAllAndOverrideSpy = jest.spyOn(reflector, 'getAllAndOverride');
     getAllAndOverrideSpy.mockReturnValue([ROLES.ADMIN]);
 
@@ -29,9 +30,11 @@ describe('RolesGuard unit tests', () => {
 
     getRequestSpy.mockReturnValue(request);
 
-    const result = sut.canActivate(ExecutionContextMock as ExecutionContext);
-
-    expect(result).toBeFalsy();
+    try {
+      sut.canActivate(ExecutionContextMock as ExecutionContext);
+    } catch (error) {
+      expect(error).toBeInstanceOf(ForbiddenError);
+    }
   });
 
   it('Should return true if user has permissions', () => {
