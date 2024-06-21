@@ -36,7 +36,7 @@ import {
       useFactory: (envConfigProvider: IEnvConfigProvider) => ({
         uri: envConfigProvider.getDbHost(),
         autoIndex: true,
-        dbName: 'pnu',
+        dbName: 'test',
       }),
       inject: [IEnvConfigProvider],
     }),
@@ -52,4 +52,4 @@ import {
   providers: [{ provide: IDatabaseService, useClass: MongoDatabaseService }],
   exports: [IDatabaseService],
 })
-export class MongoDatabaseModule {}
+export class MongoDatabaseTestModule {}

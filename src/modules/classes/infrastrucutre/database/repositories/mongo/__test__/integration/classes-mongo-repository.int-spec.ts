@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { NestApplication } from '@nestjs/core';
 import { getConnectionToken, getModelToken } from '@nestjs/mongoose';
-import { Test } from '@nestjs/testing';
 import { Connection } from 'mongoose';
 
 import {
@@ -10,8 +9,8 @@ import {
 } from '../../../../models/mongo/classes-mongo.model';
 import { ClassesMongoRepository } from '../../classes-mongo.repository';
 
-import { AppModule } from '@/app.module';
 import { ClassEntity } from '@/modules/classes/domain/entities/classes.entity';
+import { createIntegrationTestAppSetup } from '@/testing/helpers/create-integration-test-app-setup';
 
 describe('ClassesMongoRepository integration tests', () => {
   const collectionName = 'classes';
@@ -22,11 +21,7 @@ describe('ClassesMongoRepository integration tests', () => {
   let entity: ClassEntity;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
+    app = await createIntegrationTestAppSetup();
     await app.init();
 
     connection = app.get<Connection>(getConnectionToken());
