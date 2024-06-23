@@ -13,6 +13,7 @@ import {
 import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
 import { Entity } from '@/common/domain/entities/entity';
 import {
+  ArrayOperators,
   DateOperators,
   FieldMap,
   FieldType,
@@ -113,33 +114,55 @@ export abstract class MongoBaseSearchRepository<
         throw new InvalidSearchFieldError();
       }
 
+      const value = input.value;
+
       const filter: any = {};
 
-      switch (fieldType) {
-        case 'string':
-          filter[field] = this.buildStringQuery(
-            input.operator as StringOperators,
-            input.value,
-          );
-          break;
-        case 'number':
-          filter[field] = this.buildNumberQuery(
-            input.operator as NumberOperators,
-            input.value,
-          );
-          break;
-        case 'date':
-          filter[field] = this.buildDateQuery(
-            input.operator as DateOperators,
-            input.value,
-          );
-          break;
+      if (Array.isArray(value)) {
+        switch (fieldType) {
+          case 'array':
+            filter[field] = this.buildArrayQuery(
+              input.operator as ArrayOperators,
+              value,
+            );
+            break;
+        }
+      } else {
+        switch (fieldType) {
+          case 'string':
+            filter[field] = this.buildStringQuery(
+              input.operator as StringOperators,
+              value,
+            );
+            break;
+          case 'number':
+            filter[field] = this.buildNumberQuery(
+              input.operator as NumberOperators,
+              value,
+            );
+            break;
+          case 'date':
+            filter[field] = this.buildDateQuery(
+              input.operator as DateOperators,
+              value,
+            );
+            break;
+        }
       }
 
       filters.push(filter);
     });
 
     return filters;
+  }
+
+  private buildArrayQuery(operator: ArrayOperators, value: string[]): object {
+    switch (operator) {
+      case 'contains':
+        return { $in: value };
+      default:
+        throw new InvalidSearchOperatorError();
+    }
   }
 
   private buildStringQuery(operator: StringOperators, value: string): object {

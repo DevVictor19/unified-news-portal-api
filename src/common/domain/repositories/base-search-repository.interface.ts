@@ -4,9 +4,14 @@ import { Entity } from '../entities/entity';
 export type StringOperators = 'equals' | 'contains' | 'startsWith' | 'endsWith';
 export type NumberOperators = 'equals' | 'greaterThan' | 'lessThan';
 export type DateOperators = 'equals' | 'greaterThan' | 'lessThan';
-export type Operator = StringOperators | NumberOperators | DateOperators;
+export type ArrayOperators = 'contains';
+export type Operator =
+  | StringOperators
+  | NumberOperators
+  | DateOperators
+  | ArrayOperators;
 
-export type FieldType = 'string' | 'number' | 'date';
+export type FieldType = 'string' | 'number' | 'date' | 'array';
 
 export type FieldMap<T> = {
   [key in keyof T]: FieldType;
@@ -15,7 +20,7 @@ export type FieldMap<T> = {
 export type Search = {
   field: string;
   operator: Operator;
-  value: string;
+  value: string | string[];
 };
 
 export type Order = {

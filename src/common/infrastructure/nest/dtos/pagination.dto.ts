@@ -13,6 +13,8 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+import { IsStringOrStringArray } from '../decorators/is-string-or-array.decorator';
+
 import { Operator } from '@/common/domain/repositories/base-search-repository.interface';
 
 export class SearchDto {
@@ -31,10 +33,12 @@ export class SearchDto {
   ])
   operator: Operator;
 
-  @IsString()
-  @Length(1, 255)
-  @Transform(({ value }) => value.trim())
-  value: string;
+  @IsStringOrStringArray()
+  @Length(1, 255, { each: true })
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value.map((v) => v.trim()) : value.trim(),
+  )
+  value: string | string[];
 }
 
 export class OrderDto {
