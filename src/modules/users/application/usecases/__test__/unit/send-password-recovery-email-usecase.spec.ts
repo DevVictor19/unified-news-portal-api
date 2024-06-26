@@ -1,10 +1,13 @@
 import { faker } from '@faker-js/faker';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { ITemplateEngineProvider } from '../../../providers/template-engine-provider.interface';
 import { IMailService } from '../../../services/mail-service.interface';
 import { SendPasswordRecoveryEmailUseCase } from '../../send-password-recovery-email.usecase';
 
+import {
+  NotFoundError,
+  EmailNotVerifiedError,
+} from '@/common/application/errors/application-errors'; // Atualizado
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 import { DatabaseServiceMock } from '@/modules/common/database/infrastructure/__MOCKS__/database-service.mock';
@@ -35,18 +38,18 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
     );
   });
 
-  it('Should throw a NotFoundException when user is not found', async () => {
+  it('Should throw a NotFoundError when user is not found', async () => {
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
     findByEmailSpy.mockResolvedValue(null);
 
     await expect(() =>
       sut.execute({ email: faker.internet.email() }),
-    ).rejects.toBeInstanceOf(NotFoundException);
+    ).rejects.toBeInstanceOf(NotFoundError);
 
     expect(findByEmailSpy).toHaveBeenCalled();
   });
 
-  it('Should throw a UnauthorizedException when user email is not verified', async () => {
+  it('Should throw a EmailNotVerifiedError when user email is not verified', async () => {
     const user = { id: 'userId', email_is_verified: false } as UserEntity;
 
     const findByEmailSpy = jest.spyOn(databaseService.users, 'findByEmail');
@@ -54,7 +57,7 @@ describe('SendPasswordRecoveryEmailUseCase unit tests', () => {
 
     await expect(() =>
       sut.execute({ email: faker.internet.email() }),
-    ).rejects.toBeInstanceOf(UnauthorizedException);
+    ).rejects.toBeInstanceOf(EmailNotVerifiedError);
 
     expect(findByEmailSpy).toHaveBeenCalled();
   });

@@ -10,13 +10,11 @@ import {
 } from '@nestjs/common';
 
 import { CreateSubjectsDto } from './dtos';
-import { SubjectsPresenter } from './presenters/subjects.presenter';
 import {
   CreateSubjectsUseCase,
   SearchSubjectsUseCase,
   DeleteSubjectsUseCase,
 } from '../application/usecases';
-import { SubjectEntity } from '../domain/entities/subjects.entity';
 
 import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import {
@@ -24,7 +22,8 @@ import {
   StudentRoute,
   TeacherRoute,
 } from '@/common/infrastructure/nest/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
+import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
+import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
 @Controller('/subjects')
 @ProtectedRoute()
@@ -43,18 +42,14 @@ export class SubjectsController {
 
   @Get('/')
   @StudentRoute()
-  async searchSubjects(@Query() dto: SearchQueryDto) {
-    const results = await this.searchSubjectsUseCase.execute(dto);
-    return this.formatCollection(results);
+  @UsePaginationQuery()
+  searchSubjects(@Query() dto: PaginationDto) {
+    return this.searchSubjectsUseCase.execute(dto);
   }
 
   @Delete('/:subjectId')
   @TeacherRoute()
   deleteSubjects(@Param('subjectId', ParseUUIDPipe) subjectId: string) {
     return this.deleteSubjectsUseCase.execute({ subjectId });
-  }
-
-  private formatCollection(input: SubjectEntity[]) {
-    return input.map((data) => SubjectsPresenter.format(data));
   }
 }

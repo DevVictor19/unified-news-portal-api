@@ -6,6 +6,7 @@ import {
 } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
+import { ApplicationErrorsFilter } from './common/infrastructure/nest/exception-filters/application-errors.filter';
 import { IEnvConfigProvider } from './modules/common/env-config/application/providers/env-config-provider.interface';
 
 async function bootstrap() {
@@ -14,8 +15,6 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
-  const envConfigProvider = app.get(IEnvConfigProvider);
-  const port = envConfigProvider.getServerPort();
   app.useGlobalPipes(
     new ValidationPipe({
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -24,6 +23,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.useGlobalFilters(new ApplicationErrorsFilter());
+
+  const envConfigProvider = app.get(IEnvConfigProvider);
+  const port = envConfigProvider.getServerPort();
   await app.listen(port);
 }
 bootstrap();

@@ -1,7 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { IHashProvider } from '../providers/hash-provider.interface';
 
+import {
+  EmailNotVerifiedError,
+  InvalidCredentialsError,
+} from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
@@ -31,13 +35,7 @@ export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (!existingUser) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
-
-    const isEmailVerified = existingUser.email_is_verified;
-
-    if (!isEmailVerified) {
-      throw new UnauthorizedException('Email not verified');
+      throw new InvalidCredentialsError();
     }
 
     const isValidPassword = await this.hashProvider.compareHash(
@@ -46,7 +44,13 @@ export class LoginUserUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (!isValidPassword) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new InvalidCredentialsError();
+    }
+
+    const isEmailVerified = existingUser.email_is_verified;
+
+    if (!isEmailVerified) {
+      throw new EmailNotVerifiedError();
     }
 
     const payload: AuthJwtPayload = {

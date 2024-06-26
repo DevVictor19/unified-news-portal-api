@@ -12,7 +12,6 @@ services:
       - pnu-network
     volumes:
       - mongo-pnu-volume:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   backend:
     depends_on:

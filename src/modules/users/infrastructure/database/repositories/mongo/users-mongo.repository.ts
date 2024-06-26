@@ -11,12 +11,12 @@ export class UsersMongoRepository
   extends MongoBaseRepository<UserEntity, UserMongoEntity>
   implements IUsersRepository
 {
-  constructor(protected usersModel: Model<UserMongoEntity>) {
+  constructor(usersModel: Model<UserMongoEntity>) {
     super(new UserMongoEntityMapper(), usersModel);
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
-    const mongoEntity = await this.usersModel.findOne({ email });
+    const mongoEntity = await this.entityModel.findOne({ email });
     if (!mongoEntity) return null;
     return this.entityMapper.toDomainEntity(mongoEntity);
   }

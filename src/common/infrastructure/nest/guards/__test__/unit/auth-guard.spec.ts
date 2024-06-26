@@ -1,13 +1,14 @@
 import { faker } from '@faker-js/faker';
-import {
-  BadRequestException,
-  ExecutionContext,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ExecutionContext } from '@nestjs/common';
 
 import { AuthGuard } from '../../auth.guard';
 import { ExecutionContextMock } from '../testing/mocks/execution-context.mock';
 
+import {
+  BadRequestError,
+  InvalidTokenError,
+  InvalidTokenTypeError,
+} from '@/common/application/errors/application-errors';
 import { ROLES } from '@/common/domain/enums/roles.enum';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { AuthJwtParsed } from '@/modules/common/jwt/application/@types/jwt';
@@ -23,7 +24,7 @@ describe('AuthGuard unit tests', () => {
     sut = new AuthGuard(jwtProvider);
   });
 
-  it('Should throw BadRequestException if Bearer token is missing', async () => {
+  it('Should throw BadRequestError if Bearer token is missing', async () => {
     const getRequestSpy = jest.spyOn(
       ExecutionContextMock.switchToHttp(),
       'getRequest',
@@ -33,11 +34,11 @@ describe('AuthGuard unit tests', () => {
 
     await expect(
       sut.canActivate(ExecutionContextMock as ExecutionContext),
-    ).rejects.toBeInstanceOf(BadRequestException);
+    ).rejects.toBeInstanceOf(BadRequestError);
     expect(getRequestSpy).toHaveBeenCalled();
   });
 
-  it('Should throw UnauthorizedException if token is invalid', async () => {
+  it('Should throw InvalidTokenError if token is invalid', async () => {
     const getRequestSpy = jest.spyOn(
       ExecutionContextMock.switchToHttp(),
       'getRequest',
@@ -50,12 +51,12 @@ describe('AuthGuard unit tests', () => {
 
     await expect(
       sut.canActivate(ExecutionContextMock as ExecutionContext),
-    ).rejects.toBeInstanceOf(UnauthorizedException);
+    ).rejects.toBeInstanceOf(InvalidTokenError);
     expect(getRequestSpy).toHaveBeenCalled();
     expect(verifyJwtSpy).toHaveBeenCalled();
   });
 
-  it('Should throw UnauthorizedException if token_type is invalid', async () => {
+  it('Should throw InvalidTokenTypeError if token_type is invalid', async () => {
     const getRequestSpy = jest.spyOn(
       ExecutionContextMock.switchToHttp(),
       'getRequest',
@@ -75,7 +76,7 @@ describe('AuthGuard unit tests', () => {
 
     await expect(
       sut.canActivate(ExecutionContextMock as ExecutionContext),
-    ).rejects.toBeInstanceOf(UnauthorizedException);
+    ).rejects.toBeInstanceOf(InvalidTokenTypeError);
     expect(getRequestSpy).toHaveBeenCalled();
     expect(verifyJwtSpy).toHaveBeenCalled();
   });

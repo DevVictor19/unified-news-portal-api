@@ -1,83 +1,220 @@
-import { FilterQuery, Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 
+import { MongoBaseRepository } from './mongo-base-repository';
 import { MongoEntity } from '../../entities/mongo/mongo-entity';
 
+import {
+  InvalidOrderDirectionError,
+  InvalidOrderFieldError,
+  InvalidSearchFieldError,
+  InvalidSearchOperatorError,
+  InvalidSearchValueError,
+} from '@/common/application/errors/application-errors';
 import { IBaseEntityMapper } from '@/common/application/mappers/base-entity-mapper.interface';
 import { Entity } from '@/common/domain/entities/entity';
 import {
+  ArrayOperators,
+  DateOperators,
+  FieldMap,
+  FieldType,
   IBaseSearchRepository,
-  RepositorySearch,
+  NumberOperators,
+  Order,
+  RepositorySearchParams,
+  RepositorySearchResponse,
+  Search,
+  StringOperators,
 } from '@/common/domain/repositories/base-search-repository.interface';
 
 export abstract class MongoBaseSearchRepository<
-  DomainEntity extends Entity,
-  DatabaseEntity extends MongoEntity,
-> implements IBaseSearchRepository<DomainEntity>
+    DomainEntity extends Entity,
+    DatabaseEntity extends MongoEntity,
+  >
+  extends MongoBaseRepository<DomainEntity, DatabaseEntity>
+  implements IBaseSearchRepository<DomainEntity>
 {
   constructor(
-    protected entityMapper: IBaseEntityMapper<DomainEntity, DatabaseEntity>,
-    protected entityModel: Model<DatabaseEntity>,
-  ) {}
-
-  async insert(entity: DomainEntity): Promise<void> {
-    const mongoEntity = this.entityMapper.toDatabaseEntity(entity);
-    const createdUser = new this.entityModel(mongoEntity);
-    await createdUser.save();
+    entityMapper: IBaseEntityMapper<DomainEntity, DatabaseEntity>,
+    entityModel: Model<DatabaseEntity>,
+    private allowedFields: FieldMap<DatabaseEntity>,
+  ) {
+    super(entityMapper, entityModel);
   }
 
   async search({
     limitPerPage,
     pageNumber,
-    searchTerm,
-  }: RepositorySearch): Promise<DomainEntity[]> {
+    search,
+    order,
+  }: RepositorySearchParams): Promise<RepositorySearchResponse<DomainEntity>> {
     const skipAmount = (pageNumber - 1) * limitPerPage;
 
-    if (searchTerm) {
-      const results = await this.entityModel
-        .find(
-          { $text: { $search: searchTerm } } as FilterQuery<DatabaseEntity>,
-          {
-            score: { $meta: 'textScore' },
-          },
-        )
-        .sort({ score: { $meta: 'textScore' } })
-        .skip(skipAmount)
-        .limit(limitPerPage);
+    const resultsQuery = this.entityModel.countDocuments();
+    const dataQuery = this.entityModel.find();
 
-      return results.map((mongoEntity) =>
-        this.entityMapper.toDomainEntity(mongoEntity),
-      );
+    if (search) {
+      const searchFilters = this.buildSearchFilters(search);
+      resultsQuery.where({ $and: searchFilters });
+      dataQuery.where({ $and: searchFilters });
     }
 
-    const results = await this.entityModel
-      .find()
-      .skip(skipAmount)
-      .limit(limitPerPage);
+    if (order) {
+      const orderFilter = this.buildOrderFilter(order);
+      dataQuery.sort(orderFilter);
+    }
 
-    return results.map((mongoEntity) =>
-      this.entityMapper.toDomainEntity(mongoEntity),
-    );
+    dataQuery.limit(limitPerPage).skip(skipAmount);
+
+    const [results, data] = await Promise.all([
+      resultsQuery.exec(),
+      dataQuery.exec(),
+    ]);
+
+    return {
+      results,
+      pages: Math.ceil(results / limitPerPage),
+      data: data.map(this.entityMapper.toDomainEntity),
+    };
   }
 
-  async findAll(): Promise<DomainEntity[]> {
-    const results = await this.entityModel.find();
-    return results.map((mongoEntity) =>
-      this.entityMapper.toDomainEntity(mongoEntity),
-    );
+  private buildOrderFilter(order: Order): { [key: string]: SortOrder } {
+    const field = order.field as keyof DatabaseEntity;
+
+    const fieldType: FieldType | undefined = this.allowedFields[field];
+
+    if (!fieldType) {
+      throw new InvalidOrderFieldError();
+    }
+
+    const orderFilter: any = {};
+
+    switch (order.direction) {
+      case 'ASC':
+        orderFilter[field] = 1;
+        break;
+      case 'DESC':
+        orderFilter[field] = -1;
+        break;
+      default:
+        throw new InvalidOrderDirectionError();
+    }
+
+    return orderFilter;
   }
 
-  async findById(id: string): Promise<DomainEntity | null> {
-    const mongoEntity = await this.entityModel.findById(id);
-    if (!mongoEntity) return null;
-    return this.entityMapper.toDomainEntity(mongoEntity);
+  private buildSearchFilters(search: Search[]): any[] {
+    const filters: any[] = [];
+
+    search.forEach((input) => {
+      const field = input.field as keyof DatabaseEntity;
+
+      const fieldType: FieldType | undefined = this.allowedFields[field];
+
+      if (!fieldType) {
+        throw new InvalidSearchFieldError();
+      }
+
+      const value = input.value;
+
+      const filter: any = {};
+
+      if (Array.isArray(value)) {
+        switch (fieldType) {
+          case 'array':
+            filter[field] = this.buildArrayQuery(
+              input.operator as ArrayOperators,
+              value,
+            );
+            break;
+        }
+      } else {
+        switch (fieldType) {
+          case 'string':
+            filter[field] = this.buildStringQuery(
+              input.operator as StringOperators,
+              value,
+            );
+            break;
+          case 'number':
+            filter[field] = this.buildNumberQuery(
+              input.operator as NumberOperators,
+              value,
+            );
+            break;
+          case 'date':
+            filter[field] = this.buildDateQuery(
+              input.operator as DateOperators,
+              value,
+            );
+            break;
+        }
+      }
+
+      filters.push(filter);
+    });
+
+    return filters;
   }
 
-  async update(id: string, entity: DomainEntity): Promise<void> {
-    const mongoEntity = this.entityMapper.toDatabaseEntity(entity);
-    await this.entityModel.findByIdAndUpdate(id, mongoEntity);
+  private buildArrayQuery(operator: ArrayOperators, value: string[]): object {
+    switch (operator) {
+      case 'contains':
+        return { $in: value };
+      default:
+        throw new InvalidSearchOperatorError();
+    }
   }
 
-  async delete(id: string): Promise<void> {
-    await this.entityModel.deleteOne({ _id: id } as any);
+  private buildStringQuery(operator: StringOperators, value: string): object {
+    switch (operator) {
+      case 'contains':
+        return { $regex: value, $options: 'i' };
+      case 'equals':
+        return { $eq: value };
+      case 'startsWith':
+        return { $regex: `^${value}`, $options: 'i' };
+      case 'endsWith':
+        return { $regex: `${value}$`, $options: 'i' };
+      default:
+        throw new InvalidSearchOperatorError();
+    }
+  }
+
+  private buildNumberQuery(operator: NumberOperators, value: string): object {
+    const numberValue = Number(value);
+
+    if (isNaN(numberValue)) {
+      throw new InvalidSearchValueError();
+    }
+
+    switch (operator) {
+      case 'equals':
+        return { $eq: numberValue };
+      case 'greaterThan':
+        return { $gt: numberValue };
+      case 'lessThan':
+        return { $lt: numberValue };
+      default:
+        throw new InvalidSearchOperatorError();
+    }
+  }
+
+  private buildDateQuery(operator: DateOperators, value: string): object {
+    const dateValue = new Date(value);
+
+    if (isNaN(dateValue.getTime())) {
+      throw new InvalidSearchValueError();
+    }
+
+    switch (operator) {
+      case 'equals':
+        return { $eq: dateValue };
+      case 'greaterThan':
+        return { $gt: dateValue };
+      case 'lessThan':
+        return { $lt: dateValue };
+      default:
+        throw new InvalidSearchOperatorError();
+    }
   }
 }

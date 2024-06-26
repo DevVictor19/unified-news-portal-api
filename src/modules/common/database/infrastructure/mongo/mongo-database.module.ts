@@ -13,7 +13,6 @@ import {
   ClassMongoSchema,
 } from '@/modules/classes/infrastrucutre/database/models/mongo/classes-mongo.model';
 import { IEnvConfigProvider } from '@/modules/common/env-config/application/providers/env-config-provider.interface';
-import { EnvConfigModule } from '@/modules/common/env-config/infrastructure/env-config.module';
 import {
   CourseMongoEntity,
   CourseMongoSchema,
@@ -37,9 +36,9 @@ import {
       useFactory: (envConfigProvider: IEnvConfigProvider) => ({
         uri: envConfigProvider.getDbHost(),
         autoIndex: true,
+        dbName: 'pnu',
       }),
       inject: [IEnvConfigProvider],
-      imports: [EnvConfigModule.forRoot()],
     }),
     MongooseModule.forFeature([
       { name: UserMongoEntity.name, schema: UserMongoSchema },

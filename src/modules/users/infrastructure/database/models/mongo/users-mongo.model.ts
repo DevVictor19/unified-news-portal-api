@@ -13,8 +13,8 @@ export class UserMongoEntity extends MongoEntity {
   @Prop({ type: Number, default: ROLES.STUDENT })
   role: ROLES = ROLES.STUDENT;
 
-  @Prop()
-  photo_url?: string;
+  @Prop({ type: String, default: null })
+  photo_url: string | null;
 
   @Prop()
   name: string;
@@ -22,8 +22,8 @@ export class UserMongoEntity extends MongoEntity {
   @Prop()
   email: string;
 
-  @Prop()
-  phone?: string;
+  @Prop({ type: String, default: null })
+  phone: string | null;
 
   @Prop()
   password: string;

@@ -10,13 +10,11 @@ import {
 } from '@nestjs/common';
 
 import { CreateCategoriesDto } from './dtos';
-import { CategoriesPresenter } from './presenters/categories.presenter';
 import {
   CreateCategoriesUseCase,
   SearchCategoriesUseCase,
   DeleteCategoriesUseCase,
 } from '../application/usecases';
-import { CategoryEntity } from '../domain/entities/categories.entity';
 
 import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import {
@@ -24,7 +22,8 @@ import {
   StudentRoute,
   TeacherRoute,
 } from '@/common/infrastructure/nest/decorators/roles.decorator';
-import { SearchQueryDto } from '@/common/infrastructure/nest/dtos/search-query.dto';
+import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
+import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
 @Controller('/categories')
 @ProtectedRoute()
@@ -43,18 +42,14 @@ export class CategoriesController {
 
   @Get('/')
   @StudentRoute()
-  async searchCategories(@Query() dto: SearchQueryDto) {
-    const results = await this.searchCategoriesUseCase.execute(dto);
-    return this.formatCollection(results);
+  @UsePaginationQuery()
+  searchCategories(@Query() dto: PaginationDto) {
+    return this.searchCategoriesUseCase.execute(dto);
   }
 
   @Delete('/:categoryId')
   @TeacherRoute()
   deleteCategories(@Param('categoryId', ParseUUIDPipe) categoryId: string) {
     return this.deleteCategoriesUseCase.execute({ categoryId });
-  }
-
-  private formatCollection(input: CategoryEntity[]) {
-    return input.map((data) => CategoriesPresenter.format(data));
   }
 }

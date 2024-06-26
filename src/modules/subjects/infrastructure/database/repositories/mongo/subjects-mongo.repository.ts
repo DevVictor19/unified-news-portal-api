@@ -11,12 +11,16 @@ export class SubjectsMongoRepository
   extends MongoBaseSearchRepository<SubjectEntity, SubjectMongoEntity>
   implements ISubjectsRepository
 {
-  constructor(protected subjectsModel: Model<SubjectMongoEntity>) {
-    super(new SubjectMongoEntityMapper(), subjectsModel);
+  constructor(subjectsModel: Model<SubjectMongoEntity>) {
+    super(new SubjectMongoEntityMapper(), subjectsModel, {
+      _id: 'string',
+      created_at: 'date',
+      name: 'string',
+    });
   }
 
   async findByName(name: string): Promise<SubjectEntity | null> {
-    const result = await this.subjectsModel.findOne({ name });
+    const result = await this.entityModel.findOne({ name });
     if (!result) return null;
     return this.entityMapper.toDomainEntity(result);
   }

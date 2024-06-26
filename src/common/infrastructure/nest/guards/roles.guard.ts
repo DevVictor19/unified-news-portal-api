@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
+import { ForbiddenError } from '@/common/application/errors/application-errors';
 import { ROLES } from '@/common/domain/enums/roles.enum';
 
 @Injectable()
@@ -19,6 +20,12 @@ export class RolesGuard implements CanActivate {
 
     const user = request.user;
 
-    return requiredRoles.some((role) => user.role === role);
+    const isAuthorized = requiredRoles.some((role) => user.role === role);
+
+    if (!isAuthorized) {
+      throw new ForbiddenError();
+    }
+
+    return true;
   }
 }

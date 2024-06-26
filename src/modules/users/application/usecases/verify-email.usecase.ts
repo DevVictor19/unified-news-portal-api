@@ -1,9 +1,11 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
+import {
+  BadRequestError,
+  InvalidTokenError,
+  InvalidTokenTypeError,
+  NotFoundError,
+} from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
@@ -29,13 +31,11 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (!token || typeof token === 'string') {
-      throw new UnauthorizedException(
-        'Invalid token, please request another one',
-      );
+      throw new InvalidTokenError();
     }
 
     if (token.token_type !== TOKEN_TYPE.EMAIL_VERIFY) {
-      throw new UnauthorizedException('Invalid token type');
+      throw new InvalidTokenTypeError();
     }
 
     const existingUser = await this.databaseService.users.findByEmail(
@@ -43,13 +43,11 @@ export class VerifyEmailUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (!existingUser) {
-      throw new UnauthorizedException(
-        'User not registered, please signup first',
-      );
+      throw new NotFoundError();
     }
 
     if (existingUser.email_is_verified) {
-      throw new BadRequestException('Email already verified');
+      throw new BadRequestError();
     }
 
     existingUser.email_is_verified = true;

@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
+import { NotFoundError } from '@/common/application/errors/application-errors';
 import { IBaseUseCase } from '@/common/application/usecases/base-usecase.interface';
 import { IDatabaseService } from '@/modules/common/database/application/services/database-service.interface';
 
@@ -19,7 +20,7 @@ export class DeleteClassesUseCase implements IBaseUseCase<Input, Output> {
     );
 
     if (!existentClass) {
-      throw new NotFoundException('Class not found');
+      throw new NotFoundError();
     }
 
     await this.databaseService.classes.delete(input.classId);

@@ -84,6 +84,36 @@ describe('UserEntity unit tests', () => {
     expect(user.comunications.length).toBe(0);
   });
 
+  it('Should initialize photo_url with null if not provided', () => {
+    const props = {
+      email: faker.internet.email(),
+      name: faker.internet.userName(),
+      password: faker.internet.password(),
+    };
+
+    const user = new UserEntity(props);
+
+    expect(user).toBeInstanceOf(UserEntity);
+    expect(user.email).toBe(props.email);
+    expect(user.password).toBe(props.password);
+    expect(user.photo_url).toBeNull();
+  });
+
+  it('Should initialize phone with null if not provided', () => {
+    const props = {
+      email: faker.internet.email(),
+      name: faker.internet.userName(),
+      password: faker.internet.password(),
+    };
+
+    const user = new UserEntity(props);
+
+    expect(user).toBeInstanceOf(UserEntity);
+    expect(user.email).toBe(props.email);
+    expect(user.password).toBe(props.password);
+    expect(user.phone).toBeNull();
+  });
+
   it('Should create a UserEntity with all provided props', () => {
     const props: UserEntityProps = {
       email: faker.internet.email(),
