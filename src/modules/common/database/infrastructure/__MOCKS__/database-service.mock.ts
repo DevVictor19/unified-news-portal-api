@@ -8,6 +8,8 @@ import { ICoursesRepository } from '@/modules/courses/domain/repositories/course
 import { CoursesInMemoryRepository } from '@/modules/courses/infrastructure/database/repositories/in-memory/courses-in-memory.repository';
 import { IPostTypesRepository } from '@/modules/post-types/domain/repositories/post-types-repository.interface';
 import { PostTypesInMemoryRepository } from '@/modules/post-types/infrastructure/database/repositories/in-memory/post-types-in-memory.repository';
+import { IPostsRepository } from '@/modules/posts/domain/repositories/posts-repository.interface';
+import { PostsInMemoryRepository } from '@/modules/posts/infrastructure/database/repositories/in-memory/posts-in-memory.repository';
 import { ISubjectsRepository } from '@/modules/subjects/domain/repositories/subjects-repository.interface';
 import { SubjectsInMemoryRepository } from '@/modules/subjects/infrastructure/database/repositories/in-memory/subjects-in-memory.repository';
 import { IUsersRepository } from '@/modules/users/domain/repositories/users-repository.interface';
@@ -20,6 +22,7 @@ export class DatabaseServiceMock implements IDatabaseService {
   public postTypes: IPostTypesRepository;
   public subjects: ISubjectsRepository;
   public users: IUsersRepository;
+  public posts: IPostsRepository;
 
   constructor() {
     this.categories = new CategoriesInMemoryRepository();
@@ -28,5 +31,6 @@ export class DatabaseServiceMock implements IDatabaseService {
     this.postTypes = new PostTypesInMemoryRepository();
     this.subjects = new SubjectsInMemoryRepository();
     this.users = new UsersInMemoryRepository();
+    this.posts = new PostsInMemoryRepository();
   }
 }

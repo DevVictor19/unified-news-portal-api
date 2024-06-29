@@ -22,6 +22,10 @@ import {
   PostTypeMongoSchema,
 } from '@/modules/post-types/infrastructure/database/models/mongo/post-types-mongo.model';
 import {
+  PostsMongoEntity,
+  PostsMongoSchema,
+} from '@/modules/posts/infrastructure/database/models/mongo/posts-mongo.model';
+import {
   SubjectMongoEntity,
   SubjectMongoSchema,
 } from '@/modules/subjects/infrastructure/database/models/mongo/subjects-mongo.model';
@@ -47,6 +51,7 @@ import {
       { name: SubjectMongoEntity.name, schema: SubjectMongoSchema },
       { name: PostTypeMongoEntity.name, schema: PostTypeMongoSchema },
       { name: CourseMongoEntity.name, schema: CourseMongoSchema },
+      { name: PostsMongoEntity.name, schema: PostsMongoSchema },
     ]),
   ],
   providers: [{ provide: IDatabaseService, useClass: MongoDatabaseService }],

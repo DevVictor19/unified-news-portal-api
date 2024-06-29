@@ -16,6 +16,9 @@ import { CoursesMongoRepository } from '@/modules/courses/infrastructure/databas
 import { IPostTypesRepository } from '@/modules/post-types/domain/repositories/post-types-repository.interface';
 import { PostTypeMongoEntity } from '@/modules/post-types/infrastructure/database/models/mongo/post-types-mongo.model';
 import { PostTypesMongoRepository } from '@/modules/post-types/infrastructure/database/repositories/mongo/post-types-mongo.repository';
+import { IPostsRepository } from '@/modules/posts/domain/repositories/posts-repository.interface';
+import { PostsMongoEntity } from '@/modules/posts/infrastructure/database/models/mongo/posts-mongo.model';
+import { PostsMongoRepository } from '@/modules/posts/infrastructure/database/repositories/mongo/posts-mongo.repository';
 import { ISubjectsRepository } from '@/modules/subjects/domain/repositories/subjects-repository.interface';
 import { SubjectMongoEntity } from '@/modules/subjects/infrastructure/database/models/mongo/subjects-mongo.model';
 import { SubjectsMongoRepository } from '@/modules/subjects/infrastructure/database/repositories/mongo/subjects-mongo.repository';
@@ -33,6 +36,7 @@ export class MongoDatabaseService
   public postTypes: IPostTypesRepository;
   public subjects: ISubjectsRepository;
   public users: IUsersRepository;
+  public posts: IPostsRepository;
 
   constructor(
     @InjectModel(CategoryMongoEntity.name)
@@ -52,6 +56,9 @@ export class MongoDatabaseService
 
     @InjectModel(UserMongoEntity.name)
     private usersModel: Model<UserMongoEntity>,
+
+    @InjectModel(PostsMongoEntity.name)
+    private postsModel: Model<PostsMongoEntity>,
   ) {}
 
   onApplicationBootstrap() {
@@ -61,5 +68,6 @@ export class MongoDatabaseService
     this.postTypes = new PostTypesMongoRepository(this.postTypesModel);
     this.subjects = new SubjectsMongoRepository(this.subjectsModel);
     this.users = new UsersMongoRepository(this.usersModel);
+    this.posts = new PostsMongoRepository(this.postsModel);
   }
 }
