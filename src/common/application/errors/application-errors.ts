@@ -14,6 +14,7 @@ enum APPLICATION_ERROR {
   INVALID_ORDER_FIELD = 'INVALID_ORDER_FIELD',
   INVALID_ORDER_DIRECTION = 'INVALID_ORDER_DIRECTION',
   INVALID_JSON_QUERY = 'INVALID_JSON_QUERY',
+  MISSING_BEARER_TOKEN = 'MISSING_BEARER_TOKEN',
 }
 
 export class ApplicationError extends Error {
@@ -142,5 +143,13 @@ export class InvalidJsonQueryError extends ApplicationError {
     super('Invalid JSON query');
     this.httpStatus = 400;
     this.error = APPLICATION_ERROR.INVALID_JSON_QUERY;
+  }
+}
+
+export class MissingBearerTokenError extends ApplicationError {
+  constructor() {
+    super('Missing bearer token');
+    this.httpStatus = 400;
+    this.error = APPLICATION_ERROR.MISSING_BEARER_TOKEN;
   }
 }
