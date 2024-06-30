@@ -24,7 +24,7 @@ import {
   VerifyEmailUseCase,
 } from '../application/usecases';
 
-@Controller('/users')
+@Controller('users')
 export class UsersController {
   constructor(
     private signupUserUseCase: SignupUserUseCase,
@@ -35,30 +35,30 @@ export class UsersController {
     private verifyEmailUseCase: VerifyEmailUseCase,
   ) {}
 
-  @Post('/signup')
+  @Post('signup')
   signup(@Body() signupUserDto: SignupUserDto) {
     return this.signupUserUseCase.execute(signupUserDto);
   }
 
-  @Post('/login')
+  @Post('login')
   @HttpCode(200)
   login(@Body() loginUserDto: LoginUserDto) {
     return this.loginUserUseCase.execute(loginUserDto);
   }
 
-  @Post('/send-email-verification')
+  @Post('send-email-verification')
   @HttpCode(200)
   sendEmailVerification(@Body() dto: SendEmailVerificationDto) {
     return this.sendEmailVerificationUseCase.execute(dto);
   }
 
-  @Post('/send-password-recovery')
+  @Post('send-password-recovery')
   @HttpCode(200)
   sendPasswordRecoveryEmail(@Body() dto: SendPasswordRecoveryEmailDto) {
     return this.sendPasswordRecoveryEmailUseCase.execute(dto);
   }
 
-  @Patch('/change-password')
+  @Patch('change-password')
   changePassword(
     @Query('token') token: string,
     @Body() dto: ChangePasswordDto,

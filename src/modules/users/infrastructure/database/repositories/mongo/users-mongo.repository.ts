@@ -3,16 +3,19 @@ import { Model } from 'mongoose';
 import { UserMongoEntityMapper } from '../../models/mongo/users-mongo-model.mapper';
 import { UserMongoEntity } from '../../models/mongo/users-mongo.model';
 
-import { MongoBaseRepository } from '@/common/infrastructure/repositories/mongo/mongo-base-repository';
+import { MongoBaseSearchRepository } from '@/common/infrastructure/repositories/mongo/mongo-base-search-repository';
 import { UserEntity } from '@/modules/users/domain/entities/users.entity';
 import { IUsersRepository } from '@/modules/users/domain/repositories/users-repository.interface';
 
 export class UsersMongoRepository
-  extends MongoBaseRepository<UserEntity, UserMongoEntity>
+  extends MongoBaseSearchRepository<UserEntity, UserMongoEntity>
   implements IUsersRepository
 {
   constructor(usersModel: Model<UserMongoEntity>) {
-    super(new UserMongoEntityMapper(), usersModel);
+    super(new UserMongoEntityMapper(), usersModel, {
+      email: 'string',
+      name: 'string',
+    });
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
