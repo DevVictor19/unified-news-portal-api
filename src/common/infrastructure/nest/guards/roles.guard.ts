@@ -20,7 +20,7 @@ export class RolesGuard implements CanActivate {
 
     const user = request.user;
 
-    const isAuthorized = requiredRoles.some((role) => user.role === role);
+    const isAuthorized = requiredRoles?.some((role) => user.role === role);
 
     if (!isAuthorized) {
       throw new ForbiddenError();

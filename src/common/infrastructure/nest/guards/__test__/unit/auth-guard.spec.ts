@@ -5,9 +5,9 @@ import { AuthGuard } from '../../auth.guard';
 import { ExecutionContextMock } from '../testing/mocks/execution-context.mock';
 
 import {
-  BadRequestError,
   InvalidTokenError,
   InvalidTokenTypeError,
+  MissingBearerTokenError,
 } from '@/common/application/errors/application-errors';
 import { ROLES } from '@/common/domain/enums/roles.enum';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
@@ -24,7 +24,7 @@ describe('AuthGuard unit tests', () => {
     sut = new AuthGuard(jwtProvider);
   });
 
-  it('Should throw BadRequestError if Bearer token is missing', async () => {
+  it('Should throw MissingBearerTokenError if Bearer token is missing', async () => {
     const getRequestSpy = jest.spyOn(
       ExecutionContextMock.switchToHttp(),
       'getRequest',
@@ -34,7 +34,7 @@ describe('AuthGuard unit tests', () => {
 
     await expect(
       sut.canActivate(ExecutionContextMock as ExecutionContext),
-    ).rejects.toBeInstanceOf(BadRequestError);
+    ).rejects.toBeInstanceOf(MissingBearerTokenError);
     expect(getRequestSpy).toHaveBeenCalled();
   });
 

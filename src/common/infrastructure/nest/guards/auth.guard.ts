@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
 import {
-  BadRequestError,
   InvalidTokenError,
   InvalidTokenTypeError,
+  MissingBearerTokenError,
 } from '@/common/application/errors/application-errors';
 import { TOKEN_TYPE } from '@/common/domain/enums/token-type.enum';
 import { AuthJwtParsed } from '@/modules/common/jwt/application/@types/jwt';
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new BadRequestError();
+      throw new MissingBearerTokenError();
     }
 
     const payload = this.jwtProvider.verify<AuthJwtParsed>(token);

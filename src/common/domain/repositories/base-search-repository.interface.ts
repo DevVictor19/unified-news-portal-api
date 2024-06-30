@@ -14,7 +14,7 @@ export type Operator =
 export type FieldType = 'string' | 'number' | 'date' | 'array';
 
 export type FieldMap<T> = {
-  [key in keyof T]: FieldType;
+  [key in keyof T]?: FieldType;
 };
 
 export type Search = {

@@ -16,6 +16,7 @@ import {
   DeleteCoursesUseCase,
 } from '../application/usecases';
 
+import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import {
   LeaderRoute,
   StudentRoute,
@@ -25,6 +26,7 @@ import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-
 import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
 @Controller('/courses')
+@ProtectedRoute()
 export class CoursesController {
   constructor(
     private createCoursesUseCase: CreateCoursesUseCase,
