@@ -19,6 +19,7 @@ import {
   SendEmailVerificationUseCase,
   SendPasswordRecoveryEmailUseCase,
   SignupUserUseCase,
+  UpdateSubscriptionsUseCase,
   VerifyEmailUseCase,
 } from '../application/usecases';
 
@@ -48,6 +49,7 @@ import {
     DeleteUserUseCase,
     FindByIdUserUseCase,
     SearchUsersUseCase,
+    UpdateSubscriptionsUseCase,
   ],
 })
 export class UsersModule {}

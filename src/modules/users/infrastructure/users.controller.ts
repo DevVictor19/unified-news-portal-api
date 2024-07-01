@@ -5,7 +5,9 @@ import {
   HttpCode,
   Patch,
   Post,
+  Put,
   Query,
+  Req,
 } from '@nestjs/common';
 
 import {
@@ -14,6 +16,7 @@ import {
   SendEmailVerificationDto,
   SendPasswordRecoveryEmailDto,
   ChangePasswordDto,
+  UpdateSubscriptionsDto,
 } from './dtos';
 import {
   SignupUserUseCase,
@@ -22,6 +25,7 @@ import {
   ChangePasswordUseCase,
   SendPasswordRecoveryEmailUseCase,
   VerifyEmailUseCase,
+  UpdateSubscriptionsUseCase,
 } from '../application/usecases';
 
 @Controller('users')
@@ -33,6 +37,7 @@ export class UsersController {
     private changePasswordUseCase: ChangePasswordUseCase,
     private sendPasswordRecoveryEmailUseCase: SendPasswordRecoveryEmailUseCase,
     private verifyEmailUseCase: VerifyEmailUseCase,
+    private updateSubscriptionsUseCase: UpdateSubscriptionsUseCase,
   ) {}
 
   @Post('signup')
@@ -69,8 +74,17 @@ export class UsersController {
     });
   }
 
-  @Get('/verify')
+  @Get('verify')
   verifyEmail(@Query('token') token: string) {
     return this.verifyEmailUseCase.execute({ token });
+  }
+
+  @Put('subscriptions')
+  updateSubscriptions(@Body() dto: UpdateSubscriptionsDto, @Req() req: any) {
+    const user_id: string = req.user.userId;
+    return this.updateSubscriptionsUseCase.execute({
+      payload: dto,
+      user_id,
+    });
   }
 }
