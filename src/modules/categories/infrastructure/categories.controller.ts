@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreateCategoriesDto } from './dtos';
 import {
@@ -25,7 +26,8 @@ import {
 import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
 import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
-@Controller('/categories')
+@ApiTags('Categories')
+@Controller('categories')
 @ProtectedRoute()
 export class CategoriesController {
   constructor(
@@ -34,20 +36,20 @@ export class CategoriesController {
     private deleteCategoriesUseCase: DeleteCategoriesUseCase,
   ) {}
 
-  @Post('/')
+  @Post()
   @LeaderRoute()
   createCategories(@Body() dto: CreateCategoriesDto) {
     return this.createCategoriesUseCase.execute(dto);
   }
 
-  @Get('/')
+  @Get()
   @StudentRoute()
   @UsePaginationQuery()
   searchCategories(@Query() dto: PaginationDto) {
     return this.searchCategoriesUseCase.execute(dto);
   }
 
-  @Delete('/:categoryId')
+  @Delete(':categoryId')
   @TeacherRoute()
   deleteCategories(@Param('categoryId', ParseUUIDPipe) categoryId: string) {
     return this.deleteCategoriesUseCase.execute({ categoryId });

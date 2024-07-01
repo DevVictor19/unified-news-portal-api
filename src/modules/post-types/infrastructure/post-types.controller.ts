@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreatePostTypesDto } from './dtos';
 import {
@@ -16,6 +17,7 @@ import {
   DeletePostTypesUseCase,
 } from '../application/usecases';
 
+import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import {
   LeaderRoute,
   StudentRoute,
@@ -24,7 +26,9 @@ import {
 import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
 import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
+@ApiTags('Post Types')
 @Controller('/post-types')
+@ProtectedRoute()
 export class PostTypesController {
   constructor(
     private createPostTypesUseCase: CreatePostTypesUseCase,

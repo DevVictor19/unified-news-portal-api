@@ -1,3 +1,7 @@
+import {
+  RepositorySearchParams,
+  RepositorySearchResponse,
+} from '@/common/domain/repositories/base-search-repository.interface';
 import { InMemoryBaseRepository } from '@/common/infrastructure/repositories/in-memory/in-memory-base-repository';
 import { UserEntity } from '@/modules/users/domain/entities/users.entity';
 import { IUsersRepository } from '@/modules/users/domain/repositories/users-repository.interface';
@@ -18,5 +22,16 @@ export class UsersInMemoryRepository
     }
 
     return existentUser;
+  }
+
+  async search(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: RepositorySearchParams,
+  ): Promise<RepositorySearchResponse<UserEntity>> {
+    return {
+      data: [],
+      pages: 0,
+      results: 0,
+    };
   }
 }

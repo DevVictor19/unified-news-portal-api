@@ -7,6 +7,7 @@ import { EnvConfigModule } from './modules/common/env-config/infrastructure/env-
 import { JwtModule } from './modules/common/jwt/infrastructure/jwt.module';
 import { CoursesModule } from './modules/courses/infrastructure/courses.module';
 import { PostTypesModule } from './modules/post-types/infrastructure/post-types.module';
+import { PostsModule } from './modules/posts/infrastructure/posts.module';
 import { SubjectsModule } from './modules/subjects/infrastructure/subjects.module';
 import { UsersModule } from './modules/users/infrastructure/users.module';
 
@@ -21,6 +22,7 @@ import { UsersModule } from './modules/users/infrastructure/users.module';
     CoursesModule,
     CategoriesModule,
     PostTypesModule,
+    PostsModule,
   ],
 })
 export class AppModule {}
