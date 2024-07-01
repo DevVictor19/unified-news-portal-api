@@ -9,6 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { ChangeUserRoleDto, CreateUserDto } from './dtos';
 import {
@@ -24,6 +25,7 @@ import { AdminRoute } from '@/common/infrastructure/nest/decorators/roles.decora
 import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
 import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
+@ApiTags('Admin')
 @Controller('admin/users')
 @ProtectedRoute()
 @AdminRoute()

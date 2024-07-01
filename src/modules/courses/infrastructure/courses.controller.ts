@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreateCoursesDto } from './dtos';
 import {
@@ -25,6 +26,7 @@ import {
 import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
 import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
+@ApiTags('Courses')
 @Controller('/courses')
 @ProtectedRoute()
 export class CoursesController {
