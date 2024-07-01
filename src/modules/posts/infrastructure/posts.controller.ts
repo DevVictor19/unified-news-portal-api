@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -49,14 +50,14 @@ export class PostsController {
 
   @Delete(':post_id')
   @TeacherRoute()
-  delete(@Param('post_id') post_id: string, @Req() req: any) {
+  delete(@Param('post_id', ParseUUIDPipe) post_id: string, @Req() req: any) {
     const user_id: string = req.user.userId;
     return this.deletePostUseCase.execute({ post_id, user_id });
   }
 
   @Get(':post_id')
   @StudentRoute()
-  findById(@Param('post_id') post_id: string) {
+  findById(@Param('post_id', ParseUUIDPipe) post_id: string) {
     return this.findByIdPostUseCase.execute({ post_id });
   }
 
@@ -70,7 +71,7 @@ export class PostsController {
   @Put(':post_id')
   @ViceLeaderRoute()
   update(
-    @Param('post_id') post_id: string,
+    @Param('post_id', ParseUUIDPipe) post_id: string,
     @Body() dto: UpdatePostDto,
     @Req() req: any,
   ) {
