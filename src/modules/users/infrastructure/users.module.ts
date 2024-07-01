@@ -22,6 +22,7 @@ import {
   UpdateSubscriptionsUseCase,
   VerifyEmailUseCase,
 } from '../application/usecases';
+import { UpdateComunicationsUseCase } from '../application/usecases/update-comunications.usecase';
 
 @Module({
   controllers: [UsersController, UsersAdminController],
@@ -50,6 +51,7 @@ import {
     FindByIdUserUseCase,
     SearchUsersUseCase,
     UpdateSubscriptionsUseCase,
+    UpdateComunicationsUseCase,
   ],
 })
 export class UsersModule {}

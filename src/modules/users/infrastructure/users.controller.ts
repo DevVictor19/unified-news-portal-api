@@ -17,6 +17,7 @@ import {
   SendPasswordRecoveryEmailDto,
   ChangePasswordDto,
   UpdateSubscriptionsDto,
+  UpdateComunicationsDto,
 } from './dtos';
 import {
   SignupUserUseCase,
@@ -27,6 +28,10 @@ import {
   VerifyEmailUseCase,
   UpdateSubscriptionsUseCase,
 } from '../application/usecases';
+import { UpdateComunicationsUseCase } from '../application/usecases/update-comunications.usecase';
+
+import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
+import { StudentRoute } from '@/common/infrastructure/nest/decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -38,6 +43,7 @@ export class UsersController {
     private sendPasswordRecoveryEmailUseCase: SendPasswordRecoveryEmailUseCase,
     private verifyEmailUseCase: VerifyEmailUseCase,
     private updateSubscriptionsUseCase: UpdateSubscriptionsUseCase,
+    private updateComunicationsUseCase: UpdateComunicationsUseCase,
   ) {}
 
   @Post('signup')
@@ -80,10 +86,23 @@ export class UsersController {
   }
 
   @Put('subscriptions')
+  @ProtectedRoute()
+  @StudentRoute()
   updateSubscriptions(@Body() dto: UpdateSubscriptionsDto, @Req() req: any) {
     const user_id: string = req.user.userId;
     return this.updateSubscriptionsUseCase.execute({
       payload: dto,
+      user_id,
+    });
+  }
+
+  @Patch('comunications')
+  @ProtectedRoute()
+  @StudentRoute()
+  updateComunications(@Body() dto: UpdateComunicationsDto, @Req() req: any) {
+    const user_id: string = req.user.userId;
+    return this.updateComunicationsUseCase.execute({
+      payload: dto.comunications,
       user_id,
     });
   }
