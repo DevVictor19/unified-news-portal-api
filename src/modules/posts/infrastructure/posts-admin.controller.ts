@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Put,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { UpdatePostDto } from './dtos/update-post.dto';
 import {
@@ -16,6 +17,7 @@ import {
 import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import { AdminRoute } from '@/common/infrastructure/nest/decorators/roles.decorator';
 
+@ApiTags('Admin')
 @Controller('admin/posts')
 @ProtectedRoute()
 @AdminRoute()

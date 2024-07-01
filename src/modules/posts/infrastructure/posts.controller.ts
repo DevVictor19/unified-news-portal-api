@@ -10,6 +10,7 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
@@ -30,6 +31,7 @@ import {
 import { UsePaginationQuery } from '@/common/infrastructure/nest/decorators/use-pagination-query';
 import { PaginationDto } from '@/common/infrastructure/nest/dtos/pagination.dto';
 
+@ApiTags('Posts')
 @Controller('posts')
 @ProtectedRoute()
 export class PostsController {

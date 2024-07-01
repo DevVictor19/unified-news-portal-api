@@ -9,6 +9,7 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import {
   SignupUserDto,
@@ -33,6 +34,7 @@ import { UpdateComunicationsUseCase } from '../application/usecases/update-comun
 import ProtectedRoute from '@/common/infrastructure/nest/decorators/protected-route.decorator';
 import { StudentRoute } from '@/common/infrastructure/nest/decorators/roles.decorator';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(
