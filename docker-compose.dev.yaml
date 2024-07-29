@@ -7,7 +7,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
     ports:
-      - '${DB_PORT}:${DB_PORT}'
+      - '${DB_PORT}:${DB_PORT}' # accessible from localhost
     networks:
       - pnu-network
     volumes:
@@ -20,7 +20,8 @@ services:
     restart: always
     build:
       context: .
-      target: production
+      target: development
+    command: npm run start:dev
     env_file:
       - .env
     ports:

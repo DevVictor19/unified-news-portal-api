@@ -30,6 +30,6 @@ async function bootstrap() {
 
   const envConfigProvider = app.get(IEnvConfigProvider);
   const port = envConfigProvider.getServerPort();
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 }
 bootstrap();

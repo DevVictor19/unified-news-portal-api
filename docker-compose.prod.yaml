@@ -1,0 +1,38 @@
+# Dont forget to change the.env file
+# DB_HOST=mongodb://admin:admin@mongo-pnu:27017/
+# Use a reference directly for the container name
+# The API and DB containers will be on the same network
+
+services:
+  database:
+    image: mongo
+    container_name: mongo-pnu
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    networks:
+      - pnu-network
+    volumes:
+      - mongo-pnu-volume:/data/db
+
+  backend:
+    depends_on:
+      - database
+    container_name: nest-api-pnu
+    restart: always
+    build:
+      context: .
+      target: production
+    env_file:
+      - .env
+    ports:
+      - '${SERVER_PORT}:${SERVER_PORT}'
+    networks:
+      - pnu-network
+
+networks:
+  pnu-network:
+
+volumes:
+  mongo-pnu-volume:
