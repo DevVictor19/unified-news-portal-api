@@ -76,6 +76,61 @@ In light of these problems, I conceived the idea of creating a <b>Unified News P
 
 <img src="./docs/images/relational-model.png" />
 
-## Use Case Diagram 
+## Use Case Diagram
 
 <img src="./docs/images/usecases-diagram.png" alt="diagrama de cassos de uso" />
+
+## Running on Docker locally
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### Creating the .env file
+
+Create a file called `.env` in the root directory of the project and add the following environment variables:
+
+```bash
+# Database variables
+DB_USER=admin
+DB_PASSWORD=admin
+DB_HOST=mongodb://admin:admin@mongo-pnu:27017/
+DB_PORT=27017
+
+# Server  variables
+SERVER_PORT=3000
+SERVER_URL=http://localhost:3000
+SERVER_SECRET_KEY="secret key"
+
+# Mail service variables
+MAIL_NAME='Email Name'
+MAIL_EMAIL=email@email.com
+MAIL_PASSWORD=password
+```
+
+### Starting the application in development mode
+
+Go to the project directory and run:
+
+Linux / Mac:
+
+```bash
+docker compose -f docker-compose.dev.yaml up
+```
+
+Now you can access the application at http://localhost:3000/api and see the Swagger documentation.
+
+You can use directly the endpoints on http://localhost:3000 or use the Swagger documentation to test them.
+
+### Starting the application in production mode
+
+Go to the project directory and run:
+
+Linux / Mac:
+
+```bash
+docker compose -f docker-compose.prod.yaml up
+```
+
+Now you can access the application at http://localhost:3000 and use the endpoints.
